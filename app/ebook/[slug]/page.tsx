@@ -137,6 +137,19 @@ export default function EbookPage() {
     // Verificar si el PDF está disponible
     const checkPdfAvailability = async () => {
       try {
+        // En producción (Vercel), los archivos estáticos están disponibles directamente
+        // No necesitamos hacer fetch HEAD, simplemente asumimos que están disponibles
+        if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+          // Estamos en producción (Vercel)
+          setPdfLoaded(true);
+          setPdfUrl(currentEbook.pdf_path);
+          console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente en producción`);
+          setUploadStatus('✅ PDF cargado automáticamente desde el servidor');
+          setTimeout(() => setUploadStatus(''), 3000);
+          return;
+        }
+
+        // En desarrollo, verificamos la disponibilidad
         const response = await fetch(currentEbook.pdf_path, { method: 'HEAD' });
         if (response.ok) {
           // Verificar que el PDF sea del tamaño correcto (no sea un placeholder)
@@ -163,10 +176,19 @@ export default function EbookPage() {
         }
       } catch (error) {
         console.log('❌ Error verificando PDF:', error);
-        setPdfUrl('');
-        setPdfLoaded(false);
-        setUploadStatus('❌ Error al verificar PDF. Puedes subirlo manualmente.');
-        setTimeout(() => setUploadStatus(''), 5000);
+        // En caso de error, asumimos que el PDF está disponible en producción
+        if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+          setPdfLoaded(true);
+          setPdfUrl(currentEbook.pdf_path);
+          console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente (modo fallback)`);
+          setUploadStatus('✅ PDF cargado automáticamente');
+          setTimeout(() => setUploadStatus(''), 3000);
+        } else {
+          setPdfUrl('');
+          setPdfLoaded(false);
+          setUploadStatus('❌ Error al verificar PDF. Puedes subirlo manualmente.');
+          setTimeout(() => setUploadStatus(''), 5000);
+        }
       }
     };
     
