@@ -139,11 +139,11 @@ export default function EbookPage() {
       try {
         // En producción (Vercel), los archivos estáticos están disponibles directamente
         // No necesitamos hacer fetch HEAD, simplemente asumimos que están disponibles
-        if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
-          // Estamos en producción (Vercel) - v2.0
+        if (typeof window !== 'undefined' && (window.location.hostname !== 'localhost' || window.location.hostname.includes('vercel.app') || window.location.hostname.includes('mentorx.mx'))) {
+          // Estamos en producción (Vercel) - v2.2
           setPdfLoaded(true);
           setPdfUrl(currentEbook.pdf_path);
-          console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente en producción (Vercel)`);
+          console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente en producción (Vercel) - v2.2`);
           setUploadStatus('✅ PDF cargado automáticamente desde el servidor');
           setTimeout(() => setUploadStatus(''), 3000);
           return;
@@ -177,10 +177,10 @@ export default function EbookPage() {
       } catch (error) {
         console.log('❌ Error verificando PDF:', error);
         // En caso de error, asumimos que el PDF está disponible en producción
-        if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+        if (typeof window !== 'undefined' && (window.location.hostname !== 'localhost' || window.location.hostname.includes('vercel.app') || window.location.hostname.includes('mentorx.mx'))) {
           setPdfLoaded(true);
           setPdfUrl(currentEbook.pdf_path);
-          console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente (modo fallback v2.1)`);
+          console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente (modo fallback v2.2)`);
           setUploadStatus('✅ PDF cargado automáticamente');
           setTimeout(() => setUploadStatus(''), 3000);
         } else {
