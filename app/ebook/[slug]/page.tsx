@@ -109,13 +109,13 @@ export default function EbookPage() {
   const pdfViewerRef = useRef(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const isResizingRef = useRef(false);
-  const [pdfUrl, setPdfUrl] = useState(currentEbook?.pdf_path || '');
+  const [pdfUrl, setPdfUrl] = useState('');
   const [pdfHeight, setPdfHeight] = useState(600);
   const [chatMessages, setChatMessages] = useState<Array<{type: string, text: string}>>([]);
   const [inputValue, setInputValue] = useState('');
   const [isPdfLoading, setIsPdfLoading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
-  const [pdfLoaded, setPdfLoaded] = useState(!!currentEbook?.pdf_path);
+  const [pdfLoaded, setPdfLoaded] = useState(false);
   const [ebookNotFound, setEbookNotFound] = useState(false);
   const [isChatLoading, setIsChatLoading] = useState(false);
   const [showVoiceChat, setShowVoiceChat] = useState(false);
@@ -135,12 +135,14 @@ export default function EbookPage() {
       { type: 'mentor', text: `¡Hola! Soy tu mentor para "${currentEbook.title}". ¿En qué puedo ayudarte a aplicar los conceptos de este eBook?` }
     ]);
 
-    // Cargar PDF automáticamente
-    setPdfLoaded(true);
-    setPdfUrl(currentEbook.pdf_path);
-    console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente`);
-    setUploadStatus('✅ PDF cargado automáticamente');
-    setTimeout(() => setUploadStatus(''), 3000);
+    // Cargar PDF automáticamente con un pequeño delay para asegurar la hidratación
+    setTimeout(() => {
+      setPdfLoaded(true);
+      setPdfUrl(currentEbook.pdf_path);
+      console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente`);
+      setUploadStatus('✅ PDF cargado automáticamente');
+      setTimeout(() => setUploadStatus(''), 3000);
+    }, 100);
   }, [slug, currentEbook]);
 
   // Cargar el script de ElevenLabs Convai solo para Educación con Sentido
