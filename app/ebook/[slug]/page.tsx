@@ -102,16 +102,20 @@ const EBOOKS = {
 export default function EbookPage() {
   const params = useParams();
   const slug = params.slug as string;
+  
+  // Verificar si el eBook existe
+  const currentEbook = EBOOKS[slug as keyof typeof EBOOKS];
+  
   const pdfViewerRef = useRef(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const isResizingRef = useRef(false);
-  const [pdfUrl, setPdfUrl] = useState('');
+  const [pdfUrl, setPdfUrl] = useState(currentEbook?.pdf_path || '');
   const [pdfHeight, setPdfHeight] = useState(600);
   const [chatMessages, setChatMessages] = useState<Array<{type: string, text: string}>>([]);
   const [inputValue, setInputValue] = useState('');
   const [isPdfLoading, setIsPdfLoading] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
-  const [pdfLoaded, setPdfLoaded] = useState(false);
+  const [pdfLoaded, setPdfLoaded] = useState(!!currentEbook?.pdf_path);
   const [ebookNotFound, setEbookNotFound] = useState(false);
   const [isChatLoading, setIsChatLoading] = useState(false);
   const [showVoiceChat, setShowVoiceChat] = useState(false);
@@ -119,9 +123,6 @@ export default function EbookPage() {
 
   // Detectar si es dispositivo móvil
   const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
-
-  // Verificar si el eBook existe
-  const currentEbook = EBOOKS[slug as keyof typeof EBOOKS];
 
   useEffect(() => {
     console.log('🔍 Debug: useEffect ejecutándose, slug:', slug);
@@ -157,6 +158,15 @@ export default function EbookPage() {
     // Ejecutar inmediatamente
     loadPdf();
   }, [slug, currentEbook]);
+
+  // Segundo useEffect para asegurar que el PDF se cargue después de la hidratación
+  useEffect(() => {
+    if (currentEbook && !pdfLoaded) {
+      console.log('🔄 Debug: Segundo useEffect - cargando PDF después de hidratación');
+      setPdfLoaded(true);
+      setPdfUrl(currentEbook.pdf_path);
+    }
+  }, [currentEbook, pdfLoaded]);
 
   // Cargar el script de ElevenLabs Convai solo para Educación con Sentido
   useEffect(() => {
