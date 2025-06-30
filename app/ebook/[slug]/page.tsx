@@ -590,9 +590,26 @@ export default function EbookPage() {
                   border: 'none'
                 }}
                 allowFullScreen
-                onLoad={() => console.log('✅ iframe PDF cargado:', pdfUrl)}
-                onError={(e) => console.log('❌ Error cargando iframe PDF:', e, 'URL:', pdfUrl)}
+                onLoad={() => {
+                  console.log('✅ iframe PDF cargado exitosamente');
+                  console.log('🔍 URL del PDF:', pdfUrl);
+                  console.log('🔍 eBook actual:', currentEbook.title);
+                }}
+                onError={(e) => {
+                  console.log('❌ Error cargando iframe PDF');
+                  console.log('🔍 Error details:', e);
+                  console.log('🔍 URL del PDF:', pdfUrl);
+                  console.log('🔍 eBook actual:', currentEbook.title);
+                }}
               />
+              {/* Debug info */}
+              <div className="mt-2 p-2 bg-gray-100 rounded text-xs">
+                <p><strong>Debug Info:</strong></p>
+                <p>PDF URL: {pdfUrl || 'No establecida'}</p>
+                <p>PDF Loaded: {pdfLoaded ? 'Sí' : 'No'}</p>
+                <p>eBook: {currentEbook?.title || 'No encontrado'}</p>
+                <p>Hostname: {typeof window !== 'undefined' ? window.location.hostname : 'Server'}</p>
+              </div>
             </div>
           </div>
         ) : (
