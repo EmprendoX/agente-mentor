@@ -110,7 +110,7 @@ export default function EbookPage() {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const isResizingRef = useRef(false);
   const [pdfUrl, setPdfUrl] = useState('');
-  const [pdfHeight, setPdfHeight] = useState(600);
+  const [pdfHeight, setPdfHeight] = useState(800);
   const [chatMessages, setChatMessages] = useState<Array<{type: string, text: string}>>([]);
   const [inputValue, setInputValue] = useState('');
   const [isPdfLoading, setIsPdfLoading] = useState(false);
@@ -585,14 +585,18 @@ export default function EbookPage() {
                   </button>
                 </div>
               )}
+              <div className="bg-gray-50 p-2 text-center text-sm text-gray-600">
+                📖 <strong>{currentEbook.title}</strong> - PDF Viewer
+              </div>
               <iframe 
                 ref={pdfViewerRef} 
                 src={`${pdfUrl}#toolbar=1&navpanes=1&scrollbar=1&view=FitH`}
                 title={`${currentEbook.title} - PDF Viewer`}
                 className={`w-full ${isPdfExpanded ? 'h-screen' : ''}`}
                 style={{ 
-                  height: isPdfExpanded ? '100vh' : pdfHeight + 'px',
-                  border: 'none'
+                  height: isPdfExpanded ? '100vh' : (isMobile ? '600px' : '800px'),
+                  border: 'none',
+                  minHeight: isMobile ? '400px' : '600px'
                 }}
                 allowFullScreen
                 onLoad={() => {
@@ -652,7 +656,7 @@ export default function EbookPage() {
           </div>
         )}
         
-        {pdfUrl && !isPdfExpanded && (
+        {pdfUrl && !isPdfExpanded && !isMobile && (
           <div onMouseDown={startResizing} className="absolute bottom-0 left-0 w-full h-3 cursor-row-resize bg-gray-200 hover:bg-gray-300 transition-colors" />
         )}
       </div>
