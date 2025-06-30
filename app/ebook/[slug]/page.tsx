@@ -599,6 +599,7 @@ export default function EbookPage() {
                   minHeight: isMobile ? '400px' : '600px'
                 }}
                 allowFullScreen
+                sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-downloads"
                 onLoad={() => {
                   console.log('✅ iframe PDF cargado exitosamente');
                   console.log('🔍 URL del PDF:', pdfUrl);
@@ -609,6 +610,10 @@ export default function EbookPage() {
                   console.log('🔍 Error details:', e);
                   console.log('🔍 URL del PDF:', pdfUrl);
                   console.log('🔍 eBook actual:', currentEbook.title);
+                  // Fallback: intentar abrir en nueva pestaña
+                  setTimeout(() => {
+                    window.open(pdfUrl, '_blank');
+                  }, 1000);
                 }}
               />
               {/* Debug info - Completamente removido */}
