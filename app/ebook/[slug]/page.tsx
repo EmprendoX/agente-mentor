@@ -141,31 +141,20 @@ export default function EbookPage() {
       { type: 'mentor', text: `¡Hola! Soy tu mentor para "${currentEbook.title}". ¿En qué puedo ayudarte a aplicar los conceptos de este eBook?` }
     ]);
 
-    // Cargar PDF automáticamente
-    const loadPdf = async () => {
-      try {
-        // Verificar si el PDF está disponible
-        const response = await fetch(currentEbook.pdf_path, { method: 'HEAD' });
-        if (response.ok) {
-          setPdfLoaded(true);
-          setPdfUrl(currentEbook.pdf_path);
-          console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente`);
-          setUploadStatus('✅ PDF cargado automáticamente desde el servidor');
-          setTimeout(() => setUploadStatus(''), 3000);
-        } else {
-          console.log('⚠️ PDF no disponible, intentando cargar directamente');
-          // Intentar cargar directamente de todas formas
-          setPdfLoaded(true);
-          setPdfUrl(currentEbook.pdf_path);
-        }
-      } catch (error) {
-        console.log('⚠️ Error verificando PDF, cargando directamente:', error);
-        // En caso de error, cargar directamente
-        setPdfLoaded(true);
-        setPdfUrl(currentEbook.pdf_path);
-      }
+    // Cargar PDF automáticamente sin verificación
+    const loadPdf = () => {
+      console.log('🚀 Debug: Iniciando carga de PDF');
+      console.log('🔍 Debug: PDF path:', currentEbook.pdf_path);
+      
+      // Cargar directamente sin verificación
+      setPdfLoaded(true);
+      setPdfUrl(currentEbook.pdf_path);
+      console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente`);
+      setUploadStatus('✅ PDF cargado automáticamente desde el servidor');
+      setTimeout(() => setUploadStatus(''), 3000);
     };
     
+    // Ejecutar inmediatamente
     loadPdf();
   }, [slug, currentEbook]);
 
