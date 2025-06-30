@@ -180,7 +180,7 @@ export default function EbookPage() {
         if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
           setPdfLoaded(true);
           setPdfUrl(currentEbook.pdf_path);
-          console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente (modo fallback)`);
+          console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente (modo fallback v2.1)`);
           setUploadStatus('✅ PDF cargado automáticamente');
           setTimeout(() => setUploadStatus(''), 3000);
         } else {
