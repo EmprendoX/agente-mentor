@@ -11,6 +11,7 @@ export default function Sidebar() {
   
   const navItems = [
     { href: '/', label: 'Inicio' },
+    { href: '/ebooks', label: 'Ebooks' },
     { href: '/agentes', label: 'Mi Panel de Agentes' },
     { href: '/automatizaciones', label: 'Automatizaciones' },
     { href: '/mentor', label: 'MentorX' },
