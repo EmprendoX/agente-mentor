@@ -135,36 +135,12 @@ export default function EbookPage() {
       { type: 'mentor', text: `¡Hola! Soy tu mentor para "${currentEbook.title}". ¿En qué puedo ayudarte a aplicar los conceptos de este eBook?` }
     ]);
 
-    // Cargar PDF automáticamente con verificación
-    const loadPdf = async () => {
-      try {
-        console.log('🔍 Debug: Intentando cargar PDF:', currentEbook.pdf_path);
-        
-        // Verificar si el PDF está disponible
-        const response = await fetch(currentEbook.pdf_path, { method: 'HEAD' });
-        console.log('🔍 Debug: Response status:', response.status);
-        
-        if (response.ok) {
-          setPdfLoaded(true);
-          setPdfUrl(currentEbook.pdf_path);
-          console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente`);
-          setUploadStatus('✅ PDF cargado automáticamente');
-          setTimeout(() => setUploadStatus(''), 3000);
-        } else {
-          console.log('⚠️ Debug: PDF no disponible, status:', response.status);
-          // Intentar cargar de todas formas
-          setPdfLoaded(true);
-          setPdfUrl(currentEbook.pdf_path);
-        }
-      } catch (error) {
-        console.log('⚠️ Debug: Error verificando PDF:', error);
-        // En caso de error, cargar directamente
-        setPdfLoaded(true);
-        setPdfUrl(currentEbook.pdf_path);
-      }
-    };
-
-    loadPdf();
+    // Cargar PDF automáticamente sin verificación
+    setPdfLoaded(true);
+    setPdfUrl(currentEbook.pdf_path);
+    console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente`);
+    setUploadStatus('✅ PDF cargado automáticamente');
+    setTimeout(() => setUploadStatus(''), 3000);
   }, [slug, currentEbook]);
 
   // Cargar el script de ElevenLabs Convai solo para Educación con Sentido
