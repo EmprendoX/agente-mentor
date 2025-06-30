@@ -124,75 +124,49 @@ export default function EbookPage() {
   const currentEbook = EBOOKS[slug as keyof typeof EBOOKS];
 
   useEffect(() => {
+    console.log('🔍 Debug: useEffect ejecutándose, slug:', slug);
+    console.log('🔍 Debug: currentEbook:', currentEbook);
+    
     if (!currentEbook) {
+      console.log('❌ Debug: eBook no encontrado');
       setEbookNotFound(true);
       return;
     }
+
+    console.log('✅ Debug: eBook encontrado:', currentEbook.title);
+    console.log('🔍 Debug: PDF path:', currentEbook.pdf_path);
 
     // Inicializar mensajes del chat
     setChatMessages([
       { type: 'mentor', text: `¡Hola! Soy tu mentor para "${currentEbook.title}". ¿En qué puedo ayudarte a aplicar los conceptos de este eBook?` }
     ]);
 
-    // Verificar si el PDF está disponible
-    const checkPdfAvailability = async () => {
+    // Cargar PDF automáticamente
+    const loadPdf = async () => {
       try {
-        // En producción (Vercel), los archivos estáticos están disponibles directamente
-        // No necesitamos hacer fetch HEAD, simplemente asumimos que están disponibles
-        if (typeof window !== 'undefined' && (window.location.hostname !== 'localhost' || window.location.hostname.includes('vercel.app') || window.location.hostname.includes('mentorx.mx'))) {
-          // Estamos en producción (Vercel) - v2.2
-          setPdfLoaded(true);
-          setPdfUrl(currentEbook.pdf_path);
-          console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente en producción (Vercel) - v2.2`);
-          setUploadStatus('✅ PDF cargado automáticamente desde el servidor');
-          setTimeout(() => setUploadStatus(''), 3000);
-          return;
-        }
-
-        // En desarrollo, verificamos la disponibilidad
+        // Verificar si el PDF está disponible
         const response = await fetch(currentEbook.pdf_path, { method: 'HEAD' });
         if (response.ok) {
-          // Verificar que el PDF sea del tamaño correcto (no sea un placeholder)
-          const contentLength = response.headers.get('content-length');
-          if (contentLength && parseInt(contentLength) > 100000) { // Más de 100KB (ajustado para PDFs más pequeños)
-            setPdfLoaded(true);
-            setPdfUrl(currentEbook.pdf_path);
-            console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente (${contentLength} bytes)`);
-            setUploadStatus('✅ PDF cargado automáticamente desde el servidor');
-            setTimeout(() => setUploadStatus(''), 3000);
-          } else {
-            console.log('⚠️ PDF encontrado pero parece ser un placeholder, mostrando opción de carga manual');
-            setPdfUrl('');
-            setPdfLoaded(false);
-            setUploadStatus('📁 PDF placeholder detectado. Por favor, sube el PDF correcto.');
-            setTimeout(() => setUploadStatus(''), 5000);
-          }
-        } else {
-          console.log('⚠️ PDF no encontrado en el servidor, mostrando opción de carga manual');
-          setPdfUrl('');
-          setPdfLoaded(false);
-          setUploadStatus('📁 PDF no disponible automáticamente. Puedes subirlo manualmente.');
-          setTimeout(() => setUploadStatus(''), 5000);
-        }
-      } catch (error) {
-        console.log('❌ Error verificando PDF:', error);
-        // En caso de error, asumimos que el PDF está disponible en producción
-        if (typeof window !== 'undefined' && (window.location.hostname !== 'localhost' || window.location.hostname.includes('vercel.app') || window.location.hostname.includes('mentorx.mx'))) {
           setPdfLoaded(true);
           setPdfUrl(currentEbook.pdf_path);
-          console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente (modo fallback v2.2)`);
-          setUploadStatus('✅ PDF cargado automáticamente');
+          console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente`);
+          setUploadStatus('✅ PDF cargado automáticamente desde el servidor');
           setTimeout(() => setUploadStatus(''), 3000);
         } else {
-          setPdfUrl('');
-          setPdfLoaded(false);
-          setUploadStatus('❌ Error al verificar PDF. Puedes subirlo manualmente.');
-          setTimeout(() => setUploadStatus(''), 5000);
+          console.log('⚠️ PDF no disponible, intentando cargar directamente');
+          // Intentar cargar directamente de todas formas
+          setPdfLoaded(true);
+          setPdfUrl(currentEbook.pdf_path);
         }
+      } catch (error) {
+        console.log('⚠️ Error verificando PDF, cargando directamente:', error);
+        // En caso de error, cargar directamente
+        setPdfLoaded(true);
+        setPdfUrl(currentEbook.pdf_path);
       }
     };
     
-    checkPdfAvailability();
+    loadPdf();
   }, [slug, currentEbook]);
 
   // Cargar el script de ElevenLabs Convai solo para Educación con Sentido
