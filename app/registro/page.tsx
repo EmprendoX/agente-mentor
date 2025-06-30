@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { 
@@ -15,6 +15,15 @@ import {
 } from 'lucide-react';
 
 export default function RegistroPage() {
+  // Suspense boundary para searchParams
+  return (
+    <Suspense fallback={<div>Cargando...</div>}>
+      <RegistroPageContent />
+    </Suspense>
+  );
+}
+
+function RegistroPageContent() {
   const [formData, setFormData] = useState({
     nombre: '',
     email: ''

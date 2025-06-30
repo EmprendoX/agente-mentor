@@ -8,7 +8,7 @@ import {
   CheckCircle, XCircle, Plus, Search, Filter,
   ArrowRight, Eye, Edit, Trash2, Download,
   Share2, MoreVertical, Brain, Cpu, Workflow,
-  Automation, Sparkles, Rocket, Shield, Globe
+  Sparkles, Rocket, Shield, Globe
 } from 'lucide-react';
 
 interface ActiveAutomation {
