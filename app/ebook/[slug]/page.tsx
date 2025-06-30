@@ -501,12 +501,13 @@ export default function EbookPage() {
         <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
           <div className="w-24 h-36 sm:w-32 sm:h-48 overflow-hidden rounded-md shadow bg-white flex-shrink-0">
             <img 
-              src={`${currentEbook.cover_path}?v=${Date.now()}`}
+              src={currentEbook.cover_path}
               alt={`Portada: ${currentEbook.title}`}
               className="w-full h-full object-cover"
               onError={(e) => {
                 console.log('Error cargando imagen:', e);
-                (e.target as HTMLImageElement).src = `${currentEbook.cover_path}?v=${Date.now() + 1}`;
+                // Fallback a una imagen por defecto
+                (e.target as HTMLImageElement).src = '/next.svg';
               }}
             />
           </div>
@@ -606,16 +607,7 @@ export default function EbookPage() {
                   console.log('🔍 eBook actual:', currentEbook.title);
                 }}
               />
-              {/* Debug info - Solo visible en desarrollo */}
-              {process.env.NODE_ENV === 'development' && (
-                <div className="mt-2 p-2 bg-gray-100 rounded text-xs">
-                  <p><strong>Debug Info:</strong></p>
-                  <p>PDF URL: {pdfUrl || 'No establecida'}</p>
-                  <p>PDF Loaded: {pdfLoaded ? 'Sí' : 'No'}</p>
-                  <p>eBook: {currentEbook?.title || 'No encontrado'}</p>
-                  <p>Hostname: {typeof window !== 'undefined' ? window.location.hostname : 'Server'}</p>
-                </div>
-              )}
+              {/* Debug info - Completamente removido */}
             </div>
           </div>
         ) : (
