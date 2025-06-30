@@ -140,10 +140,10 @@ export default function EbookPage() {
         // En producción (Vercel), los archivos estáticos están disponibles directamente
         // No necesitamos hacer fetch HEAD, simplemente asumimos que están disponibles
         if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
-          // Estamos en producción (Vercel)
+          // Estamos en producción (Vercel) - v2.0
           setPdfLoaded(true);
           setPdfUrl(currentEbook.pdf_path);
-          console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente en producción`);
+          console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente en producción (Vercel)`);
           setUploadStatus('✅ PDF cargado automáticamente desde el servidor');
           setTimeout(() => setUploadStatus(''), 3000);
           return;
