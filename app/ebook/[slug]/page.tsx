@@ -135,14 +135,12 @@ export default function EbookPage() {
       { type: 'mentor', text: `¡Hola! Soy tu mentor para "${currentEbook.title}". ¿En qué puedo ayudarte a aplicar los conceptos de este eBook?` }
     ]);
 
-    // Cargar PDF automáticamente con un pequeño delay para asegurar la hidratación
-    setTimeout(() => {
-      setPdfLoaded(true);
-      setPdfUrl(currentEbook.pdf_path);
-      console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente`);
-      setUploadStatus('✅ PDF cargado automáticamente');
-      setTimeout(() => setUploadStatus(''), 3000);
-    }, 100);
+    // Cargar PDF automáticamente
+    setPdfLoaded(true);
+    setPdfUrl(currentEbook.pdf_path);
+    console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente`);
+    setUploadStatus('✅ PDF cargado automáticamente');
+    setTimeout(() => setUploadStatus(''), 3000);
   }, [slug, currentEbook]);
 
   // Cargar el script de ElevenLabs Convai solo para Educación con Sentido
