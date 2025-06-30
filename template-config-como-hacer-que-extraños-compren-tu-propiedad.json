@@ -1,0 +1,56 @@
+{
+  "template": {
+    "name": "Como hacer que extraños compren tu propiedad",
+    "version": "1.0.0",
+    "status": "finalizada",
+    "created": "2024-06-28",
+    "description": "Plantilla para eBook sobre estrategias de venta de propiedades a compradores desconocidos"
+  },
+  "ebook": {
+    "title": "Como hacer que extraños compren tu propiedad",
+    "subtitle": "Estrategias efectivas para vender tu propiedad a compradores que no conoces",
+    "pdf_path": "/ebooks/como-hacer-que-extraños-compren-tu-propiedad/como-hacer-que-extraños-compren-tu-propiedad.pdf",
+    "cover_path": "/ebooks/como-hacer-que-extraños-compren-tu-propiedad/como-hacer-que-extraños-compren-tu-propiedad.png",
+    "auto_load": true,
+    "download_enabled": true
+  },
+  "features": {
+    "pdf_viewer": {
+      "enabled": true,
+      "auto_load": true,
+      "resizable": true,
+      "default_height": 600
+    },
+    "mentor_chat": {
+      "enabled": true,
+      "specialized_for": "Venta de Propiedades",
+      "webhook_url": "https://emprendox.app.n8n.cloud/webhook/2c0e057e-7e80-4b35-a309-803a014c33e6"
+    },
+    "notes_system": {
+      "enabled": true,
+      "type": "OneNote-style",
+      "features": ["notebooks", "sections", "pages", "rich_editor"]
+    },
+    "reports_generator": {
+      "enabled": true,
+      "fields": ["property_type", "location", "market_conditions", "target_buyer"]
+    }
+  },
+  "design": {
+    "primary_color": "#2563EB",
+    "background_color": "#FAF3E0",
+    "theme": "professional",
+    "responsive": true
+  },
+  "technical": {
+    "framework": "Next.js 15.3.4",
+    "styling": "Tailwind CSS",
+    "state_management": "React Hooks",
+    "pdf_viewer": "iframe native"
+  },
+  "deployment": {
+    "ready_for_production": true,
+    "requirements": ["PDF file in public/ebooks/como-hacer-que-extraños-compren-tu-propiedad/"],
+    "notes": "Asegurar que el archivo PDF esté presente en la ruta especificada"
+  }
+} 

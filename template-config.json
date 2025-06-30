@@ -1,0 +1,56 @@
+{
+  "template": {
+    "name": "Educación con Sentido",
+    "version": "1.0.0",
+    "status": "finalizada",
+    "created": "2024-06-28",
+    "description": "Plantilla base para entrega de eBooks con mentoría integrada"
+  },
+  "ebook": {
+    "title": "Educación con Sentido",
+    "subtitle": "Transforma tu práctica educativa con estrategias innovadoras y significativas",
+    "pdf_path": "/ebooks/educacion-con-sentido/educacion-con-sentido.pdf",
+    "cover_path": "/ebooks/educacion-con-sentido/portada.png",
+    "auto_load": true,
+    "download_enabled": true
+  },
+  "features": {
+    "pdf_viewer": {
+      "enabled": true,
+      "auto_load": true,
+      "resizable": true,
+      "default_height": 600
+    },
+    "mentor_chat": {
+      "enabled": true,
+      "specialized_for": "Educación con Sentido",
+      "webhook_url": "https://emprendox.app.n8n.cloud/webhook/2c0e057e-7e80-4b35-a309-803a014c33e6"
+    },
+    "notes_system": {
+      "enabled": true,
+      "type": "OneNote-style",
+      "features": ["notebooks", "sections", "pages", "rich_editor"]
+    },
+    "reports_generator": {
+      "enabled": true,
+      "fields": ["industry", "niche", "location", "product_type"]
+    }
+  },
+  "design": {
+    "primary_color": "#2563EB",
+    "background_color": "#FAF3E0",
+    "theme": "professional",
+    "responsive": true
+  },
+  "technical": {
+    "framework": "Next.js 15.3.4",
+    "styling": "Tailwind CSS",
+    "state_management": "React Hooks",
+    "pdf_viewer": "iframe native"
+  },
+  "deployment": {
+    "ready_for_production": true,
+    "requirements": ["PDF file in public/ebooks/educacion-con-sentido/"],
+    "notes": "Asegurar que el archivo PDF esté presente en la ruta especificada"
+  }
+} 
