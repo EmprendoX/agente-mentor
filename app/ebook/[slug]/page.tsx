@@ -125,48 +125,23 @@ export default function EbookPage() {
   const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
 
   useEffect(() => {
-    console.log('🔍 Debug: useEffect ejecutándose, slug:', slug);
-    console.log('🔍 Debug: currentEbook:', currentEbook);
-    
     if (!currentEbook) {
-      console.log('❌ Debug: eBook no encontrado');
       setEbookNotFound(true);
       return;
     }
-
-    console.log('✅ Debug: eBook encontrado:', currentEbook.title);
-    console.log('🔍 Debug: PDF path:', currentEbook.pdf_path);
 
     // Inicializar mensajes del chat
     setChatMessages([
       { type: 'mentor', text: `¡Hola! Soy tu mentor para "${currentEbook.title}". ¿En qué puedo ayudarte a aplicar los conceptos de este eBook?` }
     ]);
 
-    // Cargar PDF automáticamente sin verificación
-    const loadPdf = () => {
-      console.log('🚀 Debug: Iniciando carga de PDF');
-      console.log('🔍 Debug: PDF path:', currentEbook.pdf_path);
-      
-      // Cargar directamente sin verificación
-      setPdfLoaded(true);
-      setPdfUrl(currentEbook.pdf_path);
-      console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente`);
-      setUploadStatus('✅ PDF cargado automáticamente desde el servidor');
-      setTimeout(() => setUploadStatus(''), 3000);
-    };
-    
-    // Ejecutar inmediatamente
-    loadPdf();
+    // Cargar PDF automáticamente
+    setPdfLoaded(true);
+    setPdfUrl(currentEbook.pdf_path);
+    console.log(`✅ PDF "${currentEbook.title}" cargado automáticamente`);
+    setUploadStatus('✅ PDF cargado automáticamente');
+    setTimeout(() => setUploadStatus(''), 3000);
   }, [slug, currentEbook]);
-
-  // Segundo useEffect para asegurar que el PDF se cargue después de la hidratación
-  useEffect(() => {
-    if (currentEbook && !pdfLoaded) {
-      console.log('🔄 Debug: Segundo useEffect - cargando PDF después de hidratación');
-      setPdfLoaded(true);
-      setPdfUrl(currentEbook.pdf_path);
-    }
-  }, [currentEbook, pdfLoaded]);
 
   // Cargar el script de ElevenLabs Convai solo para Educación con Sentido
   useEffect(() => {
