@@ -642,6 +642,8 @@ export default function EbookPage() {
                   border: 'none'
                 }}
                 allowFullScreen
+                onLoad={() => console.log('✅ iframe PDF cargado:', pdfUrl)}
+                onError={(e) => console.log('❌ Error cargando iframe PDF:', e, 'URL:', pdfUrl)}
               />
             </div>
           </div>
@@ -652,6 +654,7 @@ export default function EbookPage() {
             <p className="text-gray-600 mb-6">
               Para comenzar a leer "{currentEbook.title}", sube el archivo PDF correspondiente
             </p>
+            <p className="text-xs text-gray-500 mb-4">Debug: pdfUrl = {pdfUrl || 'vacío'}</p>
             
             {isPdfLoading && (
               <div className="mb-4">
