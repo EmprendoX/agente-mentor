@@ -495,58 +495,62 @@ export default function EbookPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF3E0] px-6 py-10 max-w-7xl mx-auto space-y-10">
+    <div className="min-h-screen bg-[#FAF3E0] px-4 sm:px-6 py-6 sm:py-10 max-w-7xl mx-auto space-y-6 sm:space-y-10">
       {/* Header del eBook */}
-      <div className="bg-[#2563EB] text-white rounded-xl shadow p-6 flex flex-col md:flex-row items-center gap-6">
-        <div className="w-32 h-48 overflow-hidden rounded-md shadow bg-white">
-          <img 
-            src={`${currentEbook.cover_path}?v=${Date.now()}`}
-            alt={`Portada: ${currentEbook.title}`}
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              console.log('Error cargando imagen:', e);
-              (e.target as HTMLImageElement).src = `${currentEbook.cover_path}?v=${Date.now() + 1}`;
-            }}
-          />
-        </div>
-        <div className="flex-1 text-center md:text-left">
-          <h1 className="text-2xl font-bold">{currentEbook.title}</h1>
-          <p className="text-sm mt-2 text-white/80">{currentEbook.subtitle}</p>
-          <div className="mt-4">
-            <span className="text-xs text-white/70">
-              {pdfLoaded ? 'PDF disponible • Cargado automáticamente' : 'PDF disponible para descarga'}
-            </span>
+      <div className="bg-[#2563EB] text-white rounded-xl shadow p-6">
+        <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+          <div className="w-24 h-36 sm:w-32 sm:h-48 overflow-hidden rounded-md shadow bg-white flex-shrink-0">
+            <img 
+              src={`${currentEbook.cover_path}?v=${Date.now()}`}
+              alt={`Portada: ${currentEbook.title}`}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                console.log('Error cargando imagen:', e);
+                (e.target as HTMLImageElement).src = `${currentEbook.cover_path}?v=${Date.now() + 1}`;
+              }}
+            />
+          </div>
+          <div className="flex-1 text-center sm:text-left">
+            <h1 className="text-xl sm:text-2xl font-bold leading-tight">{currentEbook.title}</h1>
+            <p className="text-xs sm:text-sm mt-2 text-white/80 leading-relaxed">{currentEbook.subtitle}</p>
+            <div className="mt-3 sm:mt-4">
+              <span className="text-xs text-white/70">
+                {pdfLoaded ? 'PDF disponible • Cargado automáticamente' : 'PDF disponible para descarga'}
+              </span>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Visor de PDF del eBook */}
       <div className="relative w-full bg-white border border-gray-200 rounded-xl shadow overflow-hidden">
-        <div className="p-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
-          <h2 className="text-lg font-semibold text-[#1F2937]">📖 {currentEbook.title}</h2>
-          <div className="flex gap-2">
-            <button
-              onClick={downloadPdf}
-              className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-            >
-              📥 Descargar
-            </button>
-            <span className="text-gray-500 text-sm">|</span>
-            <span className="text-gray-500 text-sm">
-              {pdfLoaded ? 'PDF cargado automáticamente' : 'Redimensionar ↓'}
-            </span>
+        <div className="p-4 border-b border-gray-200 bg-gray-50">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+            <h2 className="text-lg font-semibold text-[#1F2937]">📖 {currentEbook.title}</h2>
+            <div className="flex flex-wrap gap-2 text-sm">
+              <button
+                onClick={downloadPdf}
+                className="text-blue-600 hover:text-blue-800 font-medium"
+              >
+                📥 Descargar
+              </button>
+              <span className="text-gray-500 hidden sm:inline">|</span>
+              <span className="text-gray-500">
+                {pdfLoaded ? 'PDF cargado automáticamente' : 'Redimensionar ↓'}
+              </span>
+            </div>
           </div>
         </div>
         
         {pdfUrl && pdfLoaded ? (
           <div>
             <div className="p-4 bg-green-50 border-b border-green-200">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div className="flex items-center gap-2 text-green-700">
                   <span className="text-lg">✅</span>
                   <span className="text-sm font-medium">PDF cargado correctamente</span>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <button
                     onClick={() => setIsPdfExpanded(!isPdfExpanded)}
                     className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center gap-1"
@@ -602,14 +606,16 @@ export default function EbookPage() {
                   console.log('🔍 eBook actual:', currentEbook.title);
                 }}
               />
-              {/* Debug info */}
-              <div className="mt-2 p-2 bg-gray-100 rounded text-xs">
-                <p><strong>Debug Info:</strong></p>
-                <p>PDF URL: {pdfUrl || 'No establecida'}</p>
-                <p>PDF Loaded: {pdfLoaded ? 'Sí' : 'No'}</p>
-                <p>eBook: {currentEbook?.title || 'No encontrado'}</p>
-                <p>Hostname: {typeof window !== 'undefined' ? window.location.hostname : 'Server'}</p>
-              </div>
+              {/* Debug info - Solo visible en desarrollo */}
+              {process.env.NODE_ENV === 'development' && (
+                <div className="mt-2 p-2 bg-gray-100 rounded text-xs">
+                  <p><strong>Debug Info:</strong></p>
+                  <p>PDF URL: {pdfUrl || 'No establecida'}</p>
+                  <p>PDF Loaded: {pdfLoaded ? 'Sí' : 'No'}</p>
+                  <p>eBook: {currentEbook?.title || 'No encontrado'}</p>
+                  <p>Hostname: {typeof window !== 'undefined' ? window.location.hostname : 'Server'}</p>
+                </div>
+              )}
             </div>
           </div>
         ) : (
@@ -660,7 +666,7 @@ export default function EbookPage() {
       </div>
 
       {/* Sistema de Notas + Chat Mentor */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {/* Sistema de Notas tipo OneNote */}
         <div className="bg-white border border-gray-100 rounded-xl shadow overflow-hidden">
           <div className="p-4 border-b border-gray-200 bg-gray-50">
@@ -777,7 +783,7 @@ export default function EbookPage() {
       </div>
 
       {/* Generador de Reportes Personalizados */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {/* Formulario de Datos */}
         <div className="bg-white border border-gray-100 rounded-xl shadow p-6">
           <h2 className="text-lg font-semibold text-[#1F2937] mb-4">Generar Reporte Personalizado</h2>
