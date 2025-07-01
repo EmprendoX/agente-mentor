@@ -2,13 +2,14 @@
 
 import { useParams } from 'next/navigation';
 import { Download, ExternalLink, BookOpen } from 'lucide-react';
+import NotesSystem from '../../components/NotesSystem';
 
 const EBOOKS = {
-  'educacion-con-sentido': {
-    title: 'Educación con Sentido',
-    description: 'Transforma tu práctica educativa con estrategias innovadoras',
-    pdf_path: '/ebooks/educacion-con-sentido/educacion-con-sentido.pdf',
-    cover_path: '/ebooks/educacion-con-sentido/portada.png'
+  'accede-al-mercado-de-bienes-raices-mas-rentable-del-mundo': {
+    title: 'Accede al Mercado de Bienes Raíces Más Rentable del Mundo',
+    description: 'Descubre las estrategias más efectivas para invertir en el mercado inmobiliario más rentable del mundo.',
+    pdf_path: '/ebooks/accede-al-mercado-de-bienes-raices-mas-rentable-del-mundo/accede-al-mercado-de-bienes-raices-mas-rentable-del-mundo.pdf',
+    cover_path: '/ebooks/accede-al-mercado-de-bienes-raices-mas-rentable-del-mundo/accede-al-mercado-de-bienes-raices-mas-rentable-del-mundo.png'
   },
   'como-hacer-que-extranos-compren-tu-propiedad': {
     title: 'Cómo Hacer que Extraños Compren tu Propiedad',
@@ -16,11 +17,11 @@ const EBOOKS = {
     pdf_path: '/ebooks/como-hacer-que-extranos-compren-tu-propiedad/como-hacer-que-extranos-compren-tu-propiedad.pdf',
     cover_path: '/ebooks/como-hacer-que-extranos-compren-tu-propiedad/como-hacer-que-extranos-compren-tu-propiedad.png'
   },
-  'accede-al-mercado-de-bienes-raices-mas-rentable-del-mundo': {
-    title: 'Accede al Mercado de Bienes Raíces Más Rentable del Mundo',
-    description: 'Descubre las estrategias más efectivas para invertir en el mercado inmobiliario más rentable del mundo.',
-    pdf_path: '/ebooks/accede-al-mercado-de-bienes-raices-mas-rentable-del-mundo/accede-al-mercado-de-bienes-raices-mas-rentable-del-mundo.pdf',
-    cover_path: '/ebooks/accede-al-mercado-de-bienes-raices-mas-rentable-del-mundo/accede-al-mercado-de-bienes-raices-mas-rentable-del-mundo.png'
+  'educacion-con-sentido': {
+    title: 'Educación con Sentido',
+    description: 'Transforma tu enfoque educativo con metodologías que realmente funcionan.',
+    pdf_path: '/ebooks/educacion-con-sentido/educacion-con-sentido.pdf',
+    cover_path: '/ebooks/educacion-con-sentido/portada.png'
   },
   'guia-preventas-inmobiliarias': {
     title: 'Guía de Preventas Inmobiliarias',
@@ -115,13 +116,16 @@ export default function EbookPage() {
                 Abrir en Nueva Pestaña
               </button>
             </div>
-            <div className="w-full max-w-3xl mx-auto">
+            <div className="w-full max-w-3xl mx-auto mb-8">
               <iframe
                 src={ebook.pdf_path}
                 title={ebook.title}
                 className="w-full border rounded-lg"
                 style={{ minHeight: '70vh' }}
               />
+            </div>
+            <div className="w-full max-w-3xl mx-auto">
+              <NotesSystem />
             </div>
           </div>
         </div>
