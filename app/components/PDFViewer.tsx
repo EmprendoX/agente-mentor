@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from 'react';
-import { Download, ExternalLink, AlertCircle, CheckCircle } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Download, ExternalLink, AlertCircle, CheckCircle, RefreshCw } from 'lucide-react';
 
 interface PDFViewerProps {
   pdfPath: string;
@@ -10,7 +10,14 @@ interface PDFViewerProps {
 }
 
 export default function PDFViewer({ pdfPath, title, isMobile = false }: PDFViewerProps) {
+  const [viewMode, setViewMode] = useState<'iframe' | 'google' | 'direct'>('iframe');
   const [hasError, setHasError] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const downloadPDF = () => {
     const link = document.createElement('a');
@@ -26,6 +33,36 @@ export default function PDFViewer({ pdfPath, title, isMobile = false }: PDFViewe
     window.open(pdfPath, '_blank');
   };
 
+  const tryGoogleViewer = () => {
+    setViewMode('google');
+    setHasError(false);
+  };
+
+  const tryDirectView = () => {
+    setViewMode('direct');
+    setHasError(false);
+  };
+
+  const resetViewer = () => {
+    setViewMode('iframe');
+    setHasError(false);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-96 bg-gray-50 rounded-lg">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Cargando PDF...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Construir URL para Google Docs Viewer
+  const fullPdfUrl = typeof window !== 'undefined' ? `${window.location.origin}${pdfPath}` : pdfPath;
+  const googleViewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(fullPdfUrl)}&embedded=true`;
+
   return (
     <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
       {/* Header del visor */}
@@ -34,6 +71,9 @@ export default function PDFViewer({ pdfPath, title, isMobile = false }: PDFViewe
           <div className="flex items-center gap-3">
             <CheckCircle className="w-5 h-5 text-green-600" />
             <span className="font-medium text-gray-800">PDF Disponible</span>
+            <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+              {viewMode.toUpperCase()}
+            </span>
           </div>
           <div className="flex gap-2">
             <button
@@ -50,6 +90,13 @@ export default function PDFViewer({ pdfPath, title, isMobile = false }: PDFViewe
               <ExternalLink className="w-4 h-4" />
               Nueva Pestaña
             </button>
+            <button
+              onClick={resetViewer}
+              className="text-purple-600 hover:text-purple-800 text-sm font-medium flex items-center gap-1"
+            >
+              <RefreshCw className="w-4 h-4" />
+              Reiniciar
+            </button>
           </div>
         </div>
       </div>
@@ -64,51 +111,101 @@ export default function PDFViewer({ pdfPath, title, isMobile = false }: PDFViewe
           </div>
         )}
 
-        {/* Iframe directo */}
+        {/* Diferentes métodos de visualización */}
         <div className="relative">
-          <iframe
-            src={pdfPath}
-            title={`${title} - PDF Viewer`}
-            className="w-full"
-            style={{
-              height: isMobile ? '600px' : '800px',
-              minHeight: '400px',
-              border: 'none'
-            }}
-            onError={() => setHasError(true)}
-          />
+          {viewMode === 'iframe' && (
+            <iframe
+              src={pdfPath}
+              title={`${title} - PDF Viewer`}
+              className="w-full"
+              style={{
+                height: isMobile ? '600px' : '800px',
+                minHeight: '400px',
+                border: 'none'
+              }}
+              onError={() => {
+                setHasError(true);
+                setTimeout(tryGoogleViewer, 2000);
+              }}
+            />
+          )}
+
+          {viewMode === 'google' && (
+            <iframe
+              src={googleViewerUrl}
+              title={`${title} - Google Docs Viewer`}
+              className="w-full"
+              style={{
+                height: isMobile ? '600px' : '800px',
+                minHeight: '400px',
+                border: 'none'
+              }}
+              onError={() => {
+                setHasError(true);
+                setTimeout(tryDirectView, 2000);
+              }}
+            />
+          )}
+
+          {viewMode === 'direct' && (
+            <div className="flex items-center justify-center h-96 bg-gray-50">
+              <div className="text-center">
+                <AlertCircle className="w-12 h-12 text-orange-500 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                  PDF no disponible en el visor
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Usa las opciones de descarga o nueva pestaña.
+                </p>
+                <div className="flex flex-wrap gap-3 justify-center">
+                  <button
+                    onClick={downloadPDF}
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                  >
+                    <Download className="w-4 h-4" />
+                    Descargar PDF
+                  </button>
+                  <button
+                    onClick={openInNewTab}
+                    className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    Abrir en Nueva Pestaña
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
           
           {/* Overlay de información */}
           <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-xs">
-            IFRAME VIEWER
+            {viewMode.toUpperCase()} VIEWER
           </div>
         </div>
 
         {/* Fallback si hay error */}
-        {hasError && (
-          <div className="absolute inset-0 bg-white flex items-center justify-center">
+        {hasError && viewMode !== 'direct' && (
+          <div className="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center">
             <div className="text-center p-6">
               <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
               <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                PDF no disponible en el visor
+                Cambiando método de visualización...
               </h3>
               <p className="text-gray-600 mb-4">
-                El PDF no se puede mostrar en el visor integrado.
+                Intentando cargar el PDF con un método alternativo.
               </p>
               <div className="flex flex-wrap gap-3 justify-center">
                 <button
-                  onClick={downloadPDF}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                  onClick={tryGoogleViewer}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                 >
-                  <Download className="w-4 h-4" />
-                  Descargar PDF
+                  Usar Google Viewer
                 </button>
                 <button
-                  onClick={openInNewTab}
-                  className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+                  onClick={downloadPDF}
+                  className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
                 >
-                  <ExternalLink className="w-4 h-4" />
-                  Abrir en Nueva Pestaña
+                  Descargar PDF
                 </button>
               </div>
             </div>
