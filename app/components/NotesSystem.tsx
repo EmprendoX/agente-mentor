@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { 
   Bold, Italic, Underline, 
   List, ListOrdered, Quote, 
@@ -9,6 +9,9 @@ import {
   ChevronRight, ChevronDown,
   MoreVertical, Edit3, Copy, Trash2
 } from 'lucide-react';
+import { Slate, Editable, withReact } from 'slate-react';
+import { createEditor, Descendant, BaseEditor, Transforms, Editor, Text } from 'slate';
+import { ReactEditor } from 'slate-react';
 
 interface Page {
   id: string;
@@ -18,18 +21,11 @@ interface Page {
   updatedAt: Date;
 }
 
-interface Section {
-  id: string;
-  name: string;
-  pages: Page[];
-  isExpanded?: boolean;
-}
-
 interface Notebook {
   id: string;
   name: string;
   color: string;
-  sections: Section[];
+  pages: Page[];
   isExpanded?: boolean;
 }
 
@@ -41,7 +37,6 @@ const COLORS = [
 export default function NotesSystem() {
   const [notebooks, setNotebooks] = useState<Notebook[]>([]);
   const [selectedNotebook, setSelectedNotebook] = useState<string | null>(null);
-  const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [selectedPage, setSelectedPage] = useState<string | null>(null);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [editingTitle, setEditingTitle] = useState('');
@@ -49,11 +44,30 @@ export default function NotesSystem() {
   const [editorHeight, setEditorHeight] = useState(600);
   const [isResizing, setIsResizing] = useState(false);
   const [isEditingNotebook, setIsEditingNotebook] = useState<string | null>(null);
-  const [isEditingSection, setIsEditingSection] = useState<string | null>(null);
   const [editingNotebookName, setEditingNotebookName] = useState('');
-  const [editingSectionName, setEditingSectionName] = useState('');
   const resizeRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<HTMLDivElement>(null);
+
+  const editor = useMemo(() => withReact(createEditor()), []);
+
+  // Estado inicial para Slate
+  const initialValue: Descendant[] = [
+    { type: 'paragraph', children: [{ text: '' }] },
+  ];
+
+  // Helpers para formato
+  const isMarkActive = (editor: Editor, format: string) => {
+    const marks = Editor.marks(editor);
+    return marks ? marks[format] === true : false;
+  };
+  const toggleMark = (editor: Editor, format: string) => {
+    const isActive = isMarkActive(editor, format);
+    if (isActive) {
+      Editor.removeMark(editor, format);
+    } else {
+      Editor.addMark(editor, format, true);
+    }
+  };
 
   useEffect(() => {
     // Load from localStorage
@@ -62,7 +76,6 @@ export default function NotesSystem() {
       const data = JSON.parse(saved);
       setNotebooks(data.notebooks || []);
       setSelectedNotebook(data.selectedNotebook);
-      setSelectedSection(data.selectedSection);
       setSelectedPage(data.selectedPage);
     }
   }, []);
@@ -76,7 +89,7 @@ export default function NotesSystem() {
     }, 1000);
 
     return () => clearTimeout(timeoutId);
-  }, [notebooks, selectedNotebook, selectedSection, selectedPage]);
+  }, [notebooks, selectedNotebook, selectedPage]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -133,7 +146,6 @@ export default function NotesSystem() {
     localStorage.setItem('notes-system', JSON.stringify({
       notebooks,
       selectedNotebook,
-      selectedSection,
       selectedPage
     }));
   };
@@ -143,7 +155,7 @@ export default function NotesSystem() {
       id: Date.now().toString(),
       name: 'Nuevo Notebook',
       color: COLORS[Math.floor(Math.random() * COLORS.length)],
-      sections: [],
+      pages: [],
       isExpanded: true
     };
     setNotebooks(prev => [...prev, newNotebook]);
@@ -153,25 +165,7 @@ export default function NotesSystem() {
     setEditingNotebookName('Nuevo Notebook');
   };
 
-  const createSection = (notebookId: string) => {
-    const newSection: Section = {
-      id: Date.now().toString(),
-      name: 'Nueva Sección',
-      pages: [],
-      isExpanded: true
-    };
-    setNotebooks(prev => prev.map(nb => 
-      nb.id === notebookId 
-        ? { ...nb, sections: [...nb.sections, newSection] }
-        : nb
-    ));
-    setSelectedSection(newSection.id);
-    // Iniciar edición inmediatamente
-    setIsEditingSection(newSection.id);
-    setEditingSectionName('Nueva Sección');
-  };
-
-  const createPage = (notebookId: string, sectionId: string) => {
+  const createPage = (notebookId: string) => {
     const newPage: Page = {
       id: Date.now().toString(),
       title: 'Nueva Página',
@@ -183,11 +177,7 @@ export default function NotesSystem() {
       nb.id === notebookId 
         ? {
             ...nb,
-            sections: nb.sections.map(sec => 
-              sec.id === sectionId 
-                ? { ...sec, pages: [...sec.pages, newPage] }
-                : sec
-            )
+            pages: [...nb.pages, newPage]
           }
         : nb
     ));
@@ -198,23 +188,16 @@ export default function NotesSystem() {
   };
 
   const updatePageContent = (content: string) => {
-    if (!selectedNotebook || !selectedSection || !selectedPage) return;
+    if (!selectedNotebook || !selectedPage) return;
     
     setNotebooks(prev => prev.map(nb => 
       nb.id === selectedNotebook 
         ? {
             ...nb,
-            sections: nb.sections.map(sec => 
-              sec.id === selectedSection 
-                ? {
-                    ...sec,
-                    pages: sec.pages.map(page => 
-                      page.id === selectedPage 
-                        ? { ...page, content, updatedAt: new Date() }
-                        : page
-                    )
-                  }
-                : sec
+            pages: nb.pages.map(page => 
+              page.id === selectedPage 
+                ? { ...page, content, updatedAt: new Date() }
+                : page
             )
           }
         : nb
@@ -222,13 +205,12 @@ export default function NotesSystem() {
   };
 
   const getCurrentPage = () => {
-    if (!selectedNotebook || !selectedSection || !selectedPage) return null;
+    if (!selectedNotebook || !selectedPage) return null;
     const notebook = notebooks.find(nb => nb.id === selectedNotebook);
-    const section = notebook?.sections.find(sec => sec.id === selectedSection);
-    return section?.pages.find(page => page.id === selectedPage);
+    return notebook?.pages.find(page => page.id === selectedPage);
   };
 
-  const toggleExpanded = (type: 'notebook' | 'section', id: string) => {
+  const toggleExpanded = (type: 'notebook' | 'page', id: string) => {
     if (type === 'notebook') {
       setNotebooks(prev => prev.map(nb => 
         nb.id === id ? { ...nb, isExpanded: !nb.isExpanded } : nb
@@ -236,37 +218,24 @@ export default function NotesSystem() {
     } else {
       setNotebooks(prev => prev.map(nb => ({
         ...nb,
-        sections: nb.sections.map(sec => 
-          sec.id === id ? { ...sec, isExpanded: !sec.isExpanded } : sec
+        pages: nb.pages.map(page => 
+          page.id === id ? { ...page, isExpanded: !page.isExpanded } : page
         )
       })));
     }
   };
 
-  const deleteItem = (type: 'notebook' | 'section' | 'page', id: string) => {
+  const deleteItem = (type: 'notebook' | 'page', id: string) => {
     if (type === 'notebook') {
       setNotebooks(prev => prev.filter(nb => nb.id !== id));
       if (selectedNotebook === id) {
         setSelectedNotebook(null);
-        setSelectedSection(null);
-        setSelectedPage(null);
-      }
-    } else if (type === 'section') {
-      setNotebooks(prev => prev.map(nb => ({
-        ...nb,
-        sections: nb.sections.filter(sec => sec.id !== id)
-      })));
-      if (selectedSection === id) {
-        setSelectedSection(null);
         setSelectedPage(null);
       }
     } else if (type === 'page') {
       setNotebooks(prev => prev.map(nb => ({
         ...nb,
-        sections: nb.sections.map(sec => ({
-          ...sec,
-          pages: sec.pages.filter(page => page.id !== id)
-        }))
+        pages: nb.pages.filter(page => page.id !== id)
       })));
       if (selectedPage === id) {
         setSelectedPage(null);
@@ -274,7 +243,7 @@ export default function NotesSystem() {
     }
   };
 
-  const duplicatePage = (page: Page, targetSectionId: string) => {
+  const duplicatePage = (page: Page, targetNotebookId: string) => {
     const newPage: Page = {
       ...page,
       id: Date.now().toString(),
@@ -282,14 +251,11 @@ export default function NotesSystem() {
       createdAt: new Date(),
       updatedAt: new Date()
     };
-    setNotebooks(prev => prev.map(nb => ({
-      ...nb,
-      sections: nb.sections.map(sec => 
-        sec.id === targetSectionId 
-          ? { ...sec, pages: [...sec.pages, newPage] }
-          : sec
-      )
-    })));
+    setNotebooks(prev => prev.map(nb => 
+      nb.id === targetNotebookId 
+        ? { ...nb, pages: [...nb.pages, newPage] }
+        : nb
+    ));
   };
 
   // Funciones para el editor de texto enriquecido
@@ -344,6 +310,16 @@ export default function NotesSystem() {
   };
 
   const currentPage = getCurrentPage();
+
+  const Leaf = ({ attributes, children, leaf }: any) => {
+    if (leaf.bold) {
+      children = <strong>{children}</strong>;
+    }
+    if (leaf.italic) {
+      children = <em>{children}</em>;
+    }
+    return <span {...attributes}>{children}</span>;
+  };
 
   return (
     <div className="flex flex-col h-full bg-white rounded-xl shadow">
@@ -413,9 +389,9 @@ export default function NotesSystem() {
                   </span>
                 )}
                 <button
-                  onClick={() => createSection(notebook.id)}
+                  onClick={() => createPage(notebook.id)}
                   className="p-0.5 hover:bg-gray-200 rounded text-gray-500"
-                  title="Nueva sección"
+                  title="Nueva página"
                 >
                   <Plus size={8} />
                 </button>
@@ -430,118 +406,39 @@ export default function NotesSystem() {
               
               {notebook.isExpanded && (
                 <div className="ml-4 space-y-1">
-                  {notebook.sections.map(section => (
-                    <div key={section.id} className="text-xs">
-                      <div className="flex items-center gap-1 p-1 hover:bg-gray-100 rounded cursor-pointer">
+                  {notebook.pages.map(page => (
+                    <div
+                      key={page.id}
+                      className={`flex items-center gap-1 p-1 hover:bg-gray-100 rounded cursor-pointer ${selectedPage === page.id ? 'bg-blue-50' : ''}`}
+                      onClick={() => {
+                        setSelectedNotebook(notebook.id);
+                        setSelectedPage(page.id);
+                      }}
+                    >
+                      <FileText size={8} className="text-gray-500" />
+                      <span className="flex-1 truncate text-xs">{page.title}</span>
+                      <div className="flex items-center gap-0.5">
                         <button
-                          onClick={() => toggleExpanded('section', section.id)}
-                          className="p-0.5 hover:bg-gray-200 rounded"
-                        >
-                          {section.isExpanded ? <ChevronDown size={8} /> : <ChevronRight size={8} />}
-                        </button>
-                        <Folder size={8} className="text-gray-500" />
-                        {isEditingSection === section.id ? (
-                          <input
-                            type="text"
-                            value={editingSectionName}
-                            onChange={(e) => setEditingSectionName(e.target.value)}
-                            onBlur={() => {
-                              setNotebooks(prev => prev.map(nb => ({
-                                ...nb,
-                                sections: nb.sections.map(sec => 
-                                  sec.id === section.id ? { ...sec, name: editingSectionName } : sec
-                                )
-                              })));
-                              setIsEditingSection(null);
-                            }}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') {
-                                setNotebooks(prev => prev.map(nb => ({
-                                  ...nb,
-                                  sections: nb.sections.map(sec => 
-                                    sec.id === section.id ? { ...sec, name: editingSectionName } : sec
-                                  )
-                                })));
-                                setIsEditingSection(null);
-                              } else if (e.key === 'Escape') {
-                                setIsEditingSection(null);
-                                setEditingSectionName(section.name);
-                              }
-                            }}
-                            className="flex-1 text-xs bg-white border border-blue-300 rounded px-1 py-0.5 focus:outline-none focus:border-blue-500"
-                            autoFocus
-                          />
-                        ) : (
-                          <span
-                            className={`flex-1 truncate ${selectedSection === section.id ? 'font-medium' : ''}`}
-                            onClick={() => {
-                              setSelectedNotebook(notebook.id);
-                              setSelectedSection(section.id);
-                            }}
-                            onDoubleClick={() => {
-                              setIsEditingSection(section.id);
-                              setEditingSectionName(section.name);
-                            }}
-                          >
-                            {section.name}
-                          </span>
-                        )}
-                        <button
-                          onClick={() => createPage(notebook.id, section.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            duplicatePage(page, notebook.id);
+                          }}
                           className="p-0.5 hover:bg-gray-200 rounded text-gray-500"
-                          title="Nueva página"
+                          title="Duplicar página"
                         >
-                          <Plus size={8} />
+                          <Copy size={8} />
                         </button>
                         <button
-                          onClick={() => deleteItem('section', section.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            deleteItem('page', page.id);
+                          }}
                           className="p-0.5 hover:bg-gray-200 rounded text-gray-500"
-                          title="Eliminar sección"
+                          title="Eliminar página"
                         >
                           <Trash2 size={8} />
                         </button>
                       </div>
-                      
-                      {section.isExpanded && (
-                        <div className="ml-4 space-y-1">
-                          {section.pages.map(page => (
-                            <div
-                              key={page.id}
-                              className={`flex items-center gap-1 p-1 hover:bg-gray-100 rounded cursor-pointer ${selectedPage === page.id ? 'bg-blue-50' : ''}`}
-                              onClick={() => {
-                                setSelectedNotebook(notebook.id);
-                                setSelectedSection(section.id);
-                                setSelectedPage(page.id);
-                              }}
-                            >
-                              <FileText size={8} className="text-gray-500" />
-                              <span className="flex-1 truncate text-xs">{page.title}</span>
-                              <div className="flex items-center gap-0.5">
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    duplicatePage(page, section.id);
-                                  }}
-                                  className="p-0.5 hover:bg-gray-200 rounded text-gray-500"
-                                  title="Duplicar página"
-                                >
-                                  <Copy size={8} />
-                                </button>
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    deleteItem('page', page.id);
-                                  }}
-                                  className="p-0.5 hover:bg-gray-200 rounded text-gray-500"
-                                  title="Eliminar página"
-                                >
-                                  <Trash2 size={8} />
-                                </button>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
                     </div>
                   ))}
                 </div>
@@ -661,23 +558,65 @@ export default function NotesSystem() {
 
             {/* Large Resizable Editor */}
             <div className="flex-1 p-2 relative min-h-0" ref={resizeRef}>
-              <div
-                ref={editorRef}
-                contentEditable
-                onInput={handleEditorInput}
-                onFocus={handleEditorFocus}
-                onBlur={handleEditorBlur}
-                dangerouslySetInnerHTML={{ __html: currentPage.content }}
-                className="w-full outline-none text-gray-700 leading-relaxed border border-gray-200 rounded-lg p-3 focus:border-blue-400 focus:ring-1 focus:ring-blue-400 resize-y overflow-y-auto"
-                style={{
-                  height: `${editorHeight}px`,
-                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-                  fontSize: '14px',
-                  lineHeight: '1.6',
-                  minHeight: '300px'
+              <Slate
+                editor={editor}
+                initialValue={currentPage?.content ? JSON.parse(currentPage.content) : initialValue}
+                onChange={value => {
+                  if (currentPage) {
+                    updatePageContent(JSON.stringify(value));
+                  }
                 }}
-                data-placeholder="Escribe tus notas aquí..."
-              />
+              >
+                <div className="flex gap-2 mb-2">
+                  <button
+                    type="button"
+                    className="p-1 border rounded text-gray-600 hover:bg-gray-100"
+                    onMouseDown={e => {
+                      e.preventDefault();
+                      toggleMark(editor, 'bold');
+                    }}
+                  >
+                    <b>B</b>
+                  </button>
+                  <button
+                    type="button"
+                    className="p-1 border rounded text-gray-600 hover:bg-gray-100"
+                    onMouseDown={e => {
+                      e.preventDefault();
+                      toggleMark(editor, 'italic');
+                    }}
+                  >
+                    <i>I</i>
+                  </button>
+                </div>
+                <Editable
+                  className="w-full outline-none text-gray-700 leading-relaxed border border-gray-200 rounded-lg p-3 focus:border-blue-400 focus:ring-1 focus:ring-blue-400 resize-y overflow-y-auto"
+                  style={{
+                    height: `${editorHeight}px`,
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+                    fontSize: '14px',
+                    lineHeight: '1.6',
+                    minHeight: '300px'
+                  }}
+                  placeholder="Escribe tus notas aquí..."
+                  renderLeaf={props => <Leaf {...props} />}
+                  onKeyDown={event => {
+                    if (!event.ctrlKey) return;
+                    switch (event.key) {
+                      case 'b': {
+                        event.preventDefault();
+                        toggleMark(editor, 'bold');
+                        break;
+                      }
+                      case 'i': {
+                        event.preventDefault();
+                        toggleMark(editor, 'italic');
+                        break;
+                      }
+                    }
+                  }}
+                />
+              </Slate>
               
               {/* Manual Resize Handle */}
               <div
@@ -730,14 +669,11 @@ export default function NotesSystem() {
                   if (currentPage) {
                     setNotebooks(prev => prev.map(nb => ({
                       ...nb,
-                      sections: nb.sections.map(sec => ({
-                        ...sec,
-                        pages: sec.pages.map(page => 
-                          page.id === currentPage.id 
-                            ? { ...page, title: editingTitle }
-                            : page
-                        )
-                      }))
+                      pages: nb.pages.map(page => 
+                        page.id === currentPage.id 
+                          ? { ...page, title: editingTitle }
+                          : page
+                      )
                     })));
                   }
                   setIsEditingTitle(false);
