@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { Download, ExternalLink, AlertCircle, CheckCircle, Eye } from 'lucide-react';
+import { useState } from 'react';
+import { Download, ExternalLink, AlertCircle, CheckCircle } from 'lucide-react';
 
 interface PDFViewerProps {
   pdfPath: string;
@@ -10,25 +10,11 @@ interface PDFViewerProps {
 }
 
 export default function PDFViewer({ pdfPath, title, isMobile = false }: PDFViewerProps) {
-  const [viewMode, setViewMode] = useState<'iframe' | 'object' | 'embed'>('iframe');
   const [hasError, setHasError] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [apiPdfPath, setApiPdfPath] = useState('');
-
-  useEffect(() => {
-    // Extraer el slug del pdfPath
-    const pathParts = pdfPath.split('/');
-    const slug = pathParts[pathParts.length - 2]; // Obtener el slug del path
-    setApiPdfPath(`/api/pdf/${slug}`);
-    
-    // Simular carga
-    const timer = setTimeout(() => setIsLoading(false), 1000);
-    return () => clearTimeout(timer);
-  }, [pdfPath]);
 
   const downloadPDF = () => {
     const link = document.createElement('a');
-    link.href = apiPdfPath || pdfPath;
+    link.href = pdfPath;
     link.download = `${title}.pdf`;
     link.target = '_blank';
     document.body.appendChild(link);
@@ -37,31 +23,8 @@ export default function PDFViewer({ pdfPath, title, isMobile = false }: PDFViewe
   };
 
   const openInNewTab = () => {
-    window.open(apiPdfPath || pdfPath, '_blank');
+    window.open(pdfPath, '_blank');
   };
-
-  const tryNextViewMode = () => {
-    if (viewMode === 'iframe') {
-      setViewMode('object');
-    } else if (viewMode === 'object') {
-      setViewMode('embed');
-    } else {
-      setHasError(true);
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-96 bg-gray-50 rounded-lg">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando PDF...</p>
-        </div>
-      </div>
-    );
-  }
-
-  const currentPdfPath = apiPdfPath || pdfPath;
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
@@ -71,11 +34,6 @@ export default function PDFViewer({ pdfPath, title, isMobile = false }: PDFViewe
           <div className="flex items-center gap-3">
             <CheckCircle className="w-5 h-5 text-green-600" />
             <span className="font-medium text-gray-800">PDF Disponible</span>
-            {apiPdfPath && (
-              <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                API Route
-              </span>
-            )}
           </div>
           <div className="flex gap-2">
             <button
@@ -92,13 +50,6 @@ export default function PDFViewer({ pdfPath, title, isMobile = false }: PDFViewe
               <ExternalLink className="w-4 h-4" />
               Nueva Pestaña
             </button>
-            <button
-              onClick={tryNextViewMode}
-              className="text-purple-600 hover:text-purple-800 text-sm font-medium flex items-center gap-1"
-            >
-              <Eye className="w-4 h-4" />
-              Cambiar Vista
-            </button>
           </div>
         </div>
       </div>
@@ -113,54 +64,23 @@ export default function PDFViewer({ pdfPath, title, isMobile = false }: PDFViewe
           </div>
         )}
 
-        {/* Diferentes métodos de visualización */}
+        {/* Iframe directo */}
         <div className="relative">
-          {viewMode === 'iframe' && (
-            <iframe
-              src={currentPdfPath}
-              title={`${title} - PDF Viewer`}
-              className="w-full"
-              style={{
-                height: isMobile ? '600px' : '800px',
-                minHeight: '400px',
-                border: 'none'
-              }}
-              onError={tryNextViewMode}
-            />
-          )}
-
-          {viewMode === 'object' && (
-            <object
-              data={currentPdfPath}
-              type="application/pdf"
-              className="w-full"
-              style={{
-                height: isMobile ? '600px' : '800px',
-                minHeight: '400px',
-                border: 'none'
-              }}
-              onError={tryNextViewMode}
-            >
-              <p>Tu navegador no puede mostrar PDFs. <a href={currentPdfPath} target="_blank">Haz clic aquí para descargar</a></p>
-            </object>
-          )}
-
-          {viewMode === 'embed' && (
-            <embed
-              src={currentPdfPath}
-              type="application/pdf"
-              className="w-full"
-              style={{
-                height: isMobile ? '600px' : '800px',
-                minHeight: '400px',
-                border: 'none'
-              }}
-            />
-          )}
+          <iframe
+            src={pdfPath}
+            title={`${title} - PDF Viewer`}
+            className="w-full"
+            style={{
+              height: isMobile ? '600px' : '800px',
+              minHeight: '400px',
+              border: 'none'
+            }}
+            onError={() => setHasError(true)}
+          />
           
           {/* Overlay de información */}
           <div className="absolute top-2 right-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-xs">
-            {viewMode.toUpperCase()} Viewer
+            IFRAME VIEWER
           </div>
         </div>
 

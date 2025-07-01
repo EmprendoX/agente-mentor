@@ -4,10 +4,10 @@ import { join } from 'path';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = params;
+    const { slug } = await params;
     
     // Mapeo de slugs a rutas de archivos
     const pdfMap: { [key: string]: string } = {
