@@ -57,7 +57,7 @@ export default function EbookPage() {
             <div className="mb-6">
               <BookOpen className="w-16 h-16 text-blue-600 mx-auto mb-4" />
               <h2 className="text-2xl font-bold text-gray-800 mb-2">{ebook.title}</h2>
-              <p className="text-gray-600 mb-6">Tu eBook está listo para descargar - Vercel Fixed</p>
+              <p className="text-gray-600 mb-6">✅ VISOR QUITADO - SOLO BOTONES DE DESCARGA</p>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
