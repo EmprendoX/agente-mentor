@@ -46,8 +46,6 @@ export async function GET(
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `inline; filename="${slug}.pdf"`,
-        'X-Frame-Options': 'SAMEORIGIN',
-        'Content-Security-Policy': "frame-ancestors 'self'",
         'Cache-Control': 'public, max-age=31536000, immutable',
       },
     });
