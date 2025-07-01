@@ -1,7 +1,5 @@
 # Headers para archivos PDF
 /ebooks/*
-  X-Frame-Options: SAMEORIGIN
-  Content-Security-Policy: frame-ancestors 'self'
   Cache-Control: public, max-age=31536000, immutable
 
 # Headers para imágenes de portada
