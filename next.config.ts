@@ -13,16 +13,41 @@ const nextConfig: NextConfig = {
     formats: ['image/webp', 'image/avif'],
   },
   
-  // Headers de seguridad
+  // Configuración para archivos estáticos (PDFs)
+  experimental: {
+    optimizePackageImports: ['lucide-react'],
+  },
+  
+  // Configuración de output para producción
+  output: 'standalone',
+  
+  // Headers de seguridad específicos para PDFs
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: '/ebooks/(.*)',
         headers: [
           {
             key: 'X-Frame-Options',
-            value: 'DENY',
+            value: 'SAMEORIGIN',
           },
+          {
+            key: 'Content-Security-Policy',
+            value: "frame-ancestors 'self'",
+          },
+          {
+            key: 'Content-Type',
+            value: 'application/pdf',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        source: '/(.*)',
+        headers: [
           {
             key: 'X-Content-Type-Options',
             value: 'nosniff',
@@ -34,6 +59,20 @@ const nextConfig: NextConfig = {
         ],
       },
     ];
+  },
+  
+  // Configuración de webpack para PDFs
+  webpack: (config, { isServer }) => {
+    // Configurar manejo de archivos PDF
+    config.module.rules.push({
+      test: /\.pdf$/,
+      type: 'asset/resource',
+      generator: {
+        filename: 'static/media/[name].[hash][ext]',
+      },
+    });
+    
+    return config;
   },
 };
 

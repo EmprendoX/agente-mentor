@@ -68,35 +68,35 @@ interface Document {
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState('overview');
 
-  // Datos simulados para el dashboard
+  // Datos simulados para el dashboard educativo
   const tasks: Task[] = [
-    { id: '1', title: 'Revisar reporte de ventas Q4', priority: 'high', dueDate: '2024-01-30', completed: false },
-    { id: '2', title: 'Preparar presentación para cliente', priority: 'medium', dueDate: '2024-02-02', completed: false },
-    { id: '3', title: 'Actualizar base de datos de leads', priority: 'low', dueDate: '2024-02-05', completed: true }
+    { id: '1', title: 'Completar lección de matemáticas', priority: 'high', dueDate: '2024-01-30', completed: false },
+    { id: '2', title: 'Leer capítulo de ciencias', priority: 'medium', dueDate: '2024-02-02', completed: false },
+    { id: '3', title: 'Practicar ejercicios de inglés', priority: 'low', dueDate: '2024-02-05', completed: true }
   ];
 
   const events: Event[] = [
-    { id: '1', title: 'Reunión con equipo de marketing', date: '2024-01-29', time: '10:00 AM', type: 'meeting' },
-    { id: '2', title: 'Deadline proyecto inmobiliario', date: '2024-01-31', time: '5:00 PM', type: 'deadline' },
-    { id: '3', title: 'Recordatorio: Revisar métricas', date: '2024-02-01', time: '9:00 AM', type: 'reminder' }
+    { id: '1', title: 'Clase de matemáticas', date: '2024-01-29', time: '10:00 AM', type: 'meeting' },
+    { id: '2', title: 'Entrega de proyecto de ciencias', date: '2024-01-31', time: '5:00 PM', type: 'deadline' },
+    { id: '3', title: 'Recordatorio: Estudiar para examen', date: '2024-02-01', time: '9:00 AM', type: 'reminder' }
   ];
 
   const reports: Report[] = [
-    { id: '1', title: 'Análisis de Mercado Inmobiliario', type: 'Mercado', lastOpened: '2024-01-28', status: 'completed' },
-    { id: '2', title: 'Reporte de Leads Generados', type: 'Marketing', lastOpened: '2024-01-27', status: 'draft' },
-    { id: '3', title: 'Métricas de Conversión', type: 'Ventas', lastOpened: '2024-01-26', status: 'pending' }
+    { id: '1', title: 'Progreso en Matemáticas', type: 'Académico', lastOpened: '2024-01-28', status: 'completed' },
+    { id: '2', title: 'Reporte de Lectura', type: 'Literatura', lastOpened: '2024-01-27', status: 'draft' },
+    { id: '3', title: 'Evaluación de Ciencias', type: 'Ciencias', lastOpened: '2024-01-26', status: 'pending' }
   ];
 
   const messages: Message[] = [
-    { id: '1', sender: 'María González', subject: 'Consulta sobre nuevo proyecto', unread: true, timestamp: '2h' },
-    { id: '2', sender: 'Carlos Rodríguez', subject: 'Actualización de automatización', unread: false, timestamp: '1d' },
-    { id: '3', sender: 'Ana Martínez', subject: 'Feedback sobre reporte', unread: true, timestamp: '3h' }
+    { id: '1', sender: 'Prof. María González', subject: 'Feedback sobre tu tarea', unread: true, timestamp: '2h' },
+    { id: '2', sender: 'Prof. Carlos Rodríguez', subject: 'Recordatorio de clase', unread: false, timestamp: '1d' },
+    { id: '3', sender: 'Prof. Ana Martínez', subject: 'Felicitaciones por tu progreso', unread: true, timestamp: '3h' }
   ];
 
   const documents: Document[] = [
-    { id: '1', name: 'Guía de Ventas 2024', type: 'PDF', lastModified: '2024-01-28', isFavorite: true },
-    { id: '2', name: 'Plantilla de Contrato', type: 'DOCX', lastModified: '2024-01-27', isFavorite: false },
-    { id: '3', name: 'Análisis Competitivo', type: 'XLSX', lastModified: '2024-01-26', isFavorite: true }
+    { id: '1', name: 'Guía de Estudio 2024', type: 'PDF', lastModified: '2024-01-28', isFavorite: true },
+    { id: '2', name: 'Ejercicios de Matemáticas', type: 'DOCX', lastModified: '2024-01-27', isFavorite: false },
+    { id: '3', name: 'Notas de Ciencias', type: 'XLSX', lastModified: '2024-01-26', isFavorite: true }
   ];
 
   const getPriorityColor = (priority: string) => {
@@ -133,8 +133,8 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl font-bold">Dashboard</h1>
-              <p className="text-white/80 mt-1">Resumen personalizado de tu actividad</p>
+              <h1 className="text-2xl font-bold">SchoolX Dashboard</h1>
+              <p className="text-white/80 mt-1">Tu centro de aprendizaje personalizado</p>
             </div>
             <div className="flex items-center gap-4">
               <button className="bg-white/20 hover:bg-white/30 p-2 rounded-lg transition-colors">
@@ -167,7 +167,7 @@ export default function DashboardPage() {
           <div className="bg-white rounded-xl shadow p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Eventos Hoy</p>
+                <p className="text-sm text-gray-600">Clases Hoy</p>
                 <p className="text-2xl font-bold text-[#1F2937]">{events.length}</p>
               </div>
               <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
@@ -179,7 +179,7 @@ export default function DashboardPage() {
           <div className="bg-white rounded-xl shadow p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Mensajes Nuevos</p>
+                <p className="text-sm text-gray-600">Mensajes de Profesores</p>
                 <p className="text-2xl font-bold text-[#1F2937]">{messages.filter(m => m.unread).length}</p>
               </div>
               <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -191,7 +191,7 @@ export default function DashboardPage() {
           <div className="bg-white rounded-xl shadow p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Automatizaciones Activas</p>
+                <p className="text-sm text-gray-600">Lecciones Completadas</p>
                 <p className="text-2xl font-bold text-[#1F2937]">12</p>
               </div>
               <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
@@ -531,7 +531,7 @@ export default function DashboardPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
             <Link href="/ebook/educacion-con-sentido" className="flex flex-col items-center p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
               <BookOpen className="w-6 h-6 text-blue-600 mb-2" />
-              <span className="text-sm font-medium text-blue-900">eBooks</span>
+              <span className="text-sm font-medium text-blue-900">Educación con Sentido</span>
             </Link>
             <Link href="/registro" className="flex flex-col items-center p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
               <Users className="w-6 h-6 text-green-600 mb-2" />

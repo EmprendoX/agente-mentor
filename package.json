@@ -1,12 +1,13 @@
 {
-  "name": "agente-mentor",
+  "name": "schoolx-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "check-pdfs": "node scripts/check-pdfs.js"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.11",

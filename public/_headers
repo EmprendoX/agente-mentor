@@ -1,0 +1,23 @@
+# Headers para archivos PDF
+/ebooks/*
+  X-Frame-Options: SAMEORIGIN
+  Content-Security-Policy: frame-ancestors 'self'
+  Cache-Control: public, max-age=31536000, immutable
+
+# Headers para imágenes de portada
+/ebooks/*.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/ebooks/*.jpg
+  Cache-Control: public, max-age=31536000, immutable
+
+/ebooks/*.jpeg
+  Cache-Control: public, max-age=31536000, immutable
+
+/ebooks/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+
+# Headers generales de seguridad
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: origin-when-cross-origin 
