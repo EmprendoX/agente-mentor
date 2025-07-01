@@ -133,8 +133,8 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl font-bold">SchoolX Dashboard</h1>
-              <p className="text-white/80 mt-1">Tu centro de aprendizaje personalizado</p>
+              <h1 className="text-2xl font-bold">Agente Mentor Dashboard</h1>
+              <p className="text-white/80 mt-1">Tu centro de eBooks y mentoría con IA</p>
             </div>
             <div className="flex items-center gap-4">
               <button className="bg-white/20 hover:bg-white/30 p-2 rounded-lg transition-colors">

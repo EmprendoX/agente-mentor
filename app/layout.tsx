@@ -2,29 +2,29 @@ import './globals.css';
 import Sidebar from './sidebar';
 
 export const metadata = {
-  title: 'SchoolX - Plataforma Educativa para Niños y Jóvenes',
-  description: 'Plataforma educativa especializada para niños y jóvenes de 8-17 años. eBooks educativos, mentoría personalizada y herramientas de aprendizaje interactivas.',
-  keywords: 'educación, niños, jóvenes, ebooks educativos, mentoría, aprendizaje, schoolx, plataforma educativa',
-  authors: [{ name: 'SchoolX' }],
-  creator: 'SchoolX',
-  publisher: 'SchoolX',
+  title: 'Agente Mentor - Plataforma de eBooks con IA',
+  description: 'Plataforma moderna de eBooks especializados con mentoría integrada por inteligencia artificial, diseñada para profesionales y emprendedores.',
+  keywords: 'ebooks, mentoría, IA, inteligencia artificial, profesionales, emprendedores, agente mentor, plataforma educativa',
+  authors: [{ name: 'Agente Mentor' }],
+  creator: 'Agente Mentor',
+  publisher: 'Agente Mentor',
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://app.schoolx.mx'),
+  metadataBase: new URL('https://mentorx.mx'),
   openGraph: {
-    title: 'SchoolX - Plataforma Educativa para Niños y Jóvenes',
-    description: 'Plataforma educativa especializada para niños y jóvenes de 8-17 años con eBooks y mentoría personalizada',
-    url: 'https://app.schoolx.mx',
-    siteName: 'SchoolX',
+    title: 'Agente Mentor - Plataforma de eBooks con IA',
+    description: 'Plataforma moderna de eBooks especializados con mentoría integrada por inteligencia artificial, diseñada para profesionales y emprendedores',
+    url: 'https://mentorx.mx',
+    siteName: 'Agente Mentor',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'SchoolX - Plataforma Educativa',
+        alt: 'Agente Mentor - Plataforma de eBooks con IA',
       },
     ],
     locale: 'es_ES',
@@ -32,8 +32,8 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SchoolX - Plataforma Educativa para Niños y Jóvenes',
-    description: 'Plataforma educativa especializada para niños y jóvenes de 8-17 años',
+    title: 'Agente Mentor - Plataforma de eBooks con IA',
+    description: 'Plataforma moderna de eBooks especializados con mentoría integrada por inteligencia artificial',
     images: ['/og-image.png'],
   },
   robots: {

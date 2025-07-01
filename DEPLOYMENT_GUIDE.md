@@ -36,17 +36,7 @@ El proyecto está configurado con:
 - Headers adicionales para Vercel
 - Configuración de cache para archivos estáticos
 
-### 4. Componente PDFViewer
-
-El nuevo componente `PDFViewer` incluye:
-
-- ✅ Verificación de disponibilidad del PDF
-- ✅ Estados de carga y error
-- ✅ Fallbacks para dispositivos móviles
-- ✅ Opciones de descarga y apertura en nueva pestaña
-- ✅ Manejo robusto de errores
-
-### 5. Despliegue
+### 4. Despliegue
 
 ```bash
 # Verificar archivos
@@ -59,13 +49,13 @@ npm run build
 vercel --prod
 ```
 
-### 6. Verificación Post-Despliegue
+### 5. Verificación Post-Despliegue
 
 1. **Verificar PDFs**: Navega a cada eBook y confirma que los PDFs se cargan
 2. **Verificar Headers**: Usa las herramientas de desarrollador para confirmar que los headers están configurados correctamente
 3. **Verificar Móvil**: Prueba en dispositivos móviles
 
-### 7. Troubleshooting
+### 6. Troubleshooting
 
 #### PDF no se muestra
 - Verificar que el archivo existe en `public/ebooks/`
@@ -80,7 +70,7 @@ vercel --prod
 - Los archivos tienen cache de 1 año
 - Para forzar actualización, cambiar el nombre del archivo
 
-### 8. Estructura de Archivos
+### 7. Estructura de Archivos
 
 ```
 public/
@@ -95,13 +85,13 @@ public/
 └── _headers
 ```
 
-### 9. Monitoreo
+### 8. Monitoreo
 
 - Usar Vercel Analytics para monitorear errores
 - Verificar logs de Vercel para problemas de carga
 - Monitorear métricas de rendimiento de PDFs
 
-### 10. Actualizaciones
+### 9. Actualizaciones
 
 Para actualizar PDFs:
 

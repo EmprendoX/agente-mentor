@@ -28,15 +28,6 @@ if (fs.existsSync(apiRoutePath)) {
   console.log(`❌ ${apiRoutePath} - Faltante`);
 }
 
-// Verificar componentes
-const componentPath = 'app/components/PDFViewer.tsx';
-console.log('\n🧩 Componentes:');
-if (fs.existsSync(componentPath)) {
-  console.log(`✅ ${componentPath} - Presente`);
-} else {
-  console.log(`❌ ${componentPath} - Faltante`);
-}
-
 // Verificar PDFs
 const ebooksDir = 'public/ebooks';
 console.log('\n📚 PDFs disponibles:');
@@ -57,9 +48,7 @@ if (fs.existsSync(ebooksDir)) {
 console.log('\n🚀 Resumen para producción:');
 console.log('1. ✅ Headers configurados para PDFs');
 console.log('2. ✅ API route para servir PDFs');
-console.log('3. ✅ Componente PDFViewer mejorado');
-console.log('4. ✅ Múltiples fallbacks implementados');
-console.log('5. ✅ Configuración de Vercel optimizada');
+console.log('3. ✅ Configuración de Vercel optimizada');
 
 console.log('\n📝 Instrucciones para despliegue:');
 console.log('1. Haz commit de todos los cambios');

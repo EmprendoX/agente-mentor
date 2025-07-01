@@ -45,8 +45,7 @@
   "technical": {
     "framework": "Next.js 15.3.4",
     "styling": "Tailwind CSS",
-    "state_management": "React Hooks",
-    "pdf_viewer": "iframe native"
+    "state_management": "React Hooks"
   },
   "deployment": {
     "ready_for_production": true,
