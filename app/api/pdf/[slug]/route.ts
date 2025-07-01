@@ -45,7 +45,7 @@ export async function GET(
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `inline; filename="${slug}.pdf"`,
+        'Content-Disposition': `attachment; filename="${slug}.pdf"`,
         'Cache-Control': 'public, max-age=31536000, immutable',
       },
     });
