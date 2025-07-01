@@ -108,8 +108,8 @@ export default function PDFViewer({ pdfPath, title, isMobile = false }: PDFViewe
               title={`${title} - PDF Viewer`}
               className="w-full"
               style={{
-                height: isMobile ? '600px' : '800px',
-                minHeight: '400px',
+                height: isMobile ? '600px' : '90vh',
+                minHeight: '600px',
                 border: 'none'
               }}
               onError={() => {
@@ -125,8 +125,8 @@ export default function PDFViewer({ pdfPath, title, isMobile = false }: PDFViewe
               title={`${title} - Google Docs Viewer`}
               className="w-full"
               style={{
-                height: isMobile ? '600px' : '800px',
-                minHeight: '400px',
+                height: isMobile ? '600px' : '90vh',
+                minHeight: '600px',
                 border: 'none'
               }}
               onError={() => {
