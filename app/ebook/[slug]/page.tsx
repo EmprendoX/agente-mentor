@@ -3,6 +3,9 @@
 import { useParams } from 'next/navigation';
 import { Download, ExternalLink, BookOpen } from 'lucide-react';
 import NotesSystem from '../../components/NotesSystem';
+import AgentiveHubWidget from '../../components/AgentiveHubWidget';
+import AgentiveHubWidget2 from '../../components/AgentiveHubWidget2';
+
 
 const EBOOKS = {
   'accede-al-mercado-de-bienes-raices-mas-rentable-del-mundo': {
@@ -59,6 +62,11 @@ export default function EbookPage() {
   const params = useParams();
   const slug = params.slug as string;
   const ebook = EBOOKS[slug as keyof typeof EBOOKS];
+
+  // Debug: Log the current slug
+  console.log('Current slug:', slug);
+
+
 
   if (!ebook) {
     return (
@@ -127,6 +135,30 @@ export default function EbookPage() {
             <div className="w-full max-w-3xl mx-auto">
               <NotesSystem />
             </div>
+            
+            {/* ElevenLabs Convai Widget - Only for educacion-con-sentido */}
+            {slug === 'educacion-con-sentido' && (
+              <div className="w-full max-w-3xl mx-auto mt-8">
+                <div className="bg-white rounded-lg p-6 shadow-sm border">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-4 text-center">
+                    ¿Tienes preguntas sobre este eBook?
+                  </h3>
+                  <div className="flex justify-center">
+                    <div 
+                      dangerouslySetInnerHTML={{
+                        __html: '<elevenlabs-convai agent-id="agent_01jz45qhhmfnxa61f877a8y1y6"></elevenlabs-convai>'
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+            
+            {/* AgentiveHub Widget - Only for educacion-con-sentido */}
+            {slug === 'educacion-con-sentido' && <AgentiveHubWidget />}
+            
+            {/* AgentiveHub Widget 2 - Only for como-hacer-que-extranos-compren-tu-propiedad */}
+            {slug === 'como-hacer-que-extranos-compren-tu-propiedad' && <AgentiveHubWidget2 />}
           </div>
         </div>
       </div>

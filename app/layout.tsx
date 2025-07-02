@@ -59,6 +59,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
+      <head>
+        <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async></script>
+      </head>
       <body className="flex flex-col md:flex-row">
         <Sidebar />
         <main className="flex-1 p-3 md:p-6 bg-[#FAF3E0] min-h-screen w-full">
