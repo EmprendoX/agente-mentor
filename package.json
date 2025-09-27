@@ -17,7 +17,8 @@
     "react": "^19",
     "react-dom": "^19",
     "slate": "^0.117.2",
-    "slate-react": "^0.117.3"
+    "slate-react": "^0.117.3",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@types/node": "^22",
