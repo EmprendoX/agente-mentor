@@ -16,6 +16,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.75.1",
     "@tailwindcss/postcss": "^4.1.11",
+    "@vercel/speed-insights": "^1.2.0",
     "airtable": "^0.12.2",
     "bullmq": "^5.61.0",
     "cors": "^2.8.5",
