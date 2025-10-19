@@ -1,23 +1,6 @@
-export type AnalyticsEventType =
-  | 'interaction.logged'
-  | 'decision.accepted'
-  | 'decision.rejected'
-  | 'alert.created'
-  | 'alert.acknowledged'
-  | 'briefing.generated'
-  | 'task.created'
-  | 'task.status.updated'
-  | 'context.update'
-  | 'memory.documents.ingested'
-  | 'agent.recommendation'
-  | 'action.execution.created'
-  | 'action.execution.status'
-  | 'action.execution.failed'
-  | string;
-
 export interface AnalyticsEvent<TPayload = Record<string, unknown>> {
   id: string;
-  type: AnalyticsEventType;
+  type: string;
   timestamp: string;
   payload?: TPayload;
 }

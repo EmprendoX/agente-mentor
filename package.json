@@ -28,6 +28,7 @@
     "openai": "^6.5.0",
     "react": "^19",
     "react-dom": "^19",
+    "recharts": "^3.3.0",
     "slate": "^0.117.2",
     "slate-react": "^0.117.3",
     "swagger-ui-express": "^5.0.1",
