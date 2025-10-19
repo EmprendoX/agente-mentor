@@ -3,7 +3,7 @@ const path = require('path');
 
 console.log('🔍 Verificando configuración de Agente Mentor...\n');
 
-// Verificar que no hay referencias a SchoolX o Vercel
+// Verificar que no hay referencias a SchoolX ni al hosting anterior
 console.log('🔍 Verificando referencias incorrectas:');
 const filesToCheck = [
   'app/layout.tsx',
@@ -25,7 +25,7 @@ filesToCheck.forEach(file => {
     }
 
     if (content.match(/vercel/i)) {
-      console.log(`❌ ${file} - Contiene referencias a Vercel`);
+      console.log(`❌ ${file} - Contiene referencias al hosting anterior`);
       vercelReferences++;
     }
   }
@@ -38,9 +38,9 @@ if (schoolXReferences === 0) {
 }
 
 if (vercelReferences === 0) {
-  console.log('✅ Ninguna referencia a Vercel detectada');
+  console.log('✅ Ninguna referencia al hosting anterior detectada');
 } else {
-  console.log(`⚠️  Se encontraron ${vercelReferences} archivos con referencias a Vercel`);
+  console.log(`⚠️  Se encontraron ${vercelReferences} archivos con referencias al hosting anterior`);
 }
 
 // Verificar configuración de Netlify

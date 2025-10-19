@@ -72,12 +72,12 @@ console.log('2. ✅ Configuración de Next.js optimizada');
 console.log('3. ✅ Headers y metadata revisados');
 console.log('4. ✅ Archivos críticos presentes');
 
-console.log('\n🧹 Limpieza de referencias a Vercel:');
+console.log('\n🧹 Limpieza de referencias al hosting anterior:');
 const repoContent = fs.readFileSync('README.md', 'utf8');
 if (repoContent.match(/vercel/i)) {
-  console.log('⚠️  Aún se detectan menciones a Vercel. Reemplázalas por Netlify.');
+  console.log('⚠️  Aún se detectan menciones al proveedor anterior. Reemplázalas por Netlify.');
 } else {
-  console.log('✅ Sin referencias a Vercel en la documentación principal');
+  console.log('✅ Sin referencias al hosting anterior en la documentación principal');
 }
 
 console.log('\n📝 Comandos para deploy limpio:');

@@ -12,13 +12,13 @@ npm run check-pdfs
 
 Esto verificará que todos los PDFs y imágenes de portada estén presentes en la carpeta `public/ebooks/`.
 
-### 2. Desactivar integraciones previas con Vercel
+### 2. Desactivar integraciones previas del proveedor anterior
 
-Antes de preparar el despliegue en Netlify, asegúrate de que Vercel no siga tomando este repositorio:
+Antes de preparar el despliegue en Netlify, asegúrate de que ningún servicio previo continúe ejecutando builds automáticos sobre este repositorio:
 
-- Elimina el proyecto desde el panel de Vercel para evitar builds paralelos.
-- Revoca el acceso de Vercel a GitHub en `Settings > Applications`.
-- Borra tokens o variables de entorno relacionadas con Vercel en tu gestor de secretos.
+- Elimina el proyecto en el panel del proveedor anterior para evitar builds paralelos.
+- Revoca el acceso de esa plataforma a GitHub desde `Settings > Applications`.
+- Borra tokens o variables de entorno relacionadas con el proveedor anterior en tu gestor de secretos.
 
 ### 3. Configuración de Netlify
 
