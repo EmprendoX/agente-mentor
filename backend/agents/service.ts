@@ -1,13 +1,15 @@
 import { ActionService } from '../actions/service';
 import { AnalyticsService } from '../analytics/service';
 import { MemoryService } from '../memory/service';
-import { DailyBriefing } from './models';
+import { RAGPipeline } from '../intelligence/rag-pipeline';
+import { AgentRecommendation, DailyBriefing, GenerateRecommendationInput } from './models';
 
 export class AgentsService {
   constructor(
     private readonly actionService: ActionService,
     private readonly memoryService: MemoryService,
     private readonly analyticsService: AnalyticsService,
+    private readonly ragPipeline?: RAGPipeline,
   ) {}
 
   getDailyBriefing(date = new Date()): DailyBriefing {
@@ -43,6 +45,44 @@ export class AgentsService {
     });
 
     return briefing;
+  }
+
+  async generateRecommendation(input: GenerateRecommendationInput): Promise<AgentRecommendation> {
+    if (!this.ragPipeline) {
+      const fallback: AgentRecommendation = {
+        answer: 'La orquestación con IA no está configurada en este entorno.',
+        model: 'offline',
+        context: {
+          globalContext: [],
+          memoryUpdates: [],
+          recentInsights: [],
+          knowledgeBase: [],
+        },
+      };
+
+      this.analyticsService.recordEvent('agent.recommendation', {
+        organizationId: input.organizationId,
+        model: fallback.model,
+        status: 'unavailable',
+      });
+
+      return fallback;
+    }
+
+    const result = await this.ragPipeline.generateResponse({
+      organizationId: input.organizationId,
+      query: input.query,
+      conversation: input.conversation,
+      globalOverrides: input.globalOverrides,
+    });
+
+    this.analyticsService.recordEvent('agent.recommendation', {
+      organizationId: input.organizationId,
+      model: result.model,
+      status: 'success',
+    });
+
+    return result;
   }
 
   private buildHeadline(tasks: number, alerts: number, updates: number): string {

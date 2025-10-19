@@ -1,4 +1,5 @@
 import { Alert, Task } from '../actions/models';
+import { AgentResponse, ChatMessage } from '../intelligence/models';
 import { ContextUpdate } from '../memory/models';
 
 export interface DailyBriefing {
@@ -8,3 +9,12 @@ export interface DailyBriefing {
   activeAlerts: Alert[];
   latestUpdates: ContextUpdate[];
 }
+
+export interface GenerateRecommendationInput {
+  organizationId: string;
+  query: string;
+  conversation?: ChatMessage[];
+  globalOverrides?: string[];
+}
+
+export type AgentRecommendation = AgentResponse;
