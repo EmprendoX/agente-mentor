@@ -33,7 +33,7 @@ Construir el ecosistema líder de agentes IA en español que acompaña a equipos
 - **Framework:** Next.js 15, React 18, TypeScript.
 - **UI & estilos:** Tailwind CSS con paleta multiagente (azul, verde, naranja, morado, amarillo).
 - **Iconografía:** Lucide React.
-- **Deployment recomendado:** Vercel (`www.mentorx.mx`).
+- **Deployment recomendado:** Netlify (`www.mentorx.mx`).
 
 ## 🚀 Instalación y desarrollo
 1. **Clonar el repositorio**
@@ -83,16 +83,16 @@ npm run start    # Servidor de producción
 npm run lint     # Verificación de código
 ```
 
-## 🌐 Despliegue en Vercel (recomendado)
-1. Conectar la cuenta de GitHub y seleccionar el repositorio `agente-mentor`.
-2. Configurar el dominio personalizado `www.mentorx.mx`.
+## 🌐 Despliegue en Netlify (recomendado)
+1. Conectar la cuenta de GitHub y seleccionar el repositorio `agente-mentor` en Netlify.
+2. Establecer como comando de build `npm run build` y directorio publicado `.next` (Netlify lo detecta automáticamente con el plugin oficial).
 3. (Opcional) Variables de entorno:
    ```env
    NEXT_PUBLIC_SITE_URL=https://www.mentorx.mx
    ```
-4. Ajustar DNS en GoDaddy:
-   - **A** → `76.76.19.19`
-   - **CNAME** (`www`) → `cname.vercel-dns.com`
+4. Configurar dominio personalizado en GoDaddy apuntando a Netlify:
+   - **CNAME** (`www`) → `agente-mentor.netlify.app`
+   - **A** (root opcional) → valores proporcionados por Netlify DNS
 
 ## 📱 Responsive
 La interfaz está optimizada para móviles (≥320px), tablets, desktop y pantallas grandes (≥1440px) manteniendo consistencia visual y jerarquía de información.
