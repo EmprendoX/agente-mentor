@@ -227,6 +227,8 @@ export class AnalyticsService {
       recentActivity,
     };
 
+    const alertsAcknowledgedThisWeek = buckets.reduce((acc, bucket) => acc + bucket.alertsAcknowledged, 0);
+
     this.reportSnapshot = {
       generatedAt: now.toISOString(),
       overview: {

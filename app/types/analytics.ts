@@ -37,6 +37,7 @@ export interface BriefingAnalyticsSnapshot {
 export interface CategoryBreakdownItem {
   label: string;
   value: number;
+  [key: string]: string | number;
 }
 
 export interface ReportAnalyticsSnapshot {

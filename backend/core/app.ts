@@ -52,38 +52,43 @@ export const createApp = (): Application => {
     process.env.SUPABASE_URL && (process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY),
   );
 
-  let memoryService: MemoryService;
-  let ragPipeline: RAGPipeline | undefined;
+  let openAIChatClient: ReturnType<OpenAIService['createChatClient']> | undefined;
+  let openAIEmbeddingClient: ReturnType<OpenAIService['createEmbeddingClient']> | undefined;
+  let memoryEmbeddingRepository: MemoryEmbeddingRepository | undefined;
+  let documentIngestionService: DocumentIngestionService | undefined;
 
-  if (openAIConfigured && supabaseConfigured) {
+  if (openAIConfigured) {
     const openAIService = new OpenAIService();
-    const openAIChatClient = openAIService.createChatClient();
-    const openAIEmbeddingClient = openAIService.createEmbeddingClient();
+    openAIChatClient = openAIService.createChatClient();
 
-    const memoryEmbeddingRepository = new MemoryEmbeddingRepository();
-    const documentIngestionService = new DocumentIngestionService(openAIEmbeddingClient, memoryEmbeddingRepository);
-    memoryService = new MemoryService(analyticsService, documentIngestionService);
-
-    ragPipeline = new RAGPipeline(
-      openAIChatClient,
-      openAIEmbeddingClient,
-      memoryEmbeddingRepository,
-      memoryService,
-      actionService,
-    );
+    if (supabaseConfigured) {
+      openAIEmbeddingClient = openAIService.createEmbeddingClient();
+      memoryEmbeddingRepository = new MemoryEmbeddingRepository();
+      documentIngestionService = new DocumentIngestionService(openAIEmbeddingClient, memoryEmbeddingRepository);
+    }
   } else {
-    memoryService = new MemoryService(analyticsService);
-    if (!openAIConfigured) {
-      // eslint-disable-next-line no-console
-      console.warn('OPENAI_API_KEY no configurado. El agente utilizará respuestas locales.');
-    }
-    if (!supabaseConfigured) {
-      // eslint-disable-next-line no-console
-      console.warn('Supabase no configurado. La ingesta de documentos y búsqueda semántica estarán deshabilitadas.');
-    }
+    // eslint-disable-next-line no-console
+    console.warn('OPENAI_API_KEY no configurado. El agente utilizará respuestas locales.');
   }
 
-  const agentsService = new AgentsService(actionService, memoryService, analyticsService, ragPipeline);
+  if (!supabaseConfigured) {
+    // eslint-disable-next-line no-console
+    console.warn('Supabase no configurado. La ingesta de documentos y búsqueda semántica estarán deshabilitadas.');
+  }
+
+  const memoryService = new MemoryService(analyticsService, documentIngestionService);
+
+  const ragPipeline = openAIChatClient
+    ? new RAGPipeline(
+        openAIChatClient,
+        openAIEmbeddingClient,
+        memoryEmbeddingRepository,
+        memoryService,
+        actionService,
+      )
+    : undefined;
+
+  const agentsService = new AgentsService(actionService, memoryService, analyticsService, ragPipeline, openAIChatClient);
 
   app.get('/health', (_req, res) => {
     res.json({ status: 'ok' });

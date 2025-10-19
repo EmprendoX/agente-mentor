@@ -50,6 +50,15 @@ Construir el ecosistema líder de agentes IA en español que acompaña a equipos
    npm run dev
    ```
 4. **Abrir en el navegador** → [http://localhost:3000](http://localhost:3000)
+5. **Configurar variables de entorno claves**
+   ```env
+   OPENAI_API_KEY=sk-...
+   NEXT_PUBLIC_BACKEND_URL=http://localhost:4000/api # opcional, usa este valor por defecto
+   NEXT_PUBLIC_ORGANIZATION_ID=demo-organization      # identificador mostrado en el chat
+   ```
+
+   El comando `npm run dev` levanta el frontend de Next.js y el backend Express en paralelo. Si solo necesitas uno de los
+   servicios puedes ejecutar `npm run dev:frontend` o `npm run dev:backend` por separado.
 
 ## 📁 Estructura principal
 ```
@@ -69,6 +78,14 @@ agente-mentor/
 - `RESUMEN_IMPLEMENTACION.md`: hitos técnicos, configuraciones y próximos pasos.
 - `SISTEMA_PAGINAS_INDEPENDIENTES.md`: arquitectura para páginas individuales de eBooks.
 - `INSTRUCCIONES_*`: instrucciones específicas por plantilla.
+
+## 🗣️ Chat IA listo para producción (sin Supabase aún)
+- La vista **/mentor** ahora consume el endpoint `POST /api/agents/respond` del backend Express.
+- Cuando se dispone de `OPENAI_API_KEY`, el Core Mentor genera respuestas contextualizadas incluso sin memoria persistente.
+- Al conectar Supabase más adelante, el mismo flujo añadirá recuperación semántica y embeddings sin cambios adicionales en el
+  frontend.
+- El panel lateral del chat muestra el contexto utilizado (estratégico, memoria temporal, tareas y base documental) para validar
+  qué señales alimentaron la respuesta.
 
 ## 🎨 Experiencia y diseño
 - Fondo dinámico con gradientes multiagente (azul, verde, naranja, morado y amarillo).

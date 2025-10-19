@@ -24,8 +24,8 @@ export class RAGPipeline {
 
   constructor(
     private readonly chatService: OpenAIChatService,
-    private readonly embeddingService: OpenAIEmbeddingService,
-    private readonly memoryRepository: MemoryEmbeddingRepository,
+    private readonly embeddingService: OpenAIEmbeddingService | undefined,
+    private readonly memoryRepository: MemoryEmbeddingRepository | undefined,
     private readonly memoryService: MemoryService,
     private readonly actionService: ActionService,
     options: RAGPipelineOptions = {},
@@ -126,6 +126,10 @@ para responder con precisión y claridad. Cuando no exista información suficien
   }
 
   private async retrieveKnowledgeBaseMatches(organizationId: string, query: string): Promise<MemoryEmbeddingMatch[]> {
+    if (!this.embeddingService || !this.memoryRepository) {
+      return [];
+    }
+
     const [queryEmbedding] = await this.embeddingService.createEmbeddings({ input: [query] });
 
     try {
