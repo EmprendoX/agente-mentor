@@ -1,406 +1,375 @@
 "use client";
 
-import { useState } from 'react';
+import type { ComponentType } from 'react';
 import Link from 'next/link';
-
-import { 
-  CheckSquare, 
-  Calendar, 
-  Brain, 
-  Zap, 
-  BarChart3, 
-  MessageCircle, 
-  FileText, 
-  Bot, 
-  Search, 
-  Shield,
-  Clock,
-  AlertCircle,
-  TrendingUp,
-  Users,
-  BookOpen,
-  Plus,
+import {
   ArrowRight,
-  Star,
-  Bell,
-  Settings,
-  DollarSign,
+  Sparkles,
   Target,
-  Briefcase,
+  Users,
+  Bot,
   LineChart,
-  UserCheck,
-  Globe,
+  Rocket,
+  Shield,
+  Compass,
   Lightbulb,
-  HandCoins
+  Layers,
+  BarChart3,
 } from 'lucide-react';
 
-interface Task {
-  id: string;
+type VisionCard = {
   title: string;
-  priority: 'high' | 'medium' | 'low';
-  dueDate: string;
-  completed: boolean;
-}
+  description: string;
+  icon: ComponentType<{ className?: string }>;
+  accent: string;
+  points?: string[];
+};
 
-interface Event {
-  id: string;
-  title: string;
-  date: string;
-  time: string;
-  type: 'meeting' | 'deadline' | 'networking';
-}
-
-interface Report {
-  id: string;
-  title: string;
-  type: string;
-  lastOpened: string;
-  status: 'draft' | 'completed' | 'pending';
-}
-
-interface Message {
-  id: string;
-  sender: string;
-  subject: string;
-  unread: boolean;
-  timestamp: string;
-}
-
-interface Document {
-  id: string;
+type AgentSuite = {
   name: string;
-  type: string;
-  lastModified: string;
-  isFavorite: boolean;
-}
+  description: string;
+  gradient: string;
+  focuses: string[];
+};
 
-export default function DashboardPage() {
-  const [activeTab, setActiveTab] = useState('overview');
+type Objective = {
+  title: string;
+  description: string;
+  result: string;
+};
 
-  // Datos simulados para el dashboard de emprendimiento
-  const tasks: Task[] = [
-    { id: '1', title: 'Finalizar business plan Q1', priority: 'high', dueDate: '2024-01-30', completed: false },
-    { id: '2', title: 'Reunión con inversores', priority: 'high', dueDate: '2024-02-02', completed: false },
-    { id: '3', title: 'Análisis de competencia', priority: 'medium', dueDate: '2024-02-05', completed: false },
-    { id: '4', title: 'Optimizar landing page', priority: 'low', dueDate: '2024-02-08', completed: true }
-  ];
+const visionCards: VisionCard[] = [
+  {
+    title: 'Visión',
+    description:
+      'Construir el ecosistema líder de agentes IA en español que acompaña a emprendedores y equipos Latinoamericanos desde la ideación hasta la expansión global.',
+    icon: Sparkles,
+    accent: 'from-brand-blue/25 via-brand-purple/20 to-brand-blue/10',
+  },
+  {
+    title: 'Promesa de valor',
+    description:
+      'Activamos decisiones estratégicas, ejecución comercial y aprendizaje continuo con agentes colaborativos que hablan el idioma del negocio.',
+    icon: Rocket,
+    accent: 'from-brand-green/25 via-brand-blue/20 to-brand-green/10',
+    points: ['Implementaciones guiadas en menos de 30 días', 'Plantillas accionables conectadas a datos reales'],
+  },
+  {
+    title: 'Principios operativos',
+    description:
+      'Cada agente combina inteligencia contextual, automatización y criterio humano para desbloquear progreso tangible semana a semana.',
+    icon: Shield,
+    accent: 'from-brand-orange/25 via-brand-yellow/20 to-brand-purple/10',
+    points: ['Contexto de negocio primero', 'Velocidad sin perder precisión', 'Experiencia centrada en las personas'],
+  },
+];
 
-  const events: Event[] = [
-    { id: '1', title: 'Pitch con venture capital', date: '2024-01-29', time: '2:00 PM', type: 'meeting' },
-    { id: '2', title: 'Entrega propuesta cliente', date: '2024-01-31', time: '5:00 PM', type: 'deadline' },
-    { id: '3', title: 'Evento de networking', date: '2024-02-01', time: '7:00 PM', type: 'networking' }
-  ];
+const agentSuites: AgentSuite[] = [
+  {
+    name: 'Agente Azul · Estratega de Crecimiento',
+    description: 'Define posicionamiento, narrativa y la hoja de ruta de expansión del negocio.',
+    gradient: 'from-brand-blue/80 via-brand-purple/70 to-brand-blue/40',
+    focuses: ['Mapas de oportunidad y visión a 12 meses', 'Diseño de propuestas de valor y lanzamientos', 'OKR y tableros de alineación'],
+  },
+  {
+    name: 'Agente Verde · Arquitecto de Operaciones',
+    description: 'Optimiza procesos, automatiza flujos y coordina tareas críticas entre equipos.',
+    gradient: 'from-brand-green/80 via-brand-blue/60 to-brand-green/40',
+    focuses: ['Diseño de flujos automatizados', 'Integración de herramientas y fuentes de datos', 'Playbooks de ejecución recurrente'],
+  },
+  {
+    name: 'Agente Naranja · Catalizador Comercial',
+    description: 'Activa funnels, contenido y señales de mercado para impulsar revenue predecible.',
+    gradient: 'from-brand-orange/80 via-brand-yellow/70 to-brand-orange/40',
+    focuses: ['Secuencias multicanal y nurturing', 'Mensajería y guiones entrenados por industria', 'Paneles de conversión en tiempo real'],
+  },
+  {
+    name: 'Agente Morado · Diseñador de Experiencias',
+    description: 'Personaliza onboarding, comunidades y recursos educativos para retener usuarios.',
+    gradient: 'from-brand-purple/80 via-brand-blue/60 to-brand-purple/40',
+    focuses: ['Rutas de aprendizaje y cohortes', 'Bibliotecas vivas con contenido IA', 'Feedback loops omnicanal'],
+  },
+  {
+    name: 'Agente Amarillo · Radar de Insights',
+    description: 'Analiza señales de clientes, produce reportes accionables y detecta riesgos tempranos.',
+    gradient: 'from-brand-yellow/80 via-brand-green/60 to-brand-yellow/30',
+    focuses: ['Inteligencia de clientes en tiempo real', 'Alertas de salud del negocio', 'Storytelling con métricas clave'],
+  },
+];
 
-  const reports: Report[] = [
-    { id: '1', title: 'Métricas de Ventas Q4', type: 'Financiero', lastOpened: '2024-01-28', status: 'completed' },
-    { id: '2', title: 'Análisis de Mercado', type: 'Estratégico', lastOpened: '2024-01-27', status: 'draft' },
-    { id: '3', title: 'ROI Campañas Marketing', type: 'Marketing', lastOpened: '2024-01-26', status: 'pending' }
-  ];
+const objectives: Objective[] = [
+  {
+    title: 'Orquestar lanzamientos y experimentos continuos',
+    description: 'Los agentes coordinan backlog, recursos y aprendizajes para mantener ciclos de innovación cortos.',
+    result: 'Velocidad de lanzamiento 4× y mejores retroalimentaciones en cada sprint.',
+  },
+  {
+    title: 'Escalar ventas consultivas basadas en datos',
+    description: 'Unificamos inteligencia comercial con automatizaciones de seguimiento y recomendaciones contextuales.',
+    result: 'Embudo siempre activo y pipeline priorizado por impacto.',
+  },
+  {
+    title: 'Crear experiencias memorables para clientes y equipos',
+    description: 'Cada interacción con Agente Mentor OS mantiene consistencia de marca y tono humano.',
+    result: 'Retención sostenida, NPS creciente y equipos enfocados en decisiones estratégicas.',
+  },
+];
 
-  const messages: Message[] = [
-    { id: '1', sender: 'Carlos Investor', subject: 'Interés en tu startup', unread: true, timestamp: '2h' },
-    { id: '2', sender: 'María Cliente', subject: 'Propuesta de colaboración', unread: false, timestamp: '1d' },
-    { id: '3', sender: 'Ana Mentor', subject: 'Feedback sobre tu estrategia', unread: true, timestamp: '3h' }
-  ];
+const impactHighlights = [
+  { value: '4×', label: 'Velocidad de lanzamiento', color: 'text-brand-blue' },
+  { value: '72%', label: 'Procesos automatizados en 60 días', color: 'text-brand-green' },
+  { value: '360°', label: 'Visión del usuario final', color: 'text-brand-purple' },
+];
 
-  const documents: Document[] = [
-    { id: '1', name: 'Business Plan 2024', type: 'PDF', lastModified: '2024-01-28', isFavorite: true },
-    { id: '2', name: 'Análisis Financiero', type: 'XLSX', lastModified: '2024-01-27', isFavorite: false },
-    { id: '3', name: 'Estrategia Marketing', type: 'DOCX', lastModified: '2024-01-26', isFavorite: true }
-  ];
+const audiences = [
+  'Founders y equipos directivos de startups y scaleups en etapa de crecimiento.',
+  'Líderes de innovación corporativa que requieren pilotos ágiles y medibles.',
+  'Consultoras, aceleradoras y hubs que buscan experiencias premium para sus comunidades.',
+];
 
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'high': return 'text-red-600 bg-red-100';
-      case 'medium': return 'text-yellow-600 bg-yellow-100';
-      case 'low': return 'text-green-600 bg-green-100';
-      default: return 'text-gray-600 bg-gray-100';
-    }
-  };
+const journey = [
+  {
+    title: '1. Descubrimiento guiado',
+    description: 'Diagnóstico junto al equipo para identificar retos, datos disponibles y quick wins.',
+    icon: Compass,
+  },
+  {
+    title: '2. Activación de agentes',
+    description: 'Configuramos agentes prioritarios, conexiones de datos y tableros de seguimiento.',
+    icon: Bot,
+  },
+  {
+    title: '3. Escalamiento continuo',
+    description: 'Medimos impacto, ampliamos automatizaciones y co-creamos nuevos casos de uso.',
+    icon: LineChart,
+  },
+];
 
-  const getEventTypeIcon = (type: string) => {
-    switch (type) {
-      case 'meeting': return <Briefcase className="w-4 h-4" />;
-      case 'deadline': return <Clock className="w-4 h-4" />;
-      case 'networking': return <Users className="w-4 h-4" />;
-      default: return <Calendar className="w-4 h-4" />;
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'completed': return 'text-green-600 bg-green-100';
-      case 'pending': return 'text-yellow-600 bg-yellow-100';
-      case 'draft': return 'text-blue-600 bg-blue-100';
-      default: return 'text-gray-600 bg-gray-100';
-    }
-  };
-
+export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#FAF3E0]">
-      {/* Header */}
-      <div className="bg-[#2563EB] text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex justify-between items-center">
+    <div className="min-h-screen text-slate-100">
+      <div className="relative overflow-hidden rounded-3xl border border-white/5 bg-gradient-to-br from-surface/90 via-surface/80 to-surface/60 shadow-[0_0_60px_rgba(37,99,235,0.25)]">
+        <div className="pointer-events-none absolute inset-0 opacity-70">
+          <div className="absolute -top-24 -left-10 h-72 w-72 rounded-full bg-brand-blue/40 blur-3xl" />
+          <div className="absolute -bottom-20 -right-6 h-80 w-80 rounded-full bg-brand-purple/30 blur-3xl" />
+          <div className="absolute inset-x-0 top-1/2 h-40 w-full -translate-y-1/2 bg-gradient-to-r from-brand-orange/10 via-brand-yellow/10 to-brand-green/10 blur-2xl" />
+        </div>
+
+        <section className="relative z-10 max-w-7xl mx-auto px-6 pt-12 pb-16 lg:px-12">
+          <div className="grid gap-10 lg:grid-cols-[1.3fr_1fr] lg:items-center">
+            <div className="space-y-6">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-brand-yellow">
+                Ecosistema vivo de agentes IA
+              </span>
+              <h1 className="text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
+                Acelera tu visión con agentes IA coreografiados para cada etapa del negocio
+              </h1>
+              <p className="max-w-2xl text-lg text-slate-300">
+                Agente Mentor OS integra estrategia, ejecución y aprendizaje continuo en una plataforma de agentes colaborativos. Diseñamos experiencias completas para lanzar, vender y escalar con propósito.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Link
+                  href="/agentes"
+                  className="inline-flex items-center gap-2 rounded-full bg-brand-blue px-6 py-3 text-sm font-semibold text-white shadow-[0_0_25px_rgba(37,99,235,0.35)] transition-transform hover:-translate-y-0.5 hover:bg-brand-purple"
+                >
+                  Explorar agentes
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="/registro"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition-all hover:border-brand-yellow/60 hover:text-brand-yellow"
+                >
+                  Solicitar demo guiada
+                </Link>
+              </div>
+            </div>
+
+            <div className="grid gap-5">
+              {impactHighlights.map((highlight) => (
+                <div
+                  key={highlight.label}
+                  className="rounded-2xl border border-white/10 bg-white/5 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.35)] backdrop-blur"
+                >
+                  <p className={`text-3xl font-semibold ${highlight.color}`}>{highlight.value}</p>
+                  <p className="mt-1 text-sm text-slate-300">{highlight.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="relative z-10 border-t border-white/5 bg-black/20">
+          <div className="max-w-7xl mx-auto grid gap-6 px-6 py-12 lg:grid-cols-3 lg:px-12">
+            {visionCards.map((card) => {
+              const Icon = card.icon;
+              return (
+                <div
+                  key={card.title}
+                  className={`group rounded-3xl border border-white/10 bg-gradient-to-br ${card.accent} p-6 shadow-[0_12px_40px_rgba(15,23,42,0.35)] transition-transform duration-300 hover:-translate-y-1 hover:border-brand-yellow/40`}
+                >
+                  <div className="flex items-center justify-between">
+                    <Icon className="h-10 w-10 text-brand-yellow" />
+                    <Layers className="h-8 w-8 text-white/10" />
+                  </div>
+                  <h2 className="mt-4 text-2xl font-semibold text-white">{card.title}</h2>
+                  <p className="mt-3 text-sm text-slate-200">{card.description}</p>
+                  {card.points && (
+                    <ul className="mt-4 space-y-2 text-sm text-slate-200">
+                      {card.points.map((point) => (
+                        <li key={point} className="flex items-start gap-2">
+                          <span className="mt-1 h-1.5 w-1.5 rounded-full bg-brand-yellow" />
+                          {point}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="relative z-10 max-w-7xl mx-auto px-6 py-14 lg:px-12">
+          <div className="mb-10 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <h1 className="text-2xl font-bold">Agente Mentor Dashboard</h1>
-              <p className="text-white/80 mt-1">Tu centro de emprendimiento y mentoría con IA</p>
+              <h2 className="text-3xl font-semibold text-white">Suites de agentes interconectados</h2>
+              <p className="mt-2 max-w-3xl text-base text-slate-300">
+                Cinco agentes principales trabajan sincronizados para diagnosticar, crear, automatizar, comunicar y medir cada frente del negocio.
+              </p>
             </div>
-            <div className="flex items-center gap-4">
-              <button className="bg-white/20 hover:bg-white/30 p-2 rounded-lg transition-colors">
-                <Bell className="w-5 h-5" />
-              </button>
-              <button className="bg-white/20 hover:bg-white/30 p-2 rounded-lg transition-colors">
-                <Settings className="w-5 h-5" />
-              </button>
-            </div>
+            <Link
+              href="/agentes"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-brand-yellow hover:text-brand-orange"
+            >
+              Ver panel interactivo
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white rounded-xl shadow p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Tareas Pendientes</p>
-                <p className="text-2xl font-bold text-[#1F2937]">{tasks.filter(t => !t.completed).length}</p>
+          <div className="grid gap-6 lg:grid-cols-2">
+            {agentSuites.map((agent) => (
+              <div
+                key={agent.name}
+                className={`rounded-3xl border border-white/10 bg-gradient-to-br ${agent.gradient} p-6 shadow-[0_16px_50px_rgba(15,23,42,0.45)] backdrop-blur-lg`}
+              >
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xl font-semibold text-white">{agent.name}</h3>
+                  <Bot className="h-7 w-7 text-white/70" />
+                </div>
+                <p className="mt-3 text-sm text-slate-100/90">{agent.description}</p>
+                <ul className="mt-4 space-y-2 text-sm text-slate-100/80">
+                  {agent.focuses.map((focus) => (
+                    <li key={focus} className="flex items-start gap-2">
+                      <span className="mt-1 inline-flex h-2 w-2 rounded-full bg-white/70" />
+                      {focus}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <CheckSquare className="w-6 h-6 text-blue-600" />
-              </div>
-            </div>
+            ))}
           </div>
+        </section>
 
-          <div className="bg-white rounded-xl shadow p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Reuniones Hoy</p>
-                <p className="text-2xl font-bold text-[#1F2937]">{events.length}</p>
-              </div>
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <Calendar className="w-6 h-6 text-green-600" />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Leads Nuevos</p>
-                <p className="text-2xl font-bold text-[#1F2937]">{messages.filter(m => m.unread).length}</p>
-              </div>
-              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                <UserCheck className="w-6 h-6 text-purple-600" />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Ingresos Este Mes</p>
-                <p className="text-2xl font-bold text-[#1F2937]">$24,500</p>
-              </div>
-              <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                <DollarSign className="w-6 h-6 text-orange-600" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-          {/* Tareas */}
-          <div className="bg-white rounded-xl shadow p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-[#1F2937] flex items-center gap-2">
-                <Target className="w-5 h-5 text-blue-600" />
-                Objetivos & Tareas
-              </h2>
-              <a href="/objetivos" className="text-blue-600 hover:text-blue-800 text-sm font-medium cursor-pointer">
-                Ver todos
-              </a>
-            </div>
-            <div className="space-y-3">
-              {tasks.slice(0, 3).map((task) => (
-                <div key={task.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <div className="flex items-center gap-3">
-                    <input 
-                      type="checkbox" 
-                      checked={task.completed}
-                      className="w-4 h-4 text-blue-600 rounded"
-                    />
-                    <div>
-                      <p className={`text-sm font-medium ${task.completed ? 'line-through text-gray-500' : 'text-gray-900'}`}>
-                        {task.title}
-                      </p>
-                      <p className="text-xs text-gray-500">Vence: {task.dueDate}</p>
+        <section className="relative z-10 border-t border-white/5 bg-black/25">
+          <div className="max-w-7xl mx-auto grid gap-12 px-6 py-14 lg:grid-cols-[1.3fr_1fr] lg:px-12 lg:gap-16">
+            <div className="space-y-8">
+              <h2 className="text-3xl font-semibold text-white">Objetivos que guía Agente Mentor OS</h2>
+              <div className="space-y-6">
+                {objectives.map((objective) => (
+                  <div key={objective.title} className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-[0_14px_45px_rgba(15,23,42,0.4)]">
+                    <div className="flex items-start gap-4">
+                      <Target className="h-6 w-6 text-brand-yellow" />
+                      <div>
+                        <h3 className="text-xl font-semibold text-white">{objective.title}</h3>
+                        <p className="mt-2 text-sm text-slate-200">{objective.description}</p>
+                        <p className="mt-3 text-xs font-semibold uppercase tracking-widest text-brand-green">
+                          Resultado: {objective.result}
+                        </p>
+                      </div>
                     </div>
                   </div>
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(task.priority)}`}>
-                    {task.priority}
-                  </span>
-                </div>
-              ))}
-            </div>
-            <button className="w-full mt-4 bg-blue-50 text-blue-600 py-2 rounded-lg hover:bg-blue-100 transition-colors flex items-center justify-center gap-2">
-              <Plus className="w-4 h-4" />
-              Nuevo Objetivo
-            </button>
-          </div>
-
-          {/* Calendario */}
-          <div className="bg-white rounded-xl shadow p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-[#1F2937] flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-green-600" />
-                Agenda de Negocios
-              </h2>
-              <a href="/calendario" className="text-green-600 hover:text-green-800 text-sm font-medium cursor-pointer">
-                Ver agenda
-              </a>
-            </div>
-            <div className="space-y-3">
-              {events.slice(0, 3).map((event) => (
-                <div key={event.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                  <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
-                    {getEventTypeIcon(event.type)}
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-gray-900">{event.title}</p>
-                    <p className="text-xs text-gray-500">{event.date} • {event.time}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <button className="w-full mt-4 bg-green-50 text-green-600 py-2 rounded-lg hover:bg-green-100 transition-colors flex items-center justify-center gap-2">
-              <Plus className="w-4 h-4" />
-              Nuevo Evento
-            </button>
-          </div>
-
-          {/* MentorX */}
-          <div className="bg-white rounded-xl shadow p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-[#1F2937] flex items-center gap-2">
-                <Brain className="w-5 h-5 text-purple-600" />
-                MentorX
-              </h2>
-              <a href="/mentor" className="text-purple-600 hover:text-purple-800 text-sm font-medium cursor-pointer">
-                Ir al mentor
-              </a>
-            </div>
-            <div className="space-y-3">
-              <div className="p-3 bg-purple-50 rounded-lg">
-                <p className="text-sm font-medium text-purple-900">Última consulta</p>
-                <p className="text-xs text-purple-700 mt-1">"¿Cómo optimizar mi embudo de ventas?"</p>
-                <p className="text-xs text-purple-500 mt-2">Hace 2 horas</p>
-              </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
-                <p className="text-sm font-medium text-gray-900">Mentor activo</p>
-                <p className="text-xs text-gray-600 mt-1">Especialista en Startups Tech</p>
+                ))}
               </div>
             </div>
-            <button className="w-full mt-4 bg-purple-50 text-purple-600 py-2 rounded-lg hover:bg-purple-100 transition-colors flex items-center justify-center gap-2">
-              <MessageCircle className="w-4 h-4" />
-              Consultar Mentor
-            </button>
-          </div>
-
-          {/* Automatizaciones */}
-          <div className="bg-white rounded-xl shadow p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-[#1F2937] flex items-center gap-2">
-                <Zap className="w-5 h-5 text-orange-600" />
-                Automatizaciones
-              </h2>
-              <Link href="/automatizaciones" className="flex flex-col items-center p-4 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors">
-                <Zap className="w-6 h-6 text-orange-600 mb-2" />
-                <span className="text-sm font-medium text-orange-900">Automatizaciones</span>
-              </Link>
-              <Link href="/ebooks" className="flex flex-col items-center p-4 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors">
-                <BookOpen className="w-6 h-6 text-indigo-600 mb-2" />
-                <span className="text-sm font-medium text-indigo-900">Ebooks</span>
-              </Link>
-              <Link href="/admin" className="flex flex-col items-center p-4 bg-red-50 rounded-lg hover:bg-red-100 transition-colors">
-                <Shield className="w-6 h-6 text-red-600 mb-2" />
-                <span className="text-sm font-medium text-red-900">Admin</span>
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Business Insights */}
-        <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white rounded-xl shadow p-6">
-            <h2 className="text-lg font-semibold text-[#1F2937] mb-4 flex items-center gap-2">
-              <LineChart className="w-5 h-5 text-blue-600" />
-              Métricas Clave
-            </h2>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
-                <div>
-                  <p className="text-sm font-medium text-blue-900">Conversión de Leads</p>
-                  <p className="text-xs text-blue-700">Este mes vs anterior</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-lg font-bold text-blue-900">24.5%</p>
-                  <p className="text-xs text-green-600">+3.2%</p>
-                </div>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                <div>
-                  <p className="text-sm font-medium text-green-900">Revenue Growth</p>
-                  <p className="text-xs text-green-700">Crecimiento mensual</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-lg font-bold text-green-900">18.7%</p>
-                  <p className="text-xs text-green-600">+5.1%</p>
-                </div>
-              </div>
-              <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
-                <div>
-                  <p className="text-sm font-medium text-purple-900">Customer Acquisition</p>
-                  <p className="text-xs text-purple-700">Nuevos clientes</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-lg font-bold text-purple-900">47</p>
-                  <p className="text-xs text-green-600">+12</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow p-6">
-            <h2 className="text-lg font-semibold text-[#1F2937] mb-4 flex items-center gap-2">
-              <Lightbulb className="w-5 h-5 text-yellow-600" />
-              Insights & Oportunidades
-            </h2>
-            <div className="space-y-4">
-              <div className="p-3 bg-yellow-50 rounded-lg border-l-4 border-yellow-400">
-                <p className="text-sm font-medium text-yellow-900">Oportunidad de Mercado</p>
-                <p className="text-xs text-yellow-700 mt-1">
-                  Tu nicho tiene 34% menos competencia este trimestre. Considera aumentar inversión en marketing.
+            <div className="space-y-6">
+              <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-brand-purple/20 via-brand-blue/10 to-brand-green/10 p-6 shadow-[0_14px_45px_rgba(15,23,42,0.35)]">
+                <h3 className="text-lg font-semibold text-white">Viaje acompañado de principio a fin</h3>
+                <p className="mt-2 text-sm text-slate-200">
+                  Activamos una metodología en tres etapas para asegurar adopción, impacto y escalabilidad de cada agente.
                 </p>
+                <div className="mt-5 space-y-4">
+                  {journey.map((step) => {
+                    const Icon = step.icon;
+                    return (
+                      <div key={step.title} className="flex gap-3 rounded-2xl border border-white/10 bg-black/30 p-4">
+                        <Icon className="mt-1 h-5 w-5 text-brand-yellow" />
+                        <div>
+                          <p className="text-sm font-semibold text-white">{step.title}</p>
+                          <p className="mt-1 text-xs text-slate-300">{step.description}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-              <div className="p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400">
-                <p className="text-sm font-medium text-blue-900">Optimización de Procesos</p>
-                <p className="text-xs text-blue-700 mt-1">
-                  Automatizar el seguimiento de leads podría aumentar tu conversión en 15%.
-                </p>
-              </div>
-              <div className="p-3 bg-green-50 rounded-lg border-l-4 border-green-400">
-                <p className="text-sm font-medium text-green-900">Expansión Recomendada</p>
-                <p className="text-xs text-green-700 mt-1">
-                  Considera lanzar un programa de referidos. Tus clientes tienen alta satisfacción.
-                </p>
+
+              <div className="rounded-3xl border border-white/10 bg-white/5 p-6 shadow-[0_14px_40px_rgba(15,23,42,0.35)]">
+                <h3 className="text-lg font-semibold text-white">Público objetivo</h3>
+                <ul className="mt-4 space-y-3 text-sm text-slate-200">
+                  {audiences.map((audience) => (
+                    <li key={audience} className="flex items-start gap-2">
+                      <Users className="mt-0.5 h-4 w-4 text-brand-yellow" />
+                      {audience}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           </div>
-        </div>
+        </section>
+
+        <section className="relative z-10 max-w-7xl mx-auto px-6 py-16 lg:px-12">
+          <div className="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:items-center">
+            <div className="space-y-6">
+              <h2 className="text-3xl font-semibold text-white">Una plataforma lista para implementarse</h2>
+              <p className="text-base text-slate-300">
+                Documentación pública, sistemas de plantillas y componentes reutilizables facilitan la entrega de experiencias personalizadas. Los agentes se conectan a herramientas existentes y aprenden con cada interacción.
+              </p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
+                  <Lightbulb className="h-6 w-6 text-brand-yellow" />
+                  <h3 className="mt-3 text-sm font-semibold text-white">Criterios de diseño</h3>
+                  <p className="mt-2 text-xs text-slate-300">Interfaces enfocadas en claridad, ritmo narrativo y datos accionables.</p>
+                </div>
+                <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
+                  <BarChart3 className="h-6 w-6 text-brand-yellow" />
+                  <h3 className="mt-3 text-sm font-semibold text-white">Insights conectados</h3>
+                  <p className="mt-2 text-xs text-slate-300">Reportes dinámicos que traducen señales en decisiones inmediatas.</p>
+                </div>
+              </div>
+            </div>
+            <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-brand-blue/20 via-brand-purple/20 to-brand-yellow/20 p-8 shadow-[0_18px_50px_rgba(15,23,42,0.45)]">
+              <h3 className="text-lg font-semibold text-white">Construyamos la próxima versión de tu operación con IA</h3>
+              <p className="mt-3 text-sm text-slate-200">
+                Agenda una sesión con nuestro equipo para mapear objetivos, agentes prioritarios y el plan de despliegue.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-4">
+                <Link
+                  href="mailto:hola@mentorx.mx"
+                  className="inline-flex items-center gap-2 rounded-full bg-brand-green px-6 py-3 text-sm font-semibold text-slate-900 shadow-[0_0_25px_rgba(34,197,94,0.35)] transition-transform hover:-translate-y-0.5 hover:bg-brand-yellow"
+                >
+                  Escribir al equipo
+                </Link>
+                <Link
+                  href="/ebooks"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold text-white transition-all hover:border-brand-purple/60 hover:text-brand-purple"
+                >
+                  Ver recursos disponibles
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );
