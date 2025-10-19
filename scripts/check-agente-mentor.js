@@ -13,6 +13,7 @@ const filesToCheck = [
 ];
 
 let schoolXReferences = 0;
+let vercelReferences = 0;
 filesToCheck.forEach(file => {
   if (fs.existsSync(file)) {
     const content = fs.readFileSync(file, 'utf8');
@@ -21,6 +22,10 @@ filesToCheck.forEach(file => {
       schoolXReferences++;
     } else {
       console.log(`✅ ${file} - Sin referencias a SchoolX`);
+    }
+    if (content.toLowerCase().includes('vercel')) {
+      console.log(`⚠️  ${file} - Aún contiene menciones a Vercel`);
+      vercelReferences++;
     }
   }
 });
@@ -31,20 +36,31 @@ if (schoolXReferences === 0) {
   console.log(`\n⚠️  Se encontraron ${schoolXReferences} archivos con referencias a SchoolX`);
 }
 
-// Verificar configuración de Vercel
-console.log('\n🚀 Verificando configuración de Vercel:');
-const vercelConfig = JSON.parse(fs.readFileSync('vercel.json', 'utf8'));
-if (vercelConfig.routes && vercelConfig.routes.length > 0) {
-  console.log('⚠️  Configuración "routes" detectada - puede causar conflictos');
+if (vercelReferences === 0) {
+  console.log('✅ Sin referencias a Vercel en archivos críticos');
 } else {
-  console.log('✅ Configuración de Vercel simplificada');
+  console.log(`⚠️  Se detectaron ${vercelReferences} archivos con menciones a Vercel`);
+}
+
+// Verificar configuración de Netlify
+console.log('\n🚀 Verificando configuración de Netlify:');
+if (fs.existsSync('netlify.toml')) {
+  console.log('✅ netlify.toml - Presente');
+  const netlifyConfig = fs.readFileSync('netlify.toml', 'utf8');
+  if (netlifyConfig.includes('@netlify/plugin-nextjs')) {
+    console.log('✅ Plugin oficial de Next.js habilitado');
+  } else {
+    console.log('⚠️  Agrega el plugin "@netlify/plugin-nextjs" para optimizar el build');
+  }
+} else {
+  console.log('❌ netlify.toml - FALTANTE CRÍTICO');
 }
 
 // Verificar configuración de Next.js
 console.log('\n⚙️ Verificando configuración de Next.js:');
 const nextConfig = fs.readFileSync('next.config.ts', 'utf8');
 if (nextConfig.includes('output: \'standalone\'')) {
-  console.log('⚠️  Configuración "standalone" detectada - puede causar problemas en Vercel');
+  console.log('⚠️  Configuración "standalone" detectada - puede causar problemas en Netlify');
 } else {
   console.log('✅ Configuración de Next.js correcta');
 }
@@ -54,7 +70,7 @@ console.log('\n📋 Verificando archivos críticos:');
 const criticalFiles = [
   'package.json',
   'next.config.ts',
-  'vercel.json',
+  'netlify.toml',
   'app/layout.tsx',
   'app/page.tsx',
   'public/_headers'
@@ -96,9 +112,9 @@ console.log('\n📝 Pasos para deploy limpio:');
 console.log('1. git add .');
 console.log('2. git commit -m "Fix Agente Mentor configuration"');
 console.log('3. git push origin main');
-console.log('4. En Vercel Dashboard:');
-console.log('   - Ir a Settings > General');
-console.log('   - Hacer "Redeploy" del proyecto');
+console.log('4. En Netlify Dashboard:');
+console.log('   - Ir a Deploys');
+console.log('   - Presionar "Trigger deploy" > "Deploy site"');
 console.log('   - Verificar logs sin errores');
 
 console.log('\n🌐 URLs para probar:');
@@ -106,4 +122,4 @@ console.log('- https://mentorx.mx');
 console.log('- https://mentorx.mx/ebooks');
 console.log('- https://mentorx.mx/ebook/educacion-con-sentido');
 
-console.log('\n✅ Agente Mentor está listo para producción!'); 
+console.log('\n✅ Agente Mentor está listo para producción!');
