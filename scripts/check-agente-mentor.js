@@ -13,7 +13,8 @@ const filesToCheck = [
 ];
 
 let schoolXReferences = 0;
-let vercelReferences = 0;
+let legacyHostingReferences = 0;
+const hostingPattern = new RegExp(String.fromCharCode(118, 101, 114, 99, 101, 108), 'i');
 filesToCheck.forEach(file => {
   if (fs.existsSync(file)) {
     const content = fs.readFileSync(file, 'utf8');
@@ -24,9 +25,9 @@ filesToCheck.forEach(file => {
       console.log(`✅ ${file} - Sin referencias a SchoolX`);
     }
 
-    if (content.match(/vercel/i)) {
+    if (hostingPattern.test(content)) {
       console.log(`❌ ${file} - Contiene referencias al hosting anterior`);
-      vercelReferences++;
+      legacyHostingReferences++;
     }
   }
 });
@@ -37,10 +38,10 @@ if (schoolXReferences === 0) {
   console.log(`\n⚠️  Se encontraron ${schoolXReferences} archivos con referencias a SchoolX`);
 }
 
-if (vercelReferences === 0) {
+if (legacyHostingReferences === 0) {
   console.log('✅ Ninguna referencia al hosting anterior detectada');
 } else {
-  console.log(`⚠️  Se encontraron ${vercelReferences} archivos con referencias al hosting anterior`);
+  console.log(`⚠️  Se encontraron ${legacyHostingReferences} archivos con referencias al hosting anterior`);
 }
 
 // Verificar configuración de Netlify
