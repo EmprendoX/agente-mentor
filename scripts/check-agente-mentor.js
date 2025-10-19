@@ -3,7 +3,7 @@ const path = require('path');
 
 console.log('🔍 Verificando configuración de Agente Mentor...\n');
 
-// Verificar que no hay referencias a SchoolX
+// Verificar que no hay referencias a SchoolX o Vercel
 console.log('🔍 Verificando referencias incorrectas:');
 const filesToCheck = [
   'app/layout.tsx',
@@ -13,6 +13,7 @@ const filesToCheck = [
 ];
 
 let schoolXReferences = 0;
+let vercelReferences = 0;
 filesToCheck.forEach(file => {
   if (fs.existsSync(file)) {
     const content = fs.readFileSync(file, 'utf8');
@@ -22,6 +23,11 @@ filesToCheck.forEach(file => {
     } else {
       console.log(`✅ ${file} - Sin referencias a SchoolX`);
     }
+
+    if (content.match(/vercel/i)) {
+      console.log(`❌ ${file} - Contiene referencias a Vercel`);
+      vercelReferences++;
+    }
   }
 });
 
@@ -29,6 +35,12 @@ if (schoolXReferences === 0) {
   console.log('\n✅ Todas las referencias están corregidas para Agente Mentor');
 } else {
   console.log(`\n⚠️  Se encontraron ${schoolXReferences} archivos con referencias a SchoolX`);
+}
+
+if (vercelReferences === 0) {
+  console.log('✅ Ninguna referencia a Vercel detectada');
+} else {
+  console.log(`⚠️  Se encontraron ${vercelReferences} archivos con referencias a Vercel`);
 }
 
 // Verificar configuración de Netlify

@@ -12,7 +12,15 @@ npm run check-pdfs
 
 Esto verificará que todos los PDFs y imágenes de portada estén presentes en la carpeta `public/ebooks/`.
 
-### 2. Configuración de Netlify
+### 2. Desactivar integraciones previas con Vercel
+
+Antes de preparar el despliegue en Netlify, asegúrate de que Vercel no siga tomando este repositorio:
+
+- Elimina el proyecto desde el panel de Vercel para evitar builds paralelos.
+- Revoca el acceso de Vercel a GitHub en `Settings > Applications`.
+- Borra tokens o variables de entorno relacionadas con Vercel en tu gestor de secretos.
+
+### 3. Configuración de Netlify
 
 El proyecto está configurado con:
 
@@ -21,7 +29,7 @@ El proyecto está configurado con:
 - **Cache optimizado**: Los PDFs se cachean por 1 año
 - **Content-Type correcto**: `application/pdf` para archivos PDF
 
-### 3. Archivos de Configuración
+### 4. Archivos de Configuración
 
 #### `next.config.ts`
 - Headers de seguridad para PDFs
@@ -37,7 +45,7 @@ El proyecto está configurado con:
 - Headers adicionales compatibles con Netlify
 - Configuración de cache para archivos estáticos
 
-### 4. Despliegue
+### 5. Despliegue
 
 ```bash
 # Verificar archivos
@@ -50,13 +58,13 @@ npm run build
 netlify deploy --build --prod
 ```
 
-### 5. Verificación Post-Despliegue
+### 6. Verificación Post-Despliegue
 
 1. **Verificar PDFs**: Navega a cada eBook y confirma que los PDFs se cargan
 2. **Verificar Headers**: Usa las herramientas de desarrollador para confirmar que los headers están configurados correctamente
 3. **Verificar Móvil**: Prueba en dispositivos móviles
 
-### 6. Troubleshooting
+### 7. Troubleshooting
 
 #### PDF no se muestra
 - Verificar que el archivo existe en `public/ebooks/`
@@ -71,7 +79,7 @@ netlify deploy --build --prod
 - Los archivos tienen cache de 1 año
 - Para forzar actualización, cambiar el nombre del archivo
 
-### 7. Estructura de Archivos
+### 8. Estructura de Archivos
 
 ```
 public/
@@ -86,13 +94,13 @@ public/
 └── _headers
 ```
 
-### 8. Monitoreo
+### 9. Monitoreo
 
 - Usar Netlify Analytics (o la integración que prefieras) para monitorear errores
 - Verificar logs de Netlify Deploys para problemas de carga
 - Monitorear métricas de rendimiento de PDFs
 
-### 9. Actualizaciones
+### 10. Actualizaciones
 
 Para actualizar PDFs:
 

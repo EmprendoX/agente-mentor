@@ -72,6 +72,14 @@ console.log('2. ✅ Configuración de Next.js optimizada');
 console.log('3. ✅ Headers y metadata revisados');
 console.log('4. ✅ Archivos críticos presentes');
 
+console.log('\n🧹 Limpieza de referencias a Vercel:');
+const repoContent = fs.readFileSync('README.md', 'utf8');
+if (repoContent.match(/vercel/i)) {
+  console.log('⚠️  Aún se detectan menciones a Vercel. Reemplázalas por Netlify.');
+} else {
+  console.log('✅ Sin referencias a Vercel en la documentación principal');
+}
+
 console.log('\n📝 Comandos para deploy limpio:');
 console.log('1. git add .');
 console.log('2. git commit -m "Fix Netlify configuration"');

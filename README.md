@@ -101,6 +101,15 @@ npm run lint     # Verificación de código
 ```
 
 ## 🌐 Despliegue en Netlify (recomendado)
+
+### 🔌 Limpieza previa de Vercel (obligatoria)
+Antes de configurar Netlify asegúrate de que Vercel ya no tenga acceso al repositorio:
+
+1. Elimina el proyecto desde el panel de Vercel para evitar builds paralelos.
+2. Revoca el acceso de Vercel a GitHub en **Settings → Applications**.
+3. Borra variables o tokens de Vercel en tu gestor de secretos.
+
+### 🚀 Configuración en Netlify
 1. Conecta tu cuenta de GitHub y selecciona el repositorio `agente-mentor` en Netlify.
 2. Establece como comando de build `npm run build` y directorio publicado `.next` (el plugin oficial lo detecta automáticamente).
 3. (Opcional) Variables de entorno:
