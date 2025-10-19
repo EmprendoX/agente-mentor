@@ -1,434 +1,312 @@
-"use client";
+'use client';
 
-import { 
-  BarChart3, TrendingUp, DollarSign, FileText, 
-  PieChart, Activity, Target, Clock, CheckCircle,
-  Users, Mail, MessageSquare, Zap, Bot, 
-  Calendar, FolderOpen, Lightbulb, Settings,
-  ArrowUpRight, Download, Eye, Filter
+import { useEffect, useMemo, useState } from 'react';
+import {
+  Activity,
+  AlertTriangle,
+  BarChart3,
+  CheckCircle2,
+  PieChart as PieIcon,
 } from 'lucide-react';
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 
-interface Report {
-  id: string;
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  category: string;
-  status: 'available' | 'premium' | 'coming-soon';
-  lastUpdated?: string;
-  frequency: string;
-}
+import { MetricCard } from '@/app/components/MetricCard';
+import { getReportAnalytics } from '@/app/lib/analytics';
+import type { ReportAnalyticsSnapshot } from '@/app/types/analytics';
+
+const pieColors = ['#2563EB', '#F97316', '#10B981', '#8B5CF6', '#F59E0B'];
+
+const formatShortDate = (value: string): string => {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return date.toLocaleDateString('es-MX', { day: 'numeric', month: 'short' });
+};
 
 export default function ReportesPage() {
-  const reports: Report[] = [
-    // Financieros / Contables
-    {
-      id: '1',
-      title: 'Reporte Financiero Mensual',
-      description: 'Resumen completo de ingresos, gastos y balance del mes con análisis de tendencias',
-      icon: <BarChart3 size={24} />,
-      category: 'Financieros',
-      status: 'available',
-      lastUpdated: 'Hace 2 días',
-      frequency: 'Mensual'
-    },
-    {
-      id: '2',
-      title: 'Reporte de Ingresos y Egresos',
-      description: 'Desglose detallado de todas las entradas y salidas de dinero con categorización',
-      icon: <TrendingUp size={24} />,
-      category: 'Financieros',
-      status: 'available',
-      lastUpdated: 'Hace 1 día',
-      frequency: 'Semanal'
-    },
-    {
-      id: '3',
-      title: 'Estado de Resultados',
-      description: 'Análisis de rentabilidad y margen de ganancia por período y categoría',
-      icon: <PieChart size={24} />,
-      category: 'Financieros',
-      status: 'premium',
-      lastUpdated: 'Hace 3 días',
-      frequency: 'Mensual'
-    },
-    {
-      id: '4',
-      title: 'Reporte de Balance General',
-      description: 'Vista completa de activos, pasivos y patrimonio neto actualizado',
-      icon: <DollarSign size={24} />,
-      category: 'Financieros',
-      status: 'premium',
-      lastUpdated: 'Hace 1 semana',
-      frequency: 'Trimestral'
-    },
-    {
-      id: '5',
-      title: 'Reporte de Gastos Personales',
-      description: 'Seguimiento de gastos personales y empresariales con alertas de presupuesto',
-      icon: <FileText size={24} />,
-      category: 'Financieros',
-      status: 'available',
-      lastUpdated: 'Hace 5 horas',
-      frequency: 'Diario'
-    },
-    {
-      id: '6',
-      title: 'Reporte de Flujo de Efectivo',
-      description: 'Análisis del movimiento de dinero y proyecciones de liquidez futura',
-      icon: <Activity size={24} />,
-      category: 'Financieros',
-      status: 'premium',
-      lastUpdated: 'Hace 2 días',
-      frequency: 'Semanal'
-    },
+  const [report, setReport] = useState<ReportAnalyticsSnapshot | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    // Productividad y tareas
-    {
-      id: '7',
-      title: 'Reporte de Tareas Completadas',
-      description: 'Estadísticas de productividad y cumplimiento de objetivos diarios y semanales',
-      icon: <CheckCircle size={24} />,
-      category: 'Productividad',
-      status: 'available',
-      lastUpdated: 'Hace 1 hora',
-      frequency: 'Diario'
-    },
-    {
-      id: '8',
-      title: 'Reporte de Actividad Semanal',
-      description: 'Resumen de actividades realizadas, tiempo invertido y logros alcanzados',
-      icon: <Activity size={24} />,
-      category: 'Productividad',
-      status: 'available',
-      lastUpdated: 'Hace 1 día',
-      frequency: 'Semanal'
-    },
-    {
-      id: '9',
-      title: 'Reporte de Cumplimiento de Objetivos',
-      description: 'Seguimiento del progreso hacia metas establecidas con métricas de éxito',
-      icon: <Target size={24} />,
-      category: 'Productividad',
-      status: 'available',
-      lastUpdated: 'Hace 3 días',
-      frequency: 'Semanal'
-    },
-    {
-      id: '10',
-      title: 'Reporte de Horas Trabajadas',
-      description: 'Análisis del tiempo dedicado a diferentes proyectos y actividades',
-      icon: <Clock size={24} />,
-      category: 'Productividad',
-      status: 'premium',
-      lastUpdated: 'Hace 6 horas',
-      frequency: 'Diario'
-    },
-    {
-      id: '11',
-      title: 'Reporte de Seguimiento de Proyectos',
-      description: 'Estado actual de todos los proyectos con hitos y fechas de entrega',
-      icon: <FolderOpen size={24} />,
-      category: 'Productividad',
-      status: 'available',
-      lastUpdated: 'Hace 2 días',
-      frequency: 'Semanal'
-    },
+  useEffect(() => {
+    let active = true;
 
-    // Marketing y comunicación
-    {
-      id: '12',
-      title: 'Reporte de Campañas de Marketing',
-      description: 'Rendimiento de campañas publicitarias con métricas de ROI y conversión',
-      icon: <TrendingUp size={24} />,
-      category: 'Marketing',
-      status: 'premium',
-      lastUpdated: 'Hace 1 día',
-      frequency: 'Semanal'
-    },
-    {
-      id: '13',
-      title: 'Reporte de Publicaciones Realizadas',
-      description: 'Análisis de engagement y alcance de contenido publicado en redes sociales',
-      icon: <MessageSquare size={24} />,
-      category: 'Marketing',
-      status: 'available',
-      lastUpdated: 'Hace 4 horas',
-      frequency: 'Diario'
-    },
-    {
-      id: '14',
-      title: 'Reporte de Apertura de Correos',
-      description: 'Estadísticas de email marketing con tasas de apertura y clics',
-      icon: <Mail size={24} />,
-      category: 'Marketing',
-      status: 'available',
-      lastUpdated: 'Hace 1 día',
-      frequency: 'Semanal'
-    },
-    {
-      id: '15',
-      title: 'Reporte de Interacciones con Clientes',
-      description: 'Análisis de comunicación y satisfacción del cliente con métricas de servicio',
-      icon: <Users size={24} />,
-      category: 'Marketing',
-      status: 'premium',
-      lastUpdated: 'Hace 2 días',
-      frequency: 'Semanal'
-    },
+    const loadReport = async () => {
+      try {
+        const data = await getReportAnalytics();
+        if (!active) {
+          return;
+        }
 
-    // Automatizaciones y sistema
-    {
-      id: '16',
-      title: 'Reporte de Automatizaciones Ejecutadas',
-      description: 'Estadísticas de procesos automatizados y ahorro de tiempo generado',
-      icon: <Zap size={24} />,
-      category: 'Automatizaciones',
-      status: 'available',
-      lastUpdated: 'Hace 30 minutos',
-      frequency: 'Diario'
-    },
-    {
-      id: '17',
-      title: 'Reporte de Agentes Activos',
-      description: 'Estado y rendimiento de todos los agentes AI configurados en el sistema',
-      icon: <Bot size={24} />,
-      category: 'Automatizaciones',
-      status: 'available',
-      lastUpdated: 'Hace 1 hora',
-      frequency: 'Diario'
-    },
-    {
-      id: '18',
-      title: 'Reporte de Resúmenes Generados',
-      description: 'Estadísticas de documentos y contenido procesado por los agentes AI',
-      icon: <FileText size={24} />,
-      category: 'Automatizaciones',
-      status: 'premium',
-      lastUpdated: 'Hace 2 horas',
-      frequency: 'Semanal'
-    },
-    {
-      id: '19',
-      title: 'Reporte de Eventos Agendados',
-      description: 'Resumen de citas, reuniones y eventos programados con recordatorios',
-      icon: <Calendar size={24} />,
-      category: 'Automatizaciones',
-      status: 'available',
-      lastUpdated: 'Hace 1 día',
-      frequency: 'Diario'
-    },
-    {
-      id: '20',
-      title: 'Reporte de Documentos Recientes',
-      description: 'Análisis de documentos creados, modificados y compartidos recientemente',
-      icon: <FolderOpen size={24} />,
-      category: 'Automatizaciones',
-      status: 'available',
-      lastUpdated: 'Hace 3 horas',
-      frequency: 'Diario'
+        setReport(data);
+      } catch (error) {
+        if (!active) {
+          return;
+        }
+
+        setErrorMessage(error instanceof Error ? error.message : 'No fue posible cargar los reportes.');
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    };
+
+    void loadReport();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const interactionsVsDecisions = useMemo(() => {
+    if (!report) {
+      return [] as Array<{ date: string; interactions: number; decisions: number }>;
     }
-  ];
 
-  const categories = [
-    { name: 'Financieros', icon: <DollarSign size={20} />, color: 'bg-green-100 text-green-800' },
-    { name: 'Productividad', icon: <Target size={20} />, color: 'bg-blue-100 text-blue-800' },
-    { name: 'Marketing', icon: <TrendingUp size={20} />, color: 'bg-purple-100 text-purple-800' },
-    { name: 'Automatizaciones', icon: <Zap size={20} />, color: 'bg-orange-100 text-orange-800' }
-  ];
+    const merged = new Map<string, { date: string; interactions: number; decisions: number }>();
 
-  const getStatusColor = (status: Report['status']) => {
-    switch (status) {
-      case 'available': return 'bg-green-100 text-green-800';
-      case 'premium': return 'bg-yellow-100 text-yellow-800';
-      case 'coming-soon': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
+    report.timeseries.interactions.forEach((point) => {
+      merged.set(point.date, { date: point.date, interactions: point.value, decisions: 0 });
+    });
 
-  const getStatusText = (status: Report['status']) => {
-    switch (status) {
-      case 'available': return 'Disponible';
-      case 'premium': return 'Premium';
-      case 'coming-soon': return 'Próximamente';
-      default: return 'Desconocido';
-    }
-  };
+    report.timeseries.decisions.forEach((point) => {
+      const current = merged.get(point.date) ?? { date: point.date, interactions: 0, decisions: 0 };
+      current.decisions = point.value;
+      merged.set(point.date, current);
+    });
+
+    return [...merged.values()].sort((a, b) => a.date.localeCompare(b.date));
+  }, [report]);
+
+  const alertsSeries = useMemo(
+    () =>
+      report?.timeseries.alerts.map((point, index) => ({
+        date: point.date,
+        created: point.value,
+        acknowledged: report.timeseries.alertsAcknowledged[index]?.value ?? 0,
+      })) ?? [],
+    [report],
+  );
+
+  const interactionSources = report?.interactionSources ?? [];
+  const decisionOutcomes = report?.decisionOutcomes ?? [];
+  const overview = report?.overview;
 
   return (
-    <div className="min-h-screen bg-[#FAF3E0] px-6 py-10 max-w-7xl mx-auto space-y-8">
-      {/* Header */}
-      <div className="bg-[#2563EB] text-white rounded-xl shadow p-8">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="bg-white/20 p-3 rounded-lg">
-              <BarChart3 size={32} />
+    <div className="min-h-screen bg-[#F5F1EA] px-6 py-10">
+      <div className="mx-auto flex max-w-7xl flex-col gap-10">
+        <header className="rounded-3xl bg-gradient-to-br from-[#0EA5E9] via-[#2563EB] to-[#1D4ED8] p-8 text-white shadow-xl">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div className="max-w-2xl space-y-3">
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium uppercase tracking-wide">
+                <BarChart3 className="h-4 w-4" /> Reportes ejecutivos
+              </span>
+              <h1 className="text-3xl font-semibold lg:text-4xl">Inteligencia operativa</h1>
+              <p className="text-base text-white/80">
+                KPIs accionables con evolución temporal para coordinar acciones y anticipar riesgos en tu red de agentes.
+              </p>
             </div>
-            <div>
-              <h1 className="text-3xl font-bold">Reportes</h1>
-              <p className="text-white/80 mt-2">Análisis detallado y métricas de rendimiento de tu negocio</p>
+            <div className="grid gap-1 text-sm text-white/80">
+              <p className="text-xs uppercase tracking-wide text-white/70">Última actualización</p>
+              <p className="text-lg font-semibold text-white">{report?.generatedAt ? formatShortDate(report.generatedAt) : '—'}</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <button className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2">
-              <Filter size={16} />
-              Filtrar
-            </button>
-            <button className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2">
-              <Download size={16} />
-              Exportar
-            </button>
-          </div>
-        </div>
-      </div>
 
-      {/* Categorías */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {categories.map((category) => (
-          <div key={category.name} className="bg-white border border-gray-100 rounded-xl shadow p-4 hover:shadow-lg transition">
-            <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-lg ${category.color}`}>
-                {category.icon}
-              </div>
+          {errorMessage && (
+            <div className="mt-4 rounded-2xl border border-white/20 bg-white/10 px-4 py-3 text-sm">
+              {errorMessage}
+            </div>
+          )}
+        </header>
+
+        <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          <MetricCard
+            label="Interacciones semana"
+            value={overview ? overview.interactionsThisWeek.toLocaleString('es-MX') : loading ? '…' : '0'}
+            helper={report ? `${report.timeseries.interactions.length} días analizados` : undefined}
+            trend={overview && overview.interactionsThisWeek > 0 ? 'up' : 'neutral'}
+            icon={<Activity className="h-5 w-5" />}
+          />
+          <MetricCard
+            label="Alertas creadas"
+            value={overview ? overview.alertsCreatedThisWeek.toLocaleString('es-MX') : loading ? '…' : '0'}
+            helper={overview ? 'Últimos 7 días' : undefined}
+            trend={overview && overview.alertsCreatedThisWeek > 0 ? 'down' : 'neutral'}
+            icon={<AlertTriangle className="h-5 w-5" />}
+          />
+          <MetricCard
+            label="Alertas reconocidas"
+            value={overview ? overview.alertsAcknowledgedThisWeek.toLocaleString('es-MX') : loading ? '…' : '0'}
+            helper={overview ? 'Casos atendidos' : undefined}
+            trend={overview && overview.alertsAcknowledgedThisWeek > 0 ? 'up' : 'neutral'}
+            icon={<CheckCircle2 className="h-5 w-5" />}
+          />
+          <MetricCard
+            label="Tasa de aceptación"
+            value={overview ? `${overview.decisionsAcceptanceRate.toFixed(1)}%` : loading ? '…' : '0%'}
+            helper={overview ? 'Decisiones aceptadas vs rechazadas' : undefined}
+            trend={overview && overview.decisionsAcceptanceRate >= 80 ? 'up' : 'neutral'}
+            icon={<PieIcon className="h-5 w-5" />}
+          />
+        </section>
+
+        <section className="grid gap-6 xl:grid-cols-[2fr_1fr]">
+          <article className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-semibold text-[#1F2937]">{category.name}</h3>
-                <p className="text-sm text-gray-500">
-                  {reports.filter(r => r.category === category.name).length} reportes
-                </p>
+                <h2 className="text-xl font-semibold text-slate-900">Interacciones vs decisiones</h2>
+                <p className="text-sm text-slate-500">Serie diaria comparativa</p>
               </div>
+              <span className="text-xs font-medium uppercase tracking-wide text-slate-400">
+                {interactionsVsDecisions.length} días
+              </span>
             </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Grid de Reportes */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {reports.map((report) => (
-          <div key={report.id} className="bg-white border border-gray-100 rounded-xl shadow hover:shadow-lg transition group">
-            <div className="p-6">
-              {/* Header de la tarjeta */}
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-100 text-blue-600 rounded-lg group-hover:bg-blue-200 transition">
-                    {report.icon}
-                  </div>
-                  <div>
-                    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(report.status)}`}>
-                      {getStatusText(report.status)}
-                    </span>
-                  </div>
-                </div>
-                <button className="text-gray-400 hover:text-gray-600 transition opacity-0 group-hover:opacity-100">
-                  <ArrowUpRight size={16} />
-                </button>
-              </div>
-
-              {/* Contenido */}
-              <div className="space-y-3">
-                <h3 className="text-lg font-semibold text-[#1F2937] group-hover:text-[#2563EB] transition">
-                  {report.title}
-                </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  {report.description}
-                </p>
-
-                {/* Metadatos */}
-                <div className="pt-3 border-t border-gray-100">
-                  <div className="flex items-center justify-between text-xs text-gray-500">
-                    <div className="flex items-center gap-4">
-                      <span className="flex items-center gap-1">
-                        <Clock size={12} />
-                        {report.frequency}
-                      </span>
-                      {report.lastUpdated && (
-                        <span>Actualizado {report.lastUpdated}</span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <button className="p-1 text-gray-400 hover:text-gray-600 transition" title="Ver reporte">
-                        <Eye size={14} />
-                      </button>
-                      <button className="p-1 text-gray-400 hover:text-gray-600 transition" title="Descargar">
-                        <Download size={14} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="mt-6 h-72 w-full">
+              <ResponsiveContainer>
+                <AreaChart data={interactionsVsDecisions} margin={{ left: 0, right: 0, top: 10, bottom: 0 }}>
+                  <defs>
+                    <linearGradient id="reportInteractions" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#38BDF8" stopOpacity={0.35} />
+                      <stop offset="95%" stopColor="#38BDF8" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="reportDecisions" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#10B981" stopOpacity={0.35} />
+                      <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+                  <XAxis dataKey="date" tickFormatter={formatShortDate} stroke="#94A3B8" />
+                  <YAxis tickFormatter={(value) => value.toLocaleString('es-MX')} stroke="#94A3B8" />
+                  <Tooltip
+                    contentStyle={{ borderRadius: 12, borderColor: '#BFDBFE' }}
+                    labelFormatter={(label) => formatShortDate(label)}
+                    formatter={(value: number) => value.toLocaleString('es-MX')}
+                  />
+                  <Legend />
+                  <Area
+                    type="monotone"
+                    dataKey="interactions"
+                    stroke="#0EA5E9"
+                    fill="url(#reportInteractions)"
+                    name="Interacciones"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="decisions"
+                    stroke="#059669"
+                    fill="url(#reportDecisions)"
+                    name="Decisiones"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
             </div>
-          </div>
-        ))}
-      </div>
+          </article>
 
-      {/* Sección de Reportes Destacados */}
-      <div className="bg-white border border-gray-100 rounded-xl shadow p-8">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-2xl font-bold text-[#1F2937]">Reportes Destacados</h2>
-            <p className="text-gray-600 mt-2">Los reportes más consultados y útiles para tu negocio</p>
-          </div>
-          <button className="bg-[#2563EB] text-white px-6 py-3 rounded-lg hover:bg-[#1D4ED8] transition flex items-center gap-2">
-            <Lightbulb size={16} />
-            Ver Todos
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-xl p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-green-200 text-green-700 rounded-lg">
-                <TrendingUp size={20} />
-              </div>
+          <article className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-semibold text-green-800">Reporte Financiero Mensual</h3>
-                <p className="text-sm text-green-600">Más consultado este mes</p>
+                <h2 className="text-xl font-semibold text-slate-900">Distribución decisiones</h2>
+                <p className="text-sm text-slate-500">Aceptadas vs rechazadas</p>
               </div>
             </div>
-            <p className="text-sm text-green-700 mb-4">
-              Análisis completo de la salud financiera de tu negocio con recomendaciones personalizadas.
+            <div className="mt-6 h-72 w-full">
+              <ResponsiveContainer>
+                <PieChart>
+                  <Tooltip formatter={(value: number) => value.toLocaleString('es-MX')} />
+                  <Legend />
+                  <Pie
+                    data={decisionOutcomes}
+                    dataKey="value"
+                    nameKey="label"
+                    innerRadius={60}
+                    outerRadius={90}
+                    paddingAngle={4}
+                  >
+                    {decisionOutcomes.map((entry, index) => (
+                      <Cell key={entry.label} fill={pieColors[index % pieColors.length]} />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <p className="mt-4 text-sm text-slate-500">
+              {overview && overview.decisionsAcceptanceRate > 0
+                ? `Aceptación promedio: ${overview.decisionsAcceptanceRate.toFixed(1)}%`
+                : 'Aún no hay decisiones registradas.'}
             </p>
-            <button className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition text-sm font-medium">
-              Generar Reporte
-            </button>
-          </div>
+          </article>
+        </section>
 
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-blue-200 text-blue-700 rounded-lg">
-                <CheckCircle size={20} />
-              </div>
+        <section className="grid gap-6 xl:grid-cols-2">
+          <article className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-semibold text-blue-800">Reporte de Productividad</h3>
-                <p className="text-sm text-blue-600">Nuevo este mes</p>
+                <h2 className="text-xl font-semibold text-slate-900">Alertas creadas vs reconocidas</h2>
+                <p className="text-sm text-slate-500">Monitoreo diario</p>
               </div>
             </div>
-            <p className="text-sm text-blue-700 mb-4">
-              Optimiza tu tiempo y mejora tu eficiencia con análisis detallado de tus actividades.
-            </p>
-            <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition text-sm font-medium">
-              Generar Reporte
-            </button>
-          </div>
+            <div className="mt-6 h-72 w-full">
+              <ResponsiveContainer>
+                <BarChart data={alertsSeries} margin={{ left: 0, right: 0, top: 10, bottom: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+                  <XAxis dataKey="date" tickFormatter={formatShortDate} stroke="#94A3B8" />
+                  <YAxis tickFormatter={(value) => value.toLocaleString('es-MX')} stroke="#94A3B8" />
+                  <Tooltip
+                    contentStyle={{ borderRadius: 12, borderColor: '#FED7AA' }}
+                    labelFormatter={(label) => formatShortDate(label)}
+                    formatter={(value: number) => value.toLocaleString('es-MX')}
+                  />
+                  <Legend />
+                  <Bar dataKey="created" name="Creadas" fill="#F97316" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="acknowledged" name="Reconocidas" fill="#4ADE80" radius={[8, 8, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </article>
 
-          <div className="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 rounded-xl p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-purple-200 text-purple-700 rounded-lg">
-                <Zap size={20} />
-              </div>
+          <article className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-semibold text-purple-800">Reporte de Automatizaciones</h3>
-                <p className="text-sm text-purple-600">Ahorro de tiempo</p>
+                <h2 className="text-xl font-semibold text-slate-900">Orígenes de interacción</h2>
+                <p className="text-sm text-slate-500">Top 5 fuentes por volumen</p>
               </div>
             </div>
-            <p className="text-sm text-purple-700 mb-4">
-              Descubre cuánto tiempo te están ahorrando tus automatizaciones y agentes AI.
+            <div className="mt-6 h-72 w-full">
+              <ResponsiveContainer>
+                <BarChart data={interactionSources} layout="vertical" margin={{ top: 10, bottom: 0, left: 0, right: 0 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+                  <XAxis type="number" tickFormatter={(value) => value.toLocaleString('es-MX')} stroke="#94A3B8" />
+                  <YAxis type="category" dataKey="label" width={120} stroke="#94A3B8" />
+                  <Tooltip formatter={(value: number) => value.toLocaleString('es-MX')} />
+                  <Bar dataKey="value" fill="#6366F1" radius={[0, 8, 8, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <p className="mt-4 text-sm text-slate-500">
+              {interactionSources.length > 0
+                ? 'Identifica qué canales requieren más soporte o automatización.'
+                : 'Aún no hay suficientes interacciones para clasificar.'}
             </p>
-            <button className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition text-sm font-medium">
-              Generar Reporte
-            </button>
-          </div>
-        </div>
+          </article>
+        </section>
       </div>
     </div>
   );
-} 
+}

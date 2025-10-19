@@ -160,6 +160,20 @@ export class ActionService {
         from: statusBefore,
         to: update.status,
       });
+
+      if (update.status === 'completed') {
+        this.analyticsService.recordDecisionAccepted('action.execution', {
+          actionId: record.id,
+          type: record.type,
+        });
+      }
+
+      if (update.status === 'failed') {
+        this.analyticsService.recordDecisionRejected('action.execution', {
+          actionId: record.id,
+          type: record.type,
+        });
+      }
     }
 
     if (update.error) {
@@ -167,6 +181,14 @@ export class ActionService {
         actionId: record.id,
         error: update.error.message,
       });
+
+      if (update.status !== 'failed') {
+        this.analyticsService.recordDecisionRejected('action.execution', {
+          actionId: record.id,
+          type: record.type,
+          reason: update.error.message,
+        });
+      }
     }
 
     return record;

@@ -60,7 +60,7 @@ export class AgentsService {
         },
       };
 
-      this.analyticsService.recordEvent('agent.recommendation', {
+      this.analyticsService.recordInteraction('agent.recommendation', {
         organizationId: input.organizationId,
         model: fallback.model,
         status: 'unavailable',
@@ -76,7 +76,7 @@ export class AgentsService {
       globalOverrides: input.globalOverrides,
     });
 
-    this.analyticsService.recordEvent('agent.recommendation', {
+    this.analyticsService.recordInteraction('agent.recommendation', {
       organizationId: input.organizationId,
       model: result.model,
       status: 'success',
