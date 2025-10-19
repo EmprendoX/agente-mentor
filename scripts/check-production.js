@@ -6,7 +6,7 @@ console.log('🔍 Verificando configuración para producción...\n');
 // Verificar archivos de configuración
 const configFiles = [
   'next.config.ts',
-  'vercel.json',
+  'netlify.toml',
   'public/_headers'
 ];
 
@@ -48,12 +48,12 @@ if (fs.existsSync(ebooksDir)) {
 console.log('\n🚀 Resumen para producción:');
 console.log('1. ✅ Headers configurados para PDFs');
 console.log('2. ✅ API route para servir PDFs');
-console.log('3. ✅ Configuración de Vercel optimizada');
+console.log('3. ✅ Configuración de Netlify optimizada');
 
 console.log('\n📝 Instrucciones para despliegue:');
 console.log('1. Haz commit de todos los cambios');
 console.log('2. Push a tu repositorio');
-console.log('3. Vercel detectará los cambios automáticamente');
+console.log('3. Netlify ejecutará el build automáticamente');
 console.log('4. Los PDFs deberían funcionar en mentorx.mx');
 
 console.log('\n🎯 URLs de prueba en producción:');

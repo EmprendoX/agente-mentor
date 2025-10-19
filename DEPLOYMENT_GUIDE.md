@@ -12,10 +12,11 @@ npm run check-pdfs
 
 Esto verificará que todos los PDFs y imágenes de portada estén presentes en la carpeta `public/ebooks/`.
 
-### 2. Configuración de Vercel
+### 2. Configuración de Netlify
 
 El proyecto está configurado con:
 
+- **Plugin oficial** `@netlify/plugin-nextjs` declarado en `netlify.toml`
 - **Headers específicos para PDFs**: `X-Frame-Options: SAMEORIGIN` y `Content-Security-Policy: frame-ancestors 'self'`
 - **Cache optimizado**: Los PDFs se cachean por 1 año
 - **Content-Type correcto**: `application/pdf` para archivos PDF
@@ -27,13 +28,13 @@ El proyecto está configurado con:
 - Configuración de webpack para archivos PDF
 - Optimizaciones de producción
 
-#### `vercel.json`
-- Rutas específicas para `/ebooks/*`
-- Headers de seguridad
-- Rewrites para archivos estáticos
+#### `netlify.toml`
+- Plugin `@netlify/plugin-nextjs`
+- Configuración de build (`npm run build`) y publish (`.next`)
+- Ajustes para funciones y archivos incluidos
 
 #### `public/_headers`
-- Headers adicionales para Vercel
+- Headers adicionales compatibles con Netlify
 - Configuración de cache para archivos estáticos
 
 ### 4. Despliegue
@@ -45,8 +46,8 @@ npm run check-pdfs
 # Build de producción
 npm run build
 
-# Desplegar en Vercel
-vercel --prod
+# Desplegar en Netlify (requiere Netlify CLI previamente autenticado)
+netlify deploy --build --prod
 ```
 
 ### 5. Verificación Post-Despliegue
@@ -64,7 +65,7 @@ vercel --prod
 
 #### Error de CORS
 - Los headers `X-Frame-Options` y `Content-Security-Policy` están configurados
-- Verificar configuración de Vercel
+- Verificar configuración de Netlify
 
 #### Problemas de Cache
 - Los archivos tienen cache de 1 año
@@ -87,8 +88,8 @@ public/
 
 ### 8. Monitoreo
 
-- Usar Vercel Analytics para monitorear errores
-- Verificar logs de Vercel para problemas de carga
+- Usar Netlify Analytics (o la integración que prefieras) para monitorear errores
+- Verificar logs de Netlify Deploys para problemas de carga
 - Monitorear métricas de rendimiento de PDFs
 
 ### 9. Actualizaciones
@@ -102,4 +103,4 @@ Para actualizar PDFs:
 
 ---
 
-**Nota**: Esta configuración está optimizada para Vercel. Para otros proveedores, ajustar la configuración según sea necesario. 
+**Nota**: Esta configuración está optimizada para Netlify. Para otros proveedores, ajustar la configuración según sea necesario.
