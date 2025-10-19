@@ -81,6 +81,41 @@ if (legacyHostingPattern.test(repoContent)) {
   console.log('✅ Sin referencias al hosting anterior en la documentación principal');
 }
 
+const conflictMarkers = [/^<<<<<<< /m, /^>>>>>>> /m, /^=======$/m];
+const conflictFiles = [];
+
+const walk = dir => {
+  fs.readdirSync(dir).forEach(entry => {
+    if (entry.startsWith('.git')) {
+      return;
+    }
+
+    const fullPath = path.join(dir, entry);
+    const stat = fs.statSync(fullPath);
+
+    if (stat.isDirectory()) {
+      walk(fullPath);
+      return;
+    }
+
+    const content = fs.readFileSync(fullPath, 'utf8');
+    if (conflictMarkers.some(pattern => pattern.test(content))) {
+      conflictFiles.push(fullPath);
+    }
+  });
+};
+
+console.log('\n🧭 Buscando marcadores de conflictos en el repositorio...');
+walk(process.cwd());
+
+if (conflictFiles.length === 0) {
+  console.log('✅ Sin conflictos pendientes.');
+} else {
+  console.log('⚠️  Se detectaron marcadores de conflictos en:');
+  conflictFiles.forEach(file => console.log(`   - ${path.relative(process.cwd(), file)}`));
+  console.log('\nResuelve los conflictos con tu editor o usando git antes de continuar.');
+}
+
 console.log('\n📝 Comandos para deploy limpio:');
 console.log('1. git add .');
 console.log('2. git commit -m "Fix Netlify configuration"');
