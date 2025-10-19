@@ -1,11 +1,16 @@
 import { AnalyticsService } from '../analytics/service';
+import { SupabaseActionsRepository } from './supabase-repository';
 import {
+  ActionExecutionRecord,
+  ActionExecutionStatus,
   Alert,
+  CreateActionExecutionInput,
   CreateAlertInput,
   CreateTaskInput,
   Task,
   TaskPriority,
   TaskStatus,
+  UpdateActionExecutionInput,
   UpdateTaskStatusInput,
 } from './models';
 
@@ -14,7 +19,12 @@ export class ActionService {
 
   private readonly alerts: Alert[] = [];
 
-  constructor(private readonly analyticsService: AnalyticsService) {}
+  private readonly actionExecutions: ActionExecutionRecord[] = [];
+
+  constructor(
+    private readonly analyticsService: AnalyticsService,
+    private readonly supabaseRepository: SupabaseActionsRepository | undefined = undefined,
+  ) {}
 
   listTasks(): Task[] {
     return [...this.tasks].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
@@ -83,6 +93,95 @@ export class ActionService {
     return alert;
   }
 
+  listActionExecutions(): ActionExecutionRecord[] {
+    return [...this.actionExecutions].sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+  }
+
+  getActionExecutionById(id: string): ActionExecutionRecord | undefined {
+    return this.actionExecutions.find((item) => item.id === id);
+  }
+
+  createActionExecution(input: CreateActionExecutionInput): ActionExecutionRecord {
+    const now = new Date().toISOString();
+    const record: ActionExecutionRecord = {
+      id: input.id ?? this.generateId('act'),
+      externalId: input.externalId,
+      userId: input.userId,
+      type: input.type,
+      status: input.status,
+      payload: input.payload,
+      metadata: input.metadata,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    this.actionExecutions.push(record);
+    this.analyticsService.recordEvent('action.execution.created', {
+      actionId: record.id,
+      type: record.type,
+      status: record.status,
+    });
+    void this.persistExecution(record);
+    return record;
+  }
+
+  updateActionExecution(id: string, update: UpdateActionExecutionInput): ActionExecutionRecord | undefined {
+    const record = this.actionExecutions.find((item) => item.id === id);
+    if (!record) {
+      return undefined;
+    }
+
+    const statusBefore = record.status;
+    if (update.status) {
+      record.status = update.status;
+    }
+    if (update.result !== undefined) {
+      record.result = update.result;
+    }
+    if (update.error !== undefined) {
+      record.error = update.error;
+    }
+    if (update.startedAt) {
+      record.startedAt = update.startedAt;
+    }
+    if (update.finishedAt) {
+      record.finishedAt = update.finishedAt;
+    }
+    if (update.metadata) {
+      record.metadata = { ...(record.metadata ?? {}), ...update.metadata };
+    }
+
+    record.updatedAt = new Date().toISOString();
+    void this.persistExecution(record);
+
+    if (update.status && update.status !== statusBefore) {
+      this.analyticsService.recordEvent('action.execution.status', {
+        actionId: record.id,
+        from: statusBefore,
+        to: update.status,
+      });
+    }
+
+    if (update.error) {
+      this.analyticsService.recordEvent('action.execution.failed', {
+        actionId: record.id,
+        error: update.error.message,
+      });
+    }
+
+    return record;
+  }
+
+  private async persistExecution(record: ActionExecutionRecord): Promise<void> {
+    try {
+      await this.supabaseRepository?.upsertExecution(record);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'unknown error';
+      // eslint-disable-next-line no-console
+      console.error('Failed to persist action execution:', message);
+    }
+  }
+
   private generateId(prefix: string): string {
     return `${prefix}_${Math.random().toString(36).slice(2, 10)}`;
   }
@@ -93,3 +192,6 @@ export const isValidTaskStatus = (status: string): status is TaskStatus =>
 
 export const isValidPriority = (priority: string): priority is TaskPriority =>
   ['low', 'medium', 'high'].includes(priority);
+
+export const isValidExecutionStatus = (status: string): status is ActionExecutionStatus =>
+  ['queued', 'processing', 'completed', 'failed'].includes(status);

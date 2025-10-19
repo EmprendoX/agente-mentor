@@ -38,3 +38,45 @@ export interface CreateAlertInput {
   type: AlertType;
   message: string;
 }
+
+export type ActionExecutionStatus = 'queued' | 'processing' | 'completed' | 'failed';
+
+export interface ActionExecutionError {
+  message: string;
+  details?: unknown;
+}
+
+export interface ActionExecutionRecord {
+  id: string;
+  externalId?: string;
+  userId: string;
+  type: string;
+  status: ActionExecutionStatus;
+  payload: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
+  result?: unknown;
+  error?: ActionExecutionError | null;
+  createdAt: string;
+  updatedAt: string;
+  startedAt?: string;
+  finishedAt?: string;
+}
+
+export interface CreateActionExecutionInput {
+  id?: string;
+  externalId?: string;
+  userId: string;
+  type: string;
+  status: ActionExecutionStatus;
+  payload: Record<string, unknown>;
+  metadata?: Record<string, unknown>;
+}
+
+export interface UpdateActionExecutionInput {
+  status?: ActionExecutionStatus;
+  result?: unknown;
+  error?: ActionExecutionError | null;
+  startedAt?: string;
+  finishedAt?: string;
+  metadata?: Record<string, unknown>;
+}

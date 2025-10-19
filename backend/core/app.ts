@@ -15,6 +15,22 @@ import { DocumentIngestionService } from '../intelligence/document-ingestion';
 import { RAGPipeline } from '../intelligence/rag-pipeline';
 import { createGraphQLHandler } from './graphql';
 import { createOpenAPIDocument } from './openapi';
+import { GmailCalendarConnector } from '../actions/connectors/gmail-calendar';
+import { SlackWhatsAppConnector } from '../actions/connectors/slack-whatsapp';
+import { CrmRestConnector } from '../actions/connectors/crm-rest';
+import { ActionOrchestrator, ScopeAuthorizationValidator } from '../actions/orchestrator';
+import { ActionQueue } from '../actions/queue';
+import { SupabaseActionsRepository } from '../actions/supabase-repository';
+import { createSupabaseWebhookRouter } from '../actions/webhooks';
+
+const registerShutdownHook = (queue: ActionQueue): void => {
+  const shutdown = async () => {
+    await queue.close();
+  };
+
+  process.once('SIGINT', shutdown);
+  process.once('SIGTERM', shutdown);
+};
 
 export const createApp = (): Application => {
   const app = express();
@@ -23,7 +39,13 @@ export const createApp = (): Application => {
   app.use(express.json());
 
   const analyticsService = new AnalyticsService();
-  const actionService = new ActionService(analyticsService);
+  const supabaseRepository = new SupabaseActionsRepository();
+  const actionService = new ActionService(analyticsService, supabaseRepository);
+
+  const connectors = [new GmailCalendarConnector(), new SlackWhatsAppConnector(), new CrmRestConnector()];
+  const orchestrator = new ActionOrchestrator(connectors, new ScopeAuthorizationValidator());
+  const actionQueue = new ActionQueue(actionService, orchestrator);
+  registerShutdownHook(actionQueue);
 
   const openAIConfigured = Boolean(process.env.OPENAI_API_KEY);
   const supabaseConfigured = Boolean(
@@ -67,6 +89,7 @@ export const createApp = (): Application => {
     res.json({ status: 'ok' });
   });
 
+  app.use('/api', createSupabaseWebhookRouter(actionQueue));
   app.use('/api', createActionsRouter(actionService));
   app.use('/api', createMemoryRouter(memoryService));
   app.use('/api', createAgentsRouter(agentsService));
