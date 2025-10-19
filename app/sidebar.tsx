@@ -77,7 +77,7 @@ export default function Sidebar() {
       {/* Mobile menu button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="md:hidden fixed top-4 left-4 z-50 bg-gradient-to-r from-blue-600 to-purple-600 text-white p-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+        className="md:hidden fixed top-4 left-4 z-50 bg-gradient-to-r from-brand-blue via-brand-purple to-brand-orange text-white p-3 rounded-xl shadow-lg hover:shadow-[0_0_20px_rgba(250,204,21,0.4)] transition-all duration-300 hover:scale-105"
       >
         {isOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
@@ -91,22 +91,27 @@ export default function Sidebar() {
       )}
 
       {/* Sidebar */}
-      <aside className={`
-        fixed md:static top-0 left-0 h-full bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white flex flex-col z-40
-        transform transition-all duration-300 ease-in-out backdrop-blur-xl
+      <aside
+        className={`
+        fixed md:static top-0 left-0 h-full bg-[#0b1224]/95 text-white flex flex-col z-40
+        transform transition-all duration-300 ease-in-out backdrop-blur-2xl
         ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
-        w-72 shadow-2xl border-r border-white/10
-      `}>
+        w-72 shadow-[0_0_40px_rgba(37,99,235,0.25)] border-r border-white/10
+      `}
+      >
         
         {/* Header */}
         <div className="flex items-center justify-between md:justify-center px-6 py-6 border-b border-white/10">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-              <span className="text-xl font-bold">E</span>
+            <div className="w-10 h-10 bg-gradient-to-r from-brand-blue via-brand-purple to-brand-orange rounded-xl flex items-center justify-center shadow-lg">
+              <span className="text-base font-semibold tracking-wider">AM</span>
             </div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              Emprendox
-            </h1>
+            <div>
+              <h1 className="text-xl font-semibold bg-gradient-to-r from-brand-blue via-brand-purple to-brand-green bg-clip-text text-transparent">
+                Agente Mentor OS
+              </h1>
+              <p className="text-[11px] uppercase tracking-[0.3em] text-white/60">Ecosistema de agentes</p>
+            </div>
           </div>
           <button
             onClick={() => setIsOpen(false)}
@@ -130,7 +135,17 @@ export default function Sidebar() {
                 {items.map((item) => {
                   const Icon = item.icon;
                   const isActive = pathname === item.href;
-                  
+                  const accentColor =
+                    category === 'herramientas'
+                      ? 'from-brand-purple/30 to-brand-blue/30'
+                      : category === 'productividad'
+                        ? 'from-brand-green/25 to-brand-yellow/25'
+                        : category === 'agentes'
+                          ? 'from-brand-orange/30 to-brand-purple/30'
+                          : category === 'admin'
+                            ? 'from-brand-yellow/30 to-brand-orange/30'
+                            : 'from-brand-blue/30 to-brand-green/30';
+
                   return (
                     <Link
                       key={item.href}
@@ -138,30 +153,30 @@ export default function Sidebar() {
                       onClick={() => setIsOpen(false)}
                       className={`group flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                         isActive
-                          ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-white border border-blue-400/30 shadow-lg'
-                          : 'hover:bg-white/10 text-white/80 hover:text-white hover:translate-x-1'
+                          ? `bg-gradient-to-r ${accentColor} text-white border border-white/15 shadow-lg`
+                          : 'hover:bg-white/5 text-white/70 hover:text-white hover:translate-x-1'
                       }`}
                     >
                       <div className="flex items-center space-x-3">
-                        <Icon 
-                          size={18} 
+                        <Icon
+                          size={18}
                           className={`transition-colors duration-200 ${
-                            isActive 
-                              ? 'text-blue-400' 
-                              : 'text-white/60 group-hover:text-white'
-                          }`} 
+                            isActive
+                              ? 'text-brand-yellow'
+                              : 'text-white/50 group-hover:text-brand-yellow'
+                          }`}
                         />
                         <span className="truncate">{item.label}</span>
                       </div>
-                      
+
                       {isActive && (
-                        <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
+                        <div className="w-2 h-2 bg-brand-yellow rounded-full animate-pulse" />
                       )}
-                      
+
                       {!isActive && (
-                        <ChevronRight 
-                          size={14} 
-                          className="text-white/30 group-hover:text-white/60 group-hover:translate-x-0.5 transition-all duration-200" 
+                        <ChevronRight
+                          size={14}
+                          className="text-white/20 group-hover:text-brand-yellow/70 group-hover:translate-x-0.5 transition-all duration-200"
                         />
                       )}
                     </Link>
@@ -175,8 +190,8 @@ export default function Sidebar() {
         {/* Footer */}
         <div className="px-6 py-4 border-t border-white/10">
           <div className="flex items-center space-x-3 text-white/60 text-xs">
-            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-            <span>Sistema activo</span>
+            <div className="w-2 h-2 bg-brand-green rounded-full animate-pulse" />
+            <span>Agentes sincronizados</span>
           </div>
         </div>
       </aside>
