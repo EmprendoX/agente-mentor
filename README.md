@@ -101,16 +101,13 @@ npm run lint     # Verificación de código
 ```
 
 ## 🌐 Despliegue en Netlify (recomendado)
-1. **Desactivar Vercel si estaba configurado**
-   - Ingresar al dashboard de Vercel y eliminar el proyecto `agente-mentor` para que no genere más builds automáticos.
-   - Revocar el acceso de Vercel al repositorio en GitHub (`Settings > Applications`) para evitar despliegues accidentales.
-2. Conectar la cuenta de GitHub y seleccionar el repositorio `agente-mentor` en Netlify.
-3. Establecer como comando de build `npm run build` y directorio publicado `.next` (Netlify lo detecta automáticamente con el plugin oficial).
-4. (Opcional) Variables de entorno:
+1. Conecta tu cuenta de GitHub y selecciona el repositorio `agente-mentor` en Netlify.
+2. Establece como comando de build `npm run build` y directorio publicado `.next` (el plugin oficial lo detecta automáticamente).
+3. (Opcional) Variables de entorno:
    ```env
    NEXT_PUBLIC_SITE_URL=https://www.mentorx.mx
    ```
-5. Configurar dominio personalizado en GoDaddy apuntando a Netlify:
+4. Configura un dominio personalizado en GoDaddy apuntando a Netlify:
    - **CNAME** (`www`) → `agente-mentor.netlify.app`
    - **A** (root opcional) → valores proporcionados por Netlify DNS
 

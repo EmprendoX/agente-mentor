@@ -13,7 +13,6 @@ const filesToCheck = [
 ];
 
 let schoolXReferences = 0;
-let vercelReferences = 0;
 filesToCheck.forEach(file => {
   if (fs.existsSync(file)) {
     const content = fs.readFileSync(file, 'utf8');
@@ -23,10 +22,6 @@ filesToCheck.forEach(file => {
     } else {
       console.log(`✅ ${file} - Sin referencias a SchoolX`);
     }
-    if (content.toLowerCase().includes('vercel')) {
-      console.log(`⚠️  ${file} - Aún contiene menciones a Vercel`);
-      vercelReferences++;
-    }
   }
 });
 
@@ -34,12 +29,6 @@ if (schoolXReferences === 0) {
   console.log('\n✅ Todas las referencias están corregidas para Agente Mentor');
 } else {
   console.log(`\n⚠️  Se encontraron ${schoolXReferences} archivos con referencias a SchoolX`);
-}
-
-if (vercelReferences === 0) {
-  console.log('✅ Sin referencias a Vercel en archivos críticos');
-} else {
-  console.log(`⚠️  Se detectaron ${vercelReferences} archivos con menciones a Vercel`);
 }
 
 // Verificar configuración de Netlify
