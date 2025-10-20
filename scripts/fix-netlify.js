@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const { scanForConflicts } = require('./utils/conflict-detector');
+const { LEGACY_HOSTING_PATTERN } = require('./utils/hosting');
 
 console.log('🔧 Verificando y corrigiendo configuración para Netlify...\n');
 
@@ -76,8 +77,7 @@ console.log('4. ✅ Archivos críticos presentes');
 
 console.log('\n🧹 Limpieza de referencias al hosting anterior:');
 const repoContent = fs.readFileSync('README.md', 'utf8');
-const legacyHostingPattern = new RegExp(String.fromCharCode(118, 101, 114, 99, 101, 108), 'i');
-if (legacyHostingPattern.test(repoContent)) {
+if (LEGACY_HOSTING_PATTERN.test(repoContent)) {
   console.log('⚠️  Aún se detectan menciones al proveedor anterior. Reemplázalas por Netlify.');
 } else {
   console.log('✅ Sin referencias al hosting anterior en la documentación principal');

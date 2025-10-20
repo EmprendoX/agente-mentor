@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const { scanForConflicts } = require('./utils/conflict-detector');
+const { LEGACY_HOSTING_PATTERN } = require('./utils/hosting');
 
 console.log('🔍 Verificando configuración de Agente Mentor...\n');
 
@@ -16,7 +17,6 @@ const filesToCheck = [
 
 let schoolXReferences = 0;
 let legacyHostingReferences = 0;
-const hostingPattern = new RegExp(String.fromCharCode(118, 101, 114, 99, 101, 108), 'i');
 filesToCheck.forEach(file => {
   if (fs.existsSync(file)) {
     const content = fs.readFileSync(file, 'utf8');
@@ -27,7 +27,7 @@ filesToCheck.forEach(file => {
       console.log(`✅ ${file} - Sin referencias a SchoolX`);
     }
 
-    if (hostingPattern.test(content)) {
+    if (LEGACY_HOSTING_PATTERN.test(content)) {
       console.log(`❌ ${file} - Contiene referencias al hosting anterior`);
       legacyHostingReferences++;
     }
