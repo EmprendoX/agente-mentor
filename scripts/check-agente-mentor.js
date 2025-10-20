@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const { scanForConflicts } = require('./utils/conflict-detector');
+
 console.log('🔍 Verificando configuración de Agente Mentor...\n');
 
 // Verificar que no hay referencias a SchoolX ni al hosting anterior
@@ -110,32 +112,8 @@ console.log('✅ Dominio: mentorx.mx');
 console.log('✅ Descripción: Plataforma de eBooks con IA');
 console.log('✅ Target: Profesionales y emprendedores');
 
-const conflictMarkers = [/^<<<<<<< /m, /^>>>>>>> /m, /^=======$/m];
-const conflictFiles = [];
-
-const walk = dir => {
-  fs.readdirSync(dir).forEach(entry => {
-    if (entry.startsWith('.git')) {
-      return;
-    }
-
-    const fullPath = path.join(dir, entry);
-    const stat = fs.statSync(fullPath);
-
-    if (stat.isDirectory()) {
-      walk(fullPath);
-      return;
-    }
-
-    const content = fs.readFileSync(fullPath, 'utf8');
-    if (conflictMarkers.some(pattern => pattern.test(content))) {
-      conflictFiles.push(fullPath);
-    }
-  });
-};
-
 console.log('\n🧭 Buscando marcadores de conflictos en el repositorio...');
-walk(process.cwd());
+const conflictFiles = scanForConflicts(process.cwd());
 
 if (conflictFiles.length === 0) {
   console.log('✅ Sin conflictos pendientes. Puedes continuar con el deploy.');
