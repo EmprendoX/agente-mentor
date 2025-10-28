@@ -65,7 +65,7 @@ export class ActionsRepository extends BaseSupabaseRepository {
 
   async listByAgent(agentId: string, limit = 50): Promise<ActionRecord[]> {
     const { data, error } = await this.client
-      .from<ActionRow>('actions')
+      .from('actions')
       .select('*')
       .eq('agent_id', agentId)
       .order('created_at', { ascending: false })
@@ -81,7 +81,7 @@ export class ActionsRepository extends BaseSupabaseRepository {
 
   async listByUser(userId: string, limit = 50): Promise<ActionRecord[]> {
     const { data, error } = await this.client
-      .from<ActionRow>('actions')
+      .from('actions')
       .select('*')
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
@@ -97,7 +97,7 @@ export class ActionsRepository extends BaseSupabaseRepository {
 
   async findById(id: string): Promise<ActionRecord | null> {
     const { data, error } = await this.client
-      .from<ActionRow>('actions')
+      .from('actions')
       .select('*')
       .eq('id', id)
       .maybeSingle();
@@ -111,7 +111,7 @@ export class ActionsRepository extends BaseSupabaseRepository {
 
   async findByExternalId(externalId: string): Promise<ActionRecord | null> {
     const { data, error } = await this.client
-      .from<ActionRow>('actions')
+      .from('actions')
       .select('*')
       .eq('external_id', externalId)
       .maybeSingle();
@@ -142,7 +142,7 @@ export class ActionsRepository extends BaseSupabaseRepository {
     };
 
     const { data, error } = await this.client
-      .from<ActionRow>('actions')
+      .from('actions')
       .insert(payload)
       .select('*')
       .single();
@@ -177,7 +177,7 @@ export class ActionsRepository extends BaseSupabaseRepository {
     });
 
     const { data, error } = await this.client
-      .from<ActionRow>('actions')
+      .from('actions')
       .update(payload)
       .eq('id', id)
       .select('*')

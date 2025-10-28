@@ -37,7 +37,7 @@ export class UsersRepository extends BaseSupabaseRepository {
 
   async list(): Promise<UserRecord[]> {
     const { data, error } = await this.client
-      .from<UserRow>('users')
+      .from('users')
       .select('*')
       .order('created_at', { ascending: false });
 
@@ -51,7 +51,7 @@ export class UsersRepository extends BaseSupabaseRepository {
 
   async findById(id: string): Promise<UserRecord | null> {
     const { data, error } = await this.client
-      .from<UserRow>('users')
+      .from('users')
       .select('*')
       .eq('id', id)
       .maybeSingle();
@@ -65,7 +65,7 @@ export class UsersRepository extends BaseSupabaseRepository {
 
   async findByEmail(email: string): Promise<UserRecord | null> {
     const { data, error } = await this.client
-      .from<UserRow>('users')
+      .from('users')
       .select('*')
       .eq('email', email)
       .maybeSingle();
@@ -88,7 +88,7 @@ export class UsersRepository extends BaseSupabaseRepository {
     } satisfies Partial<UserRow>;
 
     const { data, error } = await this.client
-      .from<UserRow>('users')
+      .from('users')
       .insert(payload)
       .select('*')
       .single();
@@ -108,7 +108,7 @@ export class UsersRepository extends BaseSupabaseRepository {
     };
 
     const { data, error } = await this.client
-      .from<UserRow>('users')
+      .from('users')
       .update(updatePayload)
       .eq('id', id)
       .select('*')

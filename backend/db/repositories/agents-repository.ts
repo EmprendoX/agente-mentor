@@ -45,7 +45,7 @@ export class AgentsRepository extends BaseSupabaseRepository {
 
   async listAll(): Promise<AgentRecord[]> {
     const { data, error } = await this.client
-      .from<AgentRow>('agents')
+      .from('agents')
       .select('*')
       .order('created_at', { ascending: false });
 
@@ -59,7 +59,7 @@ export class AgentsRepository extends BaseSupabaseRepository {
 
   async listByUserId(userId: string): Promise<AgentRecord[]> {
     const { data, error } = await this.client
-      .from<AgentRow>('agents')
+      .from('agents')
       .select('*')
       .eq('user_id', userId)
       .order('created_at', { ascending: false });
@@ -74,7 +74,7 @@ export class AgentsRepository extends BaseSupabaseRepository {
 
   async findById(id: string): Promise<AgentRecord | null> {
     const { data, error } = await this.client
-      .from<AgentRow>('agents')
+      .from('agents')
       .select('*')
       .eq('id', id)
       .maybeSingle();
@@ -88,7 +88,7 @@ export class AgentsRepository extends BaseSupabaseRepository {
 
   async findByName(name: string): Promise<AgentRecord | null> {
     const { data, error } = await this.client
-      .from<AgentRow>('agents')
+      .from('agents')
       .select('*')
       .eq('name', name)
       .maybeSingle();
@@ -113,7 +113,7 @@ export class AgentsRepository extends BaseSupabaseRepository {
     };
 
     const { data, error } = await this.client
-      .from<AgentRow>('agents')
+      .from('agents')
       .insert(payload)
       .select('*')
       .single();
@@ -143,7 +143,7 @@ export class AgentsRepository extends BaseSupabaseRepository {
     });
 
     const { data, error } = await this.client
-      .from<AgentRow>('agents')
+      .from('agents')
       .update(payload)
       .eq('id', id)
       .select('*')

@@ -36,7 +36,7 @@ export class MemoryRepository extends BaseSupabaseRepository {
 
   async listByAgent(agentId: string, limit = 50): Promise<MemoryRecord[]> {
     const { data, error } = await this.client
-      .from<MemoryRow>('memory')
+      .from('memory')
       .select('*')
       .eq('agent_id', agentId)
       .order('created_at', { ascending: false })
@@ -61,7 +61,7 @@ export class MemoryRepository extends BaseSupabaseRepository {
     };
 
     const { data, error } = await this.client
-      .from<MemoryRow>('memory')
+      .from('memory')
       .insert(payload)
       .select('*')
       .single();

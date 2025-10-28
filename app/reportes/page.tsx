@@ -232,7 +232,7 @@ export default function ReportesPage() {
                   <Tooltip formatter={(value: number) => value.toLocaleString('es-MX')} />
                   <Legend />
                   <Pie
-                    data={decisionOutcomes}
+                    data={decisionOutcomes as any}
                     dataKey="value"
                     nameKey="label"
                     innerRadius={60}

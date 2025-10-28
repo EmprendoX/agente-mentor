@@ -232,7 +232,7 @@ export class AnalyticsService {
       overview: {
         interactionsThisWeek: interactionsSeries.reduce((acc, point) => acc + point.value, 0),
         alertsCreatedThisWeek: buckets.reduce((acc, bucket) => acc + bucket.alertsCreated, 0),
-        alertsAcknowledgedThisWeek,
+        alertsAcknowledgedThisWeek: alertsAcknowledgedWeek,
         decisionsAcceptanceRate: Number(acceptanceRate.toFixed(1)),
       },
       timeseries: {
