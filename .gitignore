@@ -45,6 +45,15 @@ next-env.d.ts
 # IDE
 .vscode/
 .idea/
+.cursor/
+
+# Taskmaster files
+.taskmaster/
+
+# MCP Configuration (contains API keys)
+app/mcp.json
+app/prd.txt
+.env.example
 
 # OS
 Thumbs.db
@@ -113,3 +122,19 @@ jspm_packages/
 
 # TernJS port file
 .tern-port
+
+dev-debug.log
+# Environment variables
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# OS specific
+
+# Task files
+# tasks.json
+# tasks/ 
