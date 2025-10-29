@@ -162,10 +162,10 @@ export default function LandingPage() {
                 Ecosistema vivo de agentes IA
               </span>
               <h1 className="text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
-                Acelera tu visión con agentes IA coreografiados para cada etapa del negocio
+                Construimos tu Digital Workforce inteligente para operar tu negocio
               </h1>
               <p className="max-w-2xl text-lg text-slate-300">
-                Agente Mentor OS integra estrategia, ejecución y aprendizaje continuo en una plataforma de agentes colaborativos. Diseñamos experiencias completas para lanzar, vender y escalar con propósito.
+                Orquestamos agentes de inteligencia artificial que piensan, aprenden y ejecutan en equipo, diseñando workflows inteligentes para cada área del negocio.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link
