@@ -1,0 +1,303 @@
+{
+  "metadata": {
+    "title": "Agente Mentor OS - AI agent ecosystem to grow your project",
+    "description": "Agente Mentor OS orchestrates artificial intelligence agents specialized in strategy, sales, operations and continuous learning to empower entrepreneurs and growth teams.",
+    "keywords": "artificial intelligence agents, mentoring, entrepreneurship, automation, collaborative agents, AI platform, Agente Mentor OS",
+    "creator": "Agente Mentor OS",
+    "openGraph": {
+      "title": "Agente Mentor OS - AI agent ecosystem",
+      "description": "An AI agent platform that connects strategy, automation and learning for Latin American entrepreneurs.",
+      "siteName": "Agente Mentor",
+      "locale": "en_US",
+      "imageAlt": "Agente Mentor OS - AI agent ecosystem"
+    },
+    "twitter": {
+      "title": "Agente Mentor OS - AI agent ecosystem",
+      "description": "Collaborative agents designed to support entrepreneurs and teams at every growth stage."
+    },
+    "verification": {
+      "google": "your-verification-code"
+    }
+  },
+  "layout": {
+    "liveAgents": "Agents synced"
+  },
+  "navbar": {
+    "language": "Language",
+    "spanish": "Spanish",
+    "english": "English"
+  },
+  "sidebar": {
+    "brand": "Agente Mentor OS",
+    "tagline": "Agent ecosystem",
+    "categories": {
+      "principal": "Main",
+      "herramientas": "AI tools",
+      "productividad": "Productivity",
+      "agentes": "Special agents",
+      "admin": "Administration"
+    },
+    "items": {
+      "home": "Home",
+      "ebooks": "Ebooks",
+      "agents": "My Agent Hub",
+      "automations": "Automations",
+      "mentor": "MentorX",
+      "calendar": "Calendar",
+      "reports": "Reports",
+      "tasks": "Tasks",
+      "communications": "Communications",
+      "documents": "Documents & Files",
+      "automator": "AutomatorX",
+      "websearch": "WebSearch GPT",
+      "admin": "Admin panel"
+    }
+  },
+  "landing": {
+    "badge": "Living ecosystem of AI agents",
+    "title": "Intelligent Digital Workforce To Run Your Business",
+    "description": "We orchestrate artificial intelligence agents that think, learn and execute as a team, designing smart workflows for every business area.",
+    "exploreAgents": "Explore agents",
+    "requestDemo": "Request guided demo",
+    "visionCards": [
+      {
+        "title": "Vision",
+        "description": "Build the leading Spanish-speaking AI agent ecosystem that supports Latin American founders and teams from ideation to global expansion."
+      },
+      {
+        "title": "Value promise",
+        "description": "We activate strategic decisions, commercial execution and continuous learning with collaborative agents that speak the language of business.",
+        "points": [
+          "Guided implementations in under 30 days",
+          "Actionable playbooks connected to real data"
+        ]
+      },
+      {
+        "title": "Operating principles",
+        "description": "Each agent blends contextual intelligence, automation and human judgment to unlock tangible weekly progress.",
+        "points": [
+          "Business context first",
+          "Speed without losing precision",
+          "People-centered experience"
+        ]
+      }
+    ],
+    "impactHighlights": [
+      { "value": "4×", "label": "Launch velocity" },
+      { "value": "72%", "label": "Processes automated in 60 days" },
+      { "value": "360°", "label": "Customer vision" }
+    ],
+    "agentSuites": [
+      {
+        "name": "Blue Agent · Growth Strategist",
+        "description": "Defines positioning, narrative and the roadmap for business expansion.",
+        "focuses": [
+          "Opportunity maps and 12-month vision",
+          "Value proposition design and launches",
+          "OKRs and alignment dashboards"
+        ]
+      },
+      {
+        "name": "Green Agent · Operations Architect",
+        "description": "Optimizes processes, automates flows and coordinates critical work across teams.",
+        "focuses": [
+          "Automated workflow design",
+          "Tool and data source integration",
+          "Recurring execution playbooks"
+        ]
+      },
+      {
+        "name": "Orange Agent · Commercial Catalyst",
+        "description": "Activates funnels, content and market signals to drive predictable revenue.",
+        "focuses": [
+          "Multichannel sequences and nurturing",
+          "Industry-trained messaging and scripts",
+          "Real-time conversion dashboards"
+        ]
+      },
+      {
+        "name": "Purple Agent · Experience Designer",
+        "description": "Personalizes onboarding, communities and learning resources to retain users.",
+        "focuses": [
+          "Learning paths and cohorts",
+          "Living libraries with AI content",
+          "Omnichannel feedback loops"
+        ]
+      },
+      {
+        "name": "Yellow Agent · Insight Radar",
+        "description": "Analyzes customer signals, produces actionable reports and spots early risks.",
+        "focuses": [
+          "Real-time customer intelligence",
+          "Business health alerts",
+          "Storytelling with key metrics"
+        ]
+      }
+    ],
+    "audiences": [
+      "Founders and leadership teams from growth-stage startups and scaleups.",
+      "Corporate innovation leads who need agile, measurable pilots.",
+      "Consultancies, accelerators and hubs seeking premium experiences for their communities."
+    ],
+    "journey": [
+      {
+        "title": "1. Guided discovery",
+        "description": "We diagnose with your team to identify challenges, available data and quick wins."
+      },
+      {
+        "title": "2. Agent activation",
+        "description": "We configure priority agents, data connections and monitoring dashboards."
+      },
+      {
+        "title": "3. Continuous scaling",
+        "description": "We measure impact, expand automations and co-create new use cases."
+      }
+    ],
+    "objectives": [
+      {
+        "title": "Orchestrate continuous launches and experiments",
+        "description": "Agents coordinate backlog, resources and learnings to keep innovation cycles short.",
+        "result": "4× launch speed and better feedback every sprint."
+      },
+      {
+        "title": "Scale data-driven consultative sales",
+        "description": "We unify commercial intelligence with follow-up automations and contextual recommendations.",
+        "result": "Always-on funnel and pipeline prioritized by impact."
+      },
+      {
+        "title": "Create memorable experiences for customers and teams",
+        "description": "Every interaction with Agente Mentor OS keeps brand consistency and a human tone.",
+        "result": "Sustained retention, rising NPS and teams focused on strategic decisions."
+      }
+    ],
+    "suiteTitle": "Specialized agent suite",
+    "suiteSubtitle": "A modular ecosystem blending strategy, automation and human experience.",
+    "suiteDescription": "Five core agents work in sync to diagnose, create, automate, communicate and measure every business front.",
+    "suiteCta": "Open interactive hub",
+    "audienceTitle": "Designed for teams seeking measurable impact",
+    "journeyTitle": "How we activate results in weeks",
+    "objectivesTitle": "Outcomes we measure every quarter",
+    "objectivesSectionTitle": "Objectives guided by Agente Mentor OS",
+    "journeySupportTitle": "End-to-end guided journey",
+    "journeySupportDescription": "We apply a three-stage methodology to secure adoption, impact and scalability for every agent.",
+    "audienceCardTitle": "Target audience",
+    "platformTitle": "A platform ready to deploy",
+    "platformDescription": "Public documentation, template systems and reusable components make it easy to deliver tailored experiences. Agents connect to existing tools and learn from every interaction.",
+    "platformHighlights": [
+      {
+        "title": "Design principles",
+        "description": "Interfaces focused on clarity, narrative pace and actionable data."
+      },
+      {
+        "title": "Connected insights",
+        "description": "Dynamic reports that translate signals into immediate decisions."
+      }
+    ],
+    "ctaTitle": "Let's build the next version of your operation with AI",
+    "ctaDescription": "Schedule a session with our team to map goals, priority agents and the rollout plan.",
+    "ctaPrimaryLabel": "Message the team",
+    "ctaSecondaryLabel": "View available resources"
+  },
+  "agents": {
+    "title": "My Agent Hub",
+    "subtitle": "Discover and activate AI agents that will transform your productivity",
+    "filters": {
+      "all": "All",
+      "business": "Business",
+      "productivity": "Productivity",
+      "marketing": "Marketing",
+      "analysis": "Analytics",
+      "service": "Customer Service",
+      "personal": "Personal Growth",
+      "health": "Health",
+      "education": "Education",
+      "finance": "Finance",
+      "wellness": "Wellness",
+      "healthWellness": "Health & Wellness"
+    },
+    "statuses": {
+      "available": "Available",
+      "comingSoon": "Coming soon",
+      "premium": "Premium"
+    },
+    "metrics": {
+      "available": "Available",
+      "comingSoon": "Coming soon",
+      "premium": "Premium"
+    },
+    "buttons": {
+      "available": "Activate",
+      "comingSoon": "Notify",
+      "premium": "Upgrade",
+      "default": "View more"
+    },
+    "agents": [
+      {
+        "name": "Marketing Agent",
+        "description": "Optimizes ad campaigns, analyzes performance metrics and suggests strategies to maximize marketing ROI.",
+        "category": "Business"
+      },
+      {
+        "name": "Lead Follow-up Agent",
+        "description": "Automates prospect follow-up, sends personalized reminders and boosts conversion from leads to customers.",
+        "category": "Sales"
+      },
+      {
+        "name": "Automation Agent",
+        "description": "Creates automated workflows, connects different tools and streamlines repetitive business processes.",
+        "category": "Productivity"
+      },
+      {
+        "name": "Content Agent",
+        "description": "Generates content ideas, writes SEO-optimized articles and keeps a consistent editorial calendar.",
+        "category": "Marketing"
+      },
+      {
+        "name": "Reporting Agent",
+        "description": "Analyzes business data, generates automated reports and delivers actionable decision insights.",
+        "category": "Analytics"
+      },
+      {
+        "name": "Support Agent",
+        "description": "Answers customer queries 24/7, solves common issues and escalates complex cases to the human team.",
+        "category": "Customer Service"
+      },
+      {
+        "name": "Personal Coach",
+        "description": "Helps you set and achieve personal goals, offers daily motivation and tracks progress.",
+        "category": "Personal Growth"
+      },
+      {
+        "name": "AI Nutritionist",
+        "description": "Creates personalized meal plans, suggests healthy recipes and tracks nutrition goals.",
+        "category": "Health"
+      },
+      {
+        "name": "Agenda Assistant",
+        "description": "Manages your calendar, schedules meetings automatically and optimizes your time for maximum productivity.",
+        "category": "Productivity"
+      },
+      {
+        "name": "Language Mentor",
+        "description": "Helps you learn languages with personalized exercises, simulated conversations and progress tracking.",
+        "category": "Education"
+      },
+      {
+        "name": "Finance Agent",
+        "description": "Analyzes expenses, suggests investments, builds budgets and helps you reach financial goals.",
+        "category": "Finance"
+      },
+      {
+        "name": "Conversational Therapist",
+        "description": "Provides emotional support, mindfulness techniques and tools to manage stress and anxiety.",
+        "category": "Wellness"
+      }
+    ],
+    "infoTitle": "How do the agents work?",
+    "infoDescription": [
+      "Each agent is an AI specialist that learns from your specific needs.",
+      "Once activated, it works in the background to optimise your processes and boost productivity.",
+      "Premium agents unlock advanced capabilities and deep personalisation."
+    ]
+  }
+}

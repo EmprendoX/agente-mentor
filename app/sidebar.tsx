@@ -2,9 +2,9 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { 
-  Menu, 
-  X, 
+import {
+  Menu,
+  X,
   Home,
   BookOpen,
   Users,
@@ -21,10 +21,12 @@ import {
   ChevronRight
 } from 'lucide-react';
 
+import { useI18n } from './context/I18nProvider';
+
 // Type definitions
 type NavItem = {
   href: string;
-  label: string;
+  labelKey: string;
   icon: React.ComponentType<{ size?: number; className?: string }>;
   category: string;
 };
@@ -36,31 +38,32 @@ type GroupedItems = {
 };
 
 export default function Sidebar() {
+  const { t } = useI18n();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems: NavItem[] = [
-    { href: '/', label: 'Inicio', icon: Home, category: 'principal' },
-    { href: '/ebooks', label: 'Ebooks', icon: BookOpen, category: 'principal' },
-    { href: '/agentes', label: 'Mi Panel de Agentes', icon: Users, category: 'herramientas' },
-    { href: '/automatizaciones', label: 'Automatizaciones', icon: Zap, category: 'herramientas' },
-    { href: '/mentor', label: 'MentorX', icon: Brain, category: 'herramientas' },
-    { href: '/calendario', label: 'Calendario', icon: Calendar, category: 'productividad' },
-    { href: '/reportes', label: 'Reportes', icon: BarChart3, category: 'productividad' },
-    { href: '/tareas', label: 'Tareas', icon: CheckSquare, category: 'productividad' },
-    { href: '/comunicaciones', label: 'Comunicaciones', icon: MessageSquare, category: 'productividad' },
-    { href: '/documentos', label: 'Documentos y Archivos', icon: FileText, category: 'productividad' },
-    { href: '/agentes/automatizador', label: 'AutomatizadorX', icon: Bot, category: 'agentes' },
-    { href: '/agentes/websearch', label: 'WebSearch GPT', icon: Search, category: 'agentes' },
-    { href: '/admin', label: 'Panel de Administración', icon: Settings, category: 'admin' },
+    { href: '/', labelKey: 'sidebar.items.home', icon: Home, category: 'principal' },
+    { href: '/ebooks', labelKey: 'sidebar.items.ebooks', icon: BookOpen, category: 'principal' },
+    { href: '/agentes', labelKey: 'sidebar.items.agents', icon: Users, category: 'herramientas' },
+    { href: '/automatizaciones', labelKey: 'sidebar.items.automations', icon: Zap, category: 'herramientas' },
+    { href: '/mentor', labelKey: 'sidebar.items.mentor', icon: Brain, category: 'herramientas' },
+    { href: '/calendario', labelKey: 'sidebar.items.calendar', icon: Calendar, category: 'productividad' },
+    { href: '/reportes', labelKey: 'sidebar.items.reports', icon: BarChart3, category: 'productividad' },
+    { href: '/tareas', labelKey: 'sidebar.items.tasks', icon: CheckSquare, category: 'productividad' },
+    { href: '/comunicaciones', labelKey: 'sidebar.items.communications', icon: MessageSquare, category: 'productividad' },
+    { href: '/documentos', labelKey: 'sidebar.items.documents', icon: FileText, category: 'productividad' },
+    { href: '/agentes/automatizador', labelKey: 'sidebar.items.automator', icon: Bot, category: 'agentes' },
+    { href: '/agentes/websearch', labelKey: 'sidebar.items.websearch', icon: Search, category: 'agentes' },
+    { href: '/admin', labelKey: 'sidebar.items.admin', icon: Settings, category: 'admin' },
   ];
 
   const categories: Record<CategoryType, string> = {
-    principal: 'Principal',
-    herramientas: 'Herramientas IA',
-    productividad: 'Productividad',
-    agentes: 'Agentes Especiales',
-    admin: 'Administración'
+    principal: 'sidebar.categories.principal',
+    herramientas: 'sidebar.categories.herramientas',
+    productividad: 'sidebar.categories.productividad',
+    agentes: 'sidebar.categories.agentes',
+    admin: 'sidebar.categories.admin'
   };
 
   const groupedItems: GroupedItems = navItems.reduce((acc, item) => {
@@ -108,9 +111,9 @@ export default function Sidebar() {
             </div>
             <div>
               <h1 className="text-xl font-semibold bg-gradient-to-r from-brand-blue via-brand-purple to-brand-green bg-clip-text text-transparent">
-                Agente Mentor OS
+                {t('sidebar.brand')}
               </h1>
-              <p className="text-[11px] uppercase tracking-[0.3em] text-white/60">Ecosistema de agentes</p>
+              <p className="text-[11px] uppercase tracking-[0.3em] text-white/60">{t('sidebar.tagline')}</p>
             </div>
           </div>
           <button
@@ -127,7 +130,7 @@ export default function Sidebar() {
             <div key={category} className="space-y-2">
               {/* Category Header */}
               <h3 className="text-xs font-semibold text-white/50 uppercase tracking-wider px-3 mb-3">
-                {categories[category as CategoryType]}
+                {t(categories[category as CategoryType])}
               </h3>
               
               {/* Category Items */}
@@ -166,7 +169,7 @@ export default function Sidebar() {
                               : 'text-white/50 group-hover:text-brand-yellow'
                           }`}
                         />
-                        <span className="truncate">{item.label}</span>
+                        <span className="truncate">{t(item.labelKey)}</span>
                       </div>
 
                       {isActive && (
@@ -191,7 +194,7 @@ export default function Sidebar() {
         <div className="px-6 py-4 border-t border-white/10">
           <div className="flex items-center space-x-3 text-white/60 text-xs">
             <div className="w-2 h-2 bg-brand-green rounded-full animate-pulse" />
-            <span>Agentes sincronizados</span>
+            <span>{t('layout.liveAgents')}</span>
           </div>
         </div>
       </aside>

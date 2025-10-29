@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  i18n: {
+    locales: ['es', 'en'],
+    defaultLocale: 'es',
+  },
   // Configuración básica optimizada
   compress: true,
   poweredByHeader: false,

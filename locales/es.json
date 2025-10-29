@@ -1,0 +1,303 @@
+{
+  "metadata": {
+    "title": "Agente Mentor OS - Ecosistema de agentes IA para crecer tu proyecto",
+    "description": "Agente Mentor OS orquesta agentes de inteligencia artificial especializados en estrategia, ventas, operaciones y aprendizaje continuo para potenciar emprendedores y equipos en crecimiento.",
+    "keywords": "agentes de inteligencia artificial, mentoría, emprendimiento, automatización, agentes colaborativos, plataforma IA, Agente Mentor OS",
+    "creator": "Agente Mentor OS",
+    "openGraph": {
+      "title": "Agente Mentor OS - Ecosistema de agentes IA",
+      "description": "Una plataforma de agentes IA que conecta estrategia, automatización y aprendizaje para emprendedores latinoamericanos.",
+      "siteName": "Agente Mentor",
+      "locale": "es_ES",
+      "imageAlt": "Agente Mentor OS - Ecosistema de agentes IA"
+    },
+    "twitter": {
+      "title": "Agente Mentor OS - Ecosistema de agentes IA",
+      "description": "Agentes colaborativos diseñados para acompañar a emprendedores y equipos en cada etapa de crecimiento."
+    },
+    "verification": {
+      "google": "tu-codigo-de-verificacion"
+    }
+  },
+  "layout": {
+    "liveAgents": "Agentes sincronizados"
+  },
+  "navbar": {
+    "language": "Idioma",
+    "spanish": "Español",
+    "english": "Inglés"
+  },
+  "sidebar": {
+    "brand": "Agente Mentor OS",
+    "tagline": "Ecosistema de agentes",
+    "categories": {
+      "principal": "Principal",
+      "herramientas": "Herramientas IA",
+      "productividad": "Productividad",
+      "agentes": "Agentes Especiales",
+      "admin": "Administración"
+    },
+    "items": {
+      "home": "Inicio",
+      "ebooks": "Ebooks",
+      "agents": "Mi Panel de Agentes",
+      "automations": "Automatizaciones",
+      "mentor": "MentorX",
+      "calendar": "Calendario",
+      "reports": "Reportes",
+      "tasks": "Tareas",
+      "communications": "Comunicaciones",
+      "documents": "Documentos y Archivos",
+      "automator": "AutomatizadorX",
+      "websearch": "WebSearch GPT",
+      "admin": "Panel de Administración"
+    }
+  },
+  "landing": {
+    "badge": "Ecosistema vivo de agentes IA",
+    "title": "Digital Workforce Inteligente Para Operar Tu Negocio",
+    "description": "Orquestamos agentes de inteligencia artificial que piensan, aprenden y ejecutan en equipo, diseñando workflows inteligentes para cada área del negocio.",
+    "exploreAgents": "Explorar agentes",
+    "requestDemo": "Solicitar demo guiada",
+    "visionCards": [
+      {
+        "title": "Visión",
+        "description": "Construir el ecosistema líder de agentes IA en español que acompaña a emprendedores y equipos Latinoamericanos desde la ideación hasta la expansión global."
+      },
+      {
+        "title": "Promesa de valor",
+        "description": "Activamos decisiones estratégicas, ejecución comercial y aprendizaje continuo con agentes colaborativos que hablan el idioma del negocio.",
+        "points": [
+          "Implementaciones guiadas en menos de 30 días",
+          "Plantillas accionables conectadas a datos reales"
+        ]
+      },
+      {
+        "title": "Principios operativos",
+        "description": "Cada agente combina inteligencia contextual, automatización y criterio humano para desbloquear progreso tangible semana a semana.",
+        "points": [
+          "Contexto de negocio primero",
+          "Velocidad sin perder precisión",
+          "Experiencia centrada en las personas"
+        ]
+      }
+    ],
+    "impactHighlights": [
+      { "value": "4×", "label": "Velocidad de lanzamiento" },
+      { "value": "72%", "label": "Procesos automatizados en 60 días" },
+      { "value": "360°", "label": "Visión del usuario final" }
+    ],
+    "agentSuites": [
+      {
+        "name": "Agente Azul · Estratega de Crecimiento",
+        "description": "Define posicionamiento, narrativa y la hoja de ruta de expansión del negocio.",
+        "focuses": [
+          "Mapas de oportunidad y visión a 12 meses",
+          "Diseño de propuestas de valor y lanzamientos",
+          "OKR y tableros de alineación"
+        ]
+      },
+      {
+        "name": "Agente Verde · Arquitecto de Operaciones",
+        "description": "Optimiza procesos, automatiza flujos y coordina tareas críticas entre equipos.",
+        "focuses": [
+          "Diseño de flujos automatizados",
+          "Integración de herramientas y fuentes de datos",
+          "Playbooks de ejecución recurrente"
+        ]
+      },
+      {
+        "name": "Agente Naranja · Catalizador Comercial",
+        "description": "Activa funnels, contenido y señales de mercado para impulsar revenue predecible.",
+        "focuses": [
+          "Secuencias multicanal y nurturing",
+          "Mensajería y guiones entrenados por industria",
+          "Paneles de conversión en tiempo real"
+        ]
+      },
+      {
+        "name": "Agente Morado · Diseñador de Experiencias",
+        "description": "Personaliza onboarding, comunidades y recursos educativos para retener usuarios.",
+        "focuses": [
+          "Rutas de aprendizaje y cohortes",
+          "Bibliotecas vivas con contenido IA",
+          "Feedback loops omnicanal"
+        ]
+      },
+      {
+        "name": "Agente Amarillo · Radar de Insights",
+        "description": "Analiza señales de clientes, produce reportes accionables y detecta riesgos tempranos.",
+        "focuses": [
+          "Inteligencia de clientes en tiempo real",
+          "Alertas de salud del negocio",
+          "Storytelling con métricas clave"
+        ]
+      }
+    ],
+    "audiences": [
+      "Founders y equipos directivos de startups y scaleups en etapa de crecimiento.",
+      "Líderes de innovación corporativa que requieren pilotos ágiles y medibles.",
+      "Consultoras, aceleradoras y hubs que buscan experiencias premium para sus comunidades."
+    ],
+    "journey": [
+      {
+        "title": "1. Descubrimiento guiado",
+        "description": "Diagnóstico junto al equipo para identificar retos, datos disponibles y quick wins."
+      },
+      {
+        "title": "2. Activación de agentes",
+        "description": "Configuramos agentes prioritarios, conexiones de datos y tableros de seguimiento."
+      },
+      {
+        "title": "3. Escalamiento continuo",
+        "description": "Medimos impacto, ampliamos automatizaciones y co-creamos nuevos casos de uso."
+      }
+    ],
+    "objectives": [
+      {
+        "title": "Orquestar lanzamientos y experimentos continuos",
+        "description": "Los agentes coordinan backlog, recursos y aprendizajes para mantener ciclos de innovación cortos.",
+        "result": "Velocidad de lanzamiento 4× y mejores retroalimentaciones en cada sprint."
+      },
+      {
+        "title": "Escalar ventas consultivas basadas en datos",
+        "description": "Unificamos inteligencia comercial con automatizaciones de seguimiento y recomendaciones contextuales.",
+        "result": "Embudo siempre activo y pipeline priorizado por impacto."
+      },
+      {
+        "title": "Crear experiencias memorables para clientes y equipos",
+        "description": "Cada interacción con Agente Mentor OS mantiene consistencia de marca y tono humano.",
+        "result": "Retención sostenida, NPS creciente y equipos enfocados en decisiones estratégicas."
+      }
+    ],
+    "suiteTitle": "Suite de agentes especializados",
+    "suiteSubtitle": "Un ecosistema modular que combina estrategia, automatización y experiencia humana.",
+    "suiteDescription": "Cinco agentes principales trabajan sincronizados para diagnosticar, crear, automatizar, comunicar y medir cada frente del negocio.",
+    "suiteCta": "Ver panel interactivo",
+    "audienceTitle": "Diseñado para equipos que buscan impacto medible",
+    "journeyTitle": "Cómo activamos resultados en semanas",
+    "objectivesTitle": "Resultados que medimos cada trimestre",
+    "objectivesSectionTitle": "Objetivos que guía Agente Mentor OS",
+    "journeySupportTitle": "Viaje acompañado de principio a fin",
+    "journeySupportDescription": "Activamos una metodología en tres etapas para asegurar adopción, impacto y escalabilidad de cada agente.",
+    "audienceCardTitle": "Público objetivo",
+    "platformTitle": "Una plataforma lista para implementarse",
+    "platformDescription": "Documentación pública, sistemas de plantillas y componentes reutilizables facilitan la entrega de experiencias personalizadas. Los agentes se conectan a herramientas existentes y aprenden con cada interacción.",
+    "platformHighlights": [
+      {
+        "title": "Criterios de diseño",
+        "description": "Interfaces enfocadas en claridad, ritmo narrativo y datos accionables."
+      },
+      {
+        "title": "Insights conectados",
+        "description": "Reportes dinámicos que traducen señales en decisiones inmediatas."
+      }
+    ],
+    "ctaTitle": "Construyamos la próxima versión de tu operación con IA",
+    "ctaDescription": "Agenda una sesión con nuestro equipo para mapear objetivos, agentes prioritarios y el plan de despliegue.",
+    "ctaPrimaryLabel": "Escribir al equipo",
+    "ctaSecondaryLabel": "Ver recursos disponibles"
+  },
+  "agents": {
+    "title": "Mi Panel de Agentes",
+    "subtitle": "Descubre y activa agentes de IA que transformarán tu productividad",
+    "filters": {
+      "all": "Todos",
+      "business": "Negocios",
+      "productivity": "Productividad",
+      "marketing": "Marketing",
+      "analysis": "Análisis",
+      "service": "Servicio al Cliente",
+      "personal": "Desarrollo Personal",
+      "health": "Salud",
+      "education": "Educación",
+      "finance": "Finanzas",
+      "wellness": "Bienestar",
+      "healthWellness": "Salud & Bienestar"
+    },
+    "statuses": {
+      "available": "Disponible",
+      "comingSoon": "Próximamente",
+      "premium": "Premium"
+    },
+    "metrics": {
+      "available": "Disponibles",
+      "comingSoon": "Próximamente",
+      "premium": "Premium"
+    },
+    "buttons": {
+      "available": "Activar",
+      "comingSoon": "Notificar",
+      "premium": "Actualizar",
+      "default": "Ver más"
+    },
+    "agents": [
+      {
+        "name": "Agente de Marketing",
+        "description": "Optimiza campañas publicitarias, analiza métricas de rendimiento y sugiere estrategias para maximizar el ROI de tus inversiones en marketing digital.",
+        "category": "Negocios"
+      },
+      {
+        "name": "Agente de Seguimiento de Leads",
+        "description": "Automatiza el seguimiento de prospectos, envía recordatorios personalizados y optimiza la conversión de leads a clientes.",
+        "category": "Ventas"
+      },
+      {
+        "name": "Agente de Automatizaciones",
+        "description": "Crea flujos de trabajo automatizados, conecta diferentes herramientas y optimiza procesos empresariales repetitivos.",
+        "category": "Productividad"
+      },
+      {
+        "name": "Agente de Contenido",
+        "description": "Genera ideas de contenido, escribe artículos optimizados para SEO y mantiene un calendario editorial coherente.",
+        "category": "Marketing"
+      },
+      {
+        "name": "Agente de Reportes",
+        "description": "Analiza datos empresariales, genera reportes automáticos y proporciona insights accionables para la toma de decisiones.",
+        "category": "Análisis"
+      },
+      {
+        "name": "Agente de Soporte",
+        "description": "Responde consultas de clientes 24/7, resuelve problemas comunes y escala casos complejos al equipo humano.",
+        "category": "Servicio al Cliente"
+      },
+      {
+        "name": "Coach Personal",
+        "description": "Te ayuda a establecer y alcanzar metas personales, proporciona motivación diaria y seguimiento de progreso.",
+        "category": "Desarrollo Personal"
+      },
+      {
+        "name": "Nutricionista AI",
+        "description": "Crea planes de alimentación personalizados, sugiere recetas saludables y hace seguimiento de tus objetivos nutricionales.",
+        "category": "Salud"
+      },
+      {
+        "name": "Asistente de Agenda",
+        "description": "Gestiona tu calendario, programa reuniones automáticamente y optimiza tu tiempo para máxima productividad.",
+        "category": "Productividad"
+      },
+      {
+        "name": "Mentor de Idiomas",
+        "description": "Te ayuda a aprender idiomas con ejercicios personalizados, conversaciones simuladas y seguimiento de progreso.",
+        "category": "Educación"
+      },
+      {
+        "name": "Agente de Finanzas",
+        "description": "Analiza gastos, sugiere inversiones, crea presupuestos y te ayuda a alcanzar tus objetivos financieros.",
+        "category": "Finanzas"
+      },
+      {
+        "name": "Terapeuta Conversacional",
+        "description": "Proporciona apoyo emocional, técnicas de mindfulness y herramientas para manejar el estrés y la ansiedad.",
+        "category": "Bienestar"
+      }
+    ],
+    "infoTitle": "¿Cómo funcionan los agentes?",
+    "infoDescription": [
+      "Cada agente es una IA especializada que aprende de tus necesidades específicas.",
+      "Una vez activado, trabajará en segundo plano para optimizar tus procesos y mejorar tu productividad.",
+      "Los agentes premium ofrecen funcionalidades avanzadas y personalización profunda."
+    ]
+  }
+}
