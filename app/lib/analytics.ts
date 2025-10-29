@@ -23,6 +23,40 @@ async function fetchJson<T>(path: string): Promise<T> {
   return (await response.json()) as T;
 }
 
-export const getBriefingAnalytics = () => fetchJson<BriefingAnalyticsSnapshot>('/analytics/briefing');
+export const getBriefingAnalytics = async () => {
+  // In producción sin backend configurado, evita llamadas a localhost
+  const isLocalBackend = backendBaseUrl.includes('localhost');
+  if (typeof window !== 'undefined' && isLocalBackend && process.env.NODE_ENV === 'production') {
+    const empty: BriefingAnalyticsSnapshot = {
+      generatedAt: new Date().toISOString(),
+      totals: { interactions24h: 0, decisionsAccepted24h: 0, activeAlerts: 0 },
+      trend: { interactions: [], decisions: [], alertsAcknowledged: [] },
+      highlights: [],
+      recentActivity: [],
+    };
+    return empty;
+  }
 
-export const getReportAnalytics = () => fetchJson<ReportAnalyticsSnapshot>('/analytics/reports');
+  return fetchJson<BriefingAnalyticsSnapshot>('/analytics/briefing');
+};
+
+export const getReportAnalytics = async () => {
+  const isLocalBackend = backendBaseUrl.includes('localhost');
+  if (typeof window !== 'undefined' && isLocalBackend && process.env.NODE_ENV === 'production') {
+    const empty: ReportAnalyticsSnapshot = {
+      generatedAt: new Date().toISOString(),
+      overview: {
+        interactionsThisWeek: 0,
+        alertsCreatedThisWeek: 0,
+        alertsAcknowledgedThisWeek: 0,
+        decisionsAcceptanceRate: 0,
+      },
+      timeseries: { interactions: [], decisions: [], alerts: [], alertsAcknowledged: [] },
+      decisionOutcomes: [],
+      interactionSources: [],
+    };
+    return empty;
+  }
+
+  return fetchJson<ReportAnalyticsSnapshot>('/analytics/reports');
+};
