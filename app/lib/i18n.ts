@@ -3,7 +3,13 @@ import 'server-only';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 
-import { LOCALE_COOKIE_NAME, defaultLocale, locales, type Locale } from './i18n-config';
+import {
+  LEGACY_LOCALE_COOKIE_NAME,
+  LOCALE_COOKIE_NAME,
+  defaultLocale,
+  locales,
+  type Locale,
+} from './i18n-config';
 
 type Dictionaries = typeof import('../../locales/es.json');
 
@@ -25,9 +31,13 @@ export async function getAllDictionaries(): Promise<Record<Locale, Messages>> {
 
 export async function getLocaleFromCookies(): Promise<Locale> {
   const cookieStore = await cookies();
-  const cookieValue = cookieStore.get(LOCALE_COOKIE_NAME)?.value as Locale | undefined;
-  if (cookieValue && locales.includes(cookieValue)) {
-    return cookieValue;
+  const cookieValue =
+    cookieStore.get(LOCALE_COOKIE_NAME)?.value ?? cookieStore.get(LEGACY_LOCALE_COOKIE_NAME)?.value;
+  if (cookieValue) {
+    const normalized = decodeURIComponent(cookieValue) as Locale;
+    if (locales.includes(normalized)) {
+      return normalized;
+    }
   }
   return defaultLocale;
 }

@@ -1,9 +1,15 @@
 "use client";
 
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode, startTransition } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode, startTransition } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { LOCALE_COOKIE_NAME, locales, type Locale, type Messages } from '../lib/i18n-config';
+import {
+  LEGACY_LOCALE_COOKIE_NAME,
+  LOCALE_COOKIE_NAME,
+  locales,
+  type Locale,
+  type Messages,
+} from '../lib/i18n-config';
 
 type I18nContextValue = {
   locale: Locale;
@@ -38,13 +44,20 @@ type ProviderProps = {
 export function I18nProvider({ children, initialLocale, dictionaries }: ProviderProps) {
   const router = useRouter();
   const [locale, setLocaleState] = useState<Locale>(initialLocale);
+
+  useEffect(() => {
+    document.cookie = `${LEGACY_LOCALE_COOKIE_NAME}=; path=/; max-age=0`;
+    document.cookie = `${LOCALE_COOKIE_NAME}=${encodeURIComponent(initialLocale)}; path=/; max-age=31536000`;
+  }, [initialLocale]);
+
   const setLocale = useCallback(
     (nextLocale: Locale) => {
       if (!locales.includes(nextLocale)) {
         return;
       }
       setLocaleState(nextLocale);
-      document.cookie = `${LOCALE_COOKIE_NAME}=${nextLocale}; path=/; max-age=31536000`;
+      document.cookie = `${LOCALE_COOKIE_NAME}=${encodeURIComponent(nextLocale)}; path=/; max-age=31536000`;
+      document.cookie = `${LEGACY_LOCALE_COOKIE_NAME}=; path=/; max-age=0`;
       startTransition(() => {
         router.refresh();
       });
