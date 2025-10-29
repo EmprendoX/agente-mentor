@@ -162,7 +162,7 @@ export default function LandingPage() {
                 Ecosistema vivo de agentes IA
               </span>
               <h1 className="text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
-                Construimos tu Digital Workforce inteligente para operar tu negocio
+                Digital Workforce Inteligente Para Operar Tu Negocio
               </h1>
               <p className="max-w-2xl text-lg text-slate-300">
                 Orquestamos agentes de inteligencia artificial que piensan, aprenden y ejecutan en equipo, diseñando workflows inteligentes para cada área del negocio.
